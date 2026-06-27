@@ -1,0 +1,10 @@
+# Personal /teach workspace state — generated per-user, not template content.
+# Contains personal progress, assessments and machine-specific paths; the repo
+# is public, so keep it out of version control. Each user generates their own.
+/MISSION.md
+/NOTES.md
+/learning-records/
+
+# Rendered lessons: generated during /teach sessions with real project data
+# (paths, model names). The shared .md briefs and assets/lesson.css ARE tracked.
+/lessons/*.html

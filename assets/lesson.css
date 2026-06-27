@@ -1,0 +1,192 @@
+/* Shared lesson stylesheet — Laravel 12→13: Learn by Doing
+   Tufte-ish: generous measure, quiet palette, prints well.
+   Linked by every lesson in ./lessons/*.html */
+
+:root {
+  --ink:      #1a1a1a;
+  --muted:    #6b6b6b;
+  --rule:     #e2e0da;
+  --bg:       #fdfcf9;
+  --accent:   #b5341d;   /* Laravel-ish red, used sparingly */
+  --accent-soft: #f6ece8;
+  --code-bg:  #f3f1ea;
+  --insight-bg: #f1f4f1;
+  --insight-rule: #5a7a5a;
+  --serif: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: 18px; }
+
+body {
+  font-family: var(--serif);
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.55;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+}
+
+/* ---- Header / meta ---- */
+.kicker {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.4rem;
+}
+h1 {
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1.15;
+  margin: 0 0 0.6rem;
+}
+.meta {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 0.5rem 0;
+  margin: 0 0 2rem;
+}
+
+h2 {
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin: 2.4rem 0 0.6rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--rule);
+}
+h3 { font-weight: 600; font-size: 1.05rem; margin: 1.6rem 0 0.4rem; }
+
+p, li { font-size: 1rem; }
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+a:hover { border-bottom-color: var(--accent); }
+
+/* ---- Code ---- */
+code {
+  font-family: var(--mono);
+  font-size: 0.84em;
+  background: var(--code-bg);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+pre {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  background: var(--code-bg);
+  border-left: 3px solid var(--rule);
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  border-radius: 0 4px 4px 0;
+}
+pre code { background: none; padding: 0; font-size: inherit; }
+
+/* ---- Diagram block ---- */
+.diagram {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  white-space: pre;
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px dashed var(--rule);
+  padding: 1rem 1.2rem;
+  border-radius: 4px;
+  text-align: center;
+  overflow-x: auto;
+}
+
+/* ---- Insight callout ---- */
+.insight {
+  background: var(--insight-bg);
+  border-left: 3px solid var(--insight-rule);
+  padding: 0.9rem 1.2rem;
+  margin: 1.4rem 0;
+  border-radius: 0 4px 4px 0;
+}
+.insight .label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--insight-rule);
+  margin: 0 0 0.4rem;
+}
+.insight ul { margin: 0; padding-left: 1.1rem; }
+.insight li { font-size: 0.95rem; margin: 0.3rem 0; }
+
+/* ---- Tables ---- */
+table { border-collapse: collapse; width: 100%; margin: 1.2rem 0; font-size: 0.92rem; }
+th, td { text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+
+/* ---- Verdict / mission box ---- */
+.verdict {
+  background: var(--accent-soft);
+  border-radius: 4px;
+  padding: 1rem 1.2rem;
+  margin: 1.4rem 0;
+  font-size: 0.95rem;
+}
+.verdict strong { color: var(--accent); }
+
+/* ---- Recall quiz widget ---- */
+.quiz { margin: 1.4rem 0; }
+.quiz details {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
+  margin: 0.7rem 0;
+  background: #fff;
+}
+.quiz summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.98rem;
+  list-style: none;
+}
+.quiz summary::-webkit-details-marker { display: none; }
+.quiz summary::before { content: "▸ "; color: var(--accent); }
+.quiz details[open] summary::before { content: "▾ "; }
+.quiz .answer {
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--rule);
+  font-size: 0.93rem;
+  color: var(--ink);
+}
+
+/* ---- Footer nav ---- */
+.lesson-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+.ask {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ---- Print ---- */
+@media print {
+  html { font-size: 11pt; }
+  body { background: #fff; max-width: 100%; padding: 0; }
+  .quiz details { break-inside: avoid; }
+  .quiz details[open] summary::before,
+  .quiz summary::before { content: ""; }
+  a { color: var(--ink); border: none; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.7em; color: var(--muted); }
+}

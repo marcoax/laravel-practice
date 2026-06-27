@@ -39,6 +39,26 @@ bumps stay out.
 > Prefer not to use `/teach`? Every lesson is a self-contained brief you can follow
 > with any AI assistant — or by hand.
 
+### Learn by Doing mode (recommended)
+
+These lessons work best with Claude Code's **Learning** output style active. With it,
+the agent doesn't hand you finished code: for every meaningful design decision it sets
+up the scaffolding and asks **you** to write the key 2–10 lines (a `TODO(human)` block),
+then gives feedback. That's the "understanding beats delegating" philosophy in practice.
+
+It is a separate setting from `/teach`: `/teach` decides *what* you learn; the Learning
+output style decides *how* you interact. This repo ships it as the project default in
+[`.claude/settings.json`](./.claude/settings.json):
+
+```json
+{ "outputStyle": "Learning" }
+```
+
+So if you open this repo in Claude Code, it's already on. To toggle it manually, run
+`/output-style` and pick `Learning` (or `default` to have the agent write the code for
+you). Other agents: replicate the behaviour by asking them to scaffold and leave the
+key decision to you.
+
 ## How it works
 
 - The **12 lessons** live in [`/lessons`](./lessons), numbered chronologically.
