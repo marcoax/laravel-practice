@@ -136,8 +136,38 @@ function load(){
   try { state = raw ? JSON.parse(raw) : defaults(); } catch(e){ state = defaults(); }
   LESSONS.forEach(function(l){ if(!state[l.id]) state[l.id]={status:"todo",note:""}; });
   render();
+  loadProgressFile(); // refine from agent-written progress.json (async, optional)
 }
 function save(){ store.set(STORE_KEY, JSON.stringify(state)); }
+
+// Auto-load the agent-written progress.json (lesson lifecycle gate, ADR-0004).
+// Graceful fallback: if the file is absent or unreadable (e.g. opened via file://),
+// keep the localStorage state untouched.
+function loadProgressFile(){
+  fetch("progress.json", {cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+    .then(function(data){
+      var prog = data && data.progress ? data.progress : data;
+      mergeProgress(prog);
+      save(); render();
+      setSaveNote("Synced from progress.json");
+    })
+    .catch(function(){ /* no progress.json — fall back to localStorage */ });
+}
+
+// Reconcile the agent-written `prog` ({ "<id>": {status, note} }) into `state`.
+// Precedence: progress.json drives `status` (the agent is the source of truth for
+// completion), but a non-empty local `note` is preserved when the file omits one,
+// so manual notes typed in the browser are never silently lost.
+function mergeProgress(prog){
+  if(!prog) return;
+  LESSONS.forEach(function(l){
+    var src = prog[l.id];
+    if(!src) return;
+    if(src.status) state[l.id].status = src.status;
+    if(src.note) state[l.id].note = src.note;
+  });
+}
 
 function setStatus(id,s){ state[id].status=s; save(); render(); }
 function setNote(id,v){ state[id].note=v; save(); }
@@ -182,7 +212,7 @@ function renderList(){
       '</div>'+
       '<div class="lz-title">'+l.title+'</div>'+
       '<div class="lz-meta">'+
-        '<span class="lz-eg">eraCms example <b>'+l.eg+'</b></span>'+
+        '<span class="lz-eg">your project <b>'+l.eg+'</b></span>'+
         '<a class="lz-link" href="lessons/'+l.slug+'.md">↗ open lesson</a>'+
       '</div>'+
       '<div class="states">'+

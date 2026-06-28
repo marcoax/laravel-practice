@@ -28,7 +28,19 @@ bumps stay out.
    ```
    Source: https://github.com/mattpocock/skills
 
-3. **Run a lesson.** Open your agent in this repo and point `/teach` at a lesson,
+3. **Configure your workspace.** Run **`/lesson-init`** once: it asks a few questions
+   (reference project, language, output style, pedagogy) and writes them to a git-ignored
+   `learning-config.md` that every session then reads.
+   ```
+   /lesson-init
+   ```
+   Prefer to do it by hand? Copy the schema and edit the values:
+   ```bash
+   cp learning-config.example.md learning-config.md
+   # then set reference_project and any preferences
+   ```
+
+4. **Run a lesson.** Open your agent in this repo and point `/teach` at a lesson,
    oldest first:
    ```
    /teach lessons/01-eloquent-casts.md
@@ -47,17 +59,18 @@ up the scaffolding and asks **you** to write the key 2–10 lines (a `TODO(human
 then gives feedback. That's the "understanding beats delegating" philosophy in practice.
 
 It is a separate setting from `/teach`: `/teach` decides *what* you learn; the Learning
-output style decides *how* you interact. This repo ships it as the project default in
-[`.claude/settings.json`](./.claude/settings.json):
+output style decides *how* you interact. Picking it is part of `/lesson-init`, which writes
+your choice to the git-ignored
+[`.claude/settings.local.json`](./.claude/settings.local.json) — so it stays per-user,
+while the tracked `settings.json` ships neutral:
 
 ```json
 { "outputStyle": "Learning" }
 ```
 
-So if you open this repo in Claude Code, it's already on. To toggle it manually, run
-`/output-style` and pick `Learning` (or `default` to have the agent write the code for
-you). Other agents: replicate the behaviour by asking them to scaffold and leave the
-key decision to you.
+To change it later, run `/output-style` and pick `Learning` (or `default` to have the
+agent write the code for you). Other agents: replicate the behaviour by asking them to
+scaffold and leave the key decision to you.
 
 ## How it works
 
@@ -74,8 +87,9 @@ repetitive work, but the design decisions stay yours. For every new feature the
 question isn't "does it exist?" but "**does my project need it?**" — and sometimes
 the right answer is a deliberate "no".
 
-Where useful, each lesson shows how I assessed the change for **eraCms**
-(Laravel 13 + Vue 3), as a concrete example — not as absolute truth.
+Where useful, each lesson shows how the change was assessed for a **real reference
+project** — the one you pick at setup (`/lesson-init`) — as a concrete example, not as
+absolute truth.
 
 ## Tracking your progress
 

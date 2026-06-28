@@ -8,3 +8,11 @@
 # Rendered lessons: generated during /teach sessions with real project data
 # (paths, model names). The shared .md briefs and assets/lesson.css ARE tracked.
 /lessons/*.html
+
+# Lesson lifecycle gate: agent-written progress state mirrored into index.html.
+# Per-user progress; the tracker UI (index.html) IS tracked. See ADR-0004.
+/progress.json
+
+# Per-user lesson setup (reference project, language, pedagogy). The schema
+# reference learning-config.example.md IS tracked. See ADR-0001.
+/learning-config.md

@@ -1,8 +1,9 @@
 # AGENTS.md — Instructions for agents
 
 This repository is a **Laravel 12 → 13** learning path run with the `/teach` skill. Each
-lesson teaches a single change from 12.x to 13.x, assessed against the real project
-**eraCms** (Laravel 13 + Vue 3).
+lesson teaches a single change from 12.x to 13.x, assessed against **your reference
+project** — a real codebase you choose at setup (`/lesson-init`), recorded in the
+git-ignored `learning-config.md`.
 
 ## Rules
 
@@ -11,7 +12,8 @@ lesson teaches a single change from 12.x to 13.x, assessed against the real proj
   as source/summary, but the teaching output is always HTML.
 - **Language:** project Markdown and documentation files are written in **English**; the
   chat conversation and the HTML lessons (learner-facing material) are in **Italian**.
-- Ground every lesson on eraCms as a concrete example, not as absolute truth.
+- Ground every lesson on **your reference project** (the `reference_project` in
+  `learning-config.md`) as a concrete example, not as absolute truth.
 - **Learn by Doing mode.** This project sets the `Learning` output style as the default in
   `.claude/settings.json`. When generating code that involves a design decision, set up the
   scaffolding and leave the key 2–10 lines to the user via a single `TODO(human)` block,
