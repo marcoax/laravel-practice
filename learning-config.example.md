@@ -25,8 +25,9 @@ reference_project: /absolute/path/to/your/project
 model: claude-opus-4-8
 
 # Language split. chat = conversation + HTML lessons (learner-facing); docs = project MD.
+# chat choices: en (default) | it | fr | de | es. docs stays en.
 language:
-  chat: it
+  chat: en
   docs: en
 
 # --- Pedagogy ---

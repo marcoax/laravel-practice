@@ -21,8 +21,10 @@ codebase you choose at setup (`/lesson-init`), recorded in the git-ignored
 - **All lessons are generated as HTML** in `./lessons/NN-<name>.html`, reusing the shared
   stylesheet `./assets/lesson.css`; they must be clean and printable. The `.md` briefs stay
   as source/summary, but the teaching output is always HTML.
-- **Language:** project Markdown and documentation files are written in **English**; the
-  chat conversation and the HTML lessons (learner-facing material) are in **Italian**.
+- **Language:** project Markdown and documentation files are always written in **English**.
+  The chat conversation and the HTML lessons (learner-facing material) follow the learner's
+  chosen `language.chat` in `learning-config.md` — **default English**, selectable among
+  `en | it | fr | de | es` at `/lesson-init`.
 - Ground every lesson on **your reference project** (the `reference_project` in
   `learning-config.md`) as a concrete example, not as absolute truth.
 - **Learn by Doing mode.** This project sets the `Learning` output style as the default in
