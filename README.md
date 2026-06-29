@@ -80,6 +80,28 @@ scaffold and leave the key decision to you.
 - You can **use the provided lessons** or **write your own** starting from
   [`lessons/_template.md`](./lessons/_template.md).
 
+## Staying up to date — `/lesson-update`
+
+The current lessons cover Laravel **up to version 13.8**. Laravel keeps shipping, so
+**`/lesson-update`** looks for releases newer than that and turns the worthwhile ones into
+new lessons:
+
+1. **Discover** new releases from the editorial sources — [Laravel News](https://laravel-news.com)
+   (primary) → [Laravel Daily](https://laraveldaily.com) (fallback). A release is
+   lesson-worthy only if one of the blogs wrote about it.
+2. **Propose one lesson per release** (named by version, e.g. `13.17-…`), one at a time —
+   you accept or skip each.
+3. **Generate** the accepted ones into [`/lessons`](./lessons), ready to run with `/teach`.
+
+```
+/lesson-update
+```
+
+You can run it manually any time. It also runs **automatically in the background when you
+finish a lesson** — a read-only check that only *proposes* new lessons, never generates them
+without your say-so. Toggle that with `auto_check_new_lessons` in `learning-config.md` (set
+at `/lesson-init`).
+
 ## Philosophy
 
 Understanding beats delegating. AI is great for learning interactively and for
