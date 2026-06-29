@@ -33,7 +33,7 @@ codebase you choose at setup (`/lesson-init`), recorded in the git-ignored
   rather than handing over finished code. It is separate from `/teach`: `/teach` decides
   *what* to teach, the output style decides *how* to interact.
 
-When editing a lesson brief, keep the format (what changed, why it matters, what to try,
+When editing a lesson brief, keep the format (what changed, why it matters,     what to try,
 relevance questions) and match the existing lessons' tone.
 
 See `NOTES.md` for teaching preferences and `MISSION.md` for context.

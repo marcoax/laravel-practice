@@ -1,4 +1,4 @@
-# learning-config (example / schema)
+    # learning-config (example / schema)
 
 Per-user setup for how you approach the lessons. Copy this file to
 **`learning-config.md`** (git-ignored) and edit the values — or just run **`/lesson-init`**,
