@@ -49,6 +49,12 @@ and the pedagogy fields (`practice_default`, `quiz_format`, `deep_dive`,
 **absent**, suggest running **`/lesson-init`** to create it. See
 `learning-config.example.md` for the schema and ADR-0001/0003.
 
+**Permission mode.** This workspace defaults to auto-accept edits via
+`permissions.defaultMode: "acceptEdits"` so `/teach` can write lessons, learning
+records, and `progress.json` without per-edit prompts. Like the output style, it lives
+in the **git-ignored** `.claude/settings.local.json` (per-user, not in the tracked
+template), so each contributor opts in on their own machine. See ADR-0008.
+
 ## Lesson lifecycle
 
 No lesson is left implicitly "done". At the **end of each lesson**, before moving on,
