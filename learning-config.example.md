@@ -45,8 +45,44 @@ deep_dive: on
 # Consulted only when auto_branch is on.
 branch_convention: "one branch per lesson, e.g. lesson-NN-<slug>"
 
-# Whether each lesson opens a fresh branch cut from `main` (named via branch_convention).
-# /lesson-init only records this; /teach actually cuts the branch at lesson start.
-# TODO(human): define the auto_branch field(s) — pick the shape that fits the schema:
-#   the on/off toggle, its default, and how the base branch (main) is recorded.
+# Whether each lesson opens a fresh branch cut from auto_branch_base (named via
+# branch_convention). on | off. /lesson-init only records this; /teach actually cuts
+# the branch at lesson start. Consulted only when on.
+auto_branch: off
+
+# Base branch the per-lesson branch is cut from. Consulted only when auto_branch is on.
+auto_branch_base: main
+
+# --- Lesson updates (/lesson-update) ---
+
+# Editorial discovery sources, in fallback order: a release is lesson-worthy if
+# *either* blog wrote about it — laravel-news (primary) → Laravel Daily (fallback).
+# These blogs both discover and editorially filter releases (ADR-0005).
+# Ordered fallback chain — first entry is primary, the rest are tried in order if it
+# is unreachable. Discovery (ADR-0007 sub-agent) walks this list top to bottom.
+lesson_sources:
+  - laravel-news.com   # primary
+  - laraveldaily.com   # fallback
+
+# Changelog cross-check only: confirms version numbers/ordering and enriches detail,
+# but never surfaces a release on its own (ADR-0005). The Laravel framework repo.
+lesson_changelog: laravel/framework   # GitHub repo; CHANGELOG.md
+
+# High-water cursor: the highest version already examined on the sources. Defines
+# "new = > scanned". Not derivable — the source of truth for how far we've looked.
+laravel_version_scanned: "13.8"
+
+# Mirror of the highest version that became a lesson (derivable from the origin: local
+# files in lessons/). Kept explicit as a convenience anchor for the README (ADR-0006).
+laravel_version_covered: "13.8"
+
+# Versions the learner saw and declined; never re-proposed. Not derivable. Default [].
+lessons_skipped: []
+
+# Auto-fire the background discovery check at lesson completion (ADR-0007).
+# on | off. Proposed during /lesson-init; off → nothing fires.
+auto_check_new_lessons: on
+
+# Date of the last discovery check (ISO 8601, e.g. 2026-06-29), or null if never run.
+last_checked: null
 ```
