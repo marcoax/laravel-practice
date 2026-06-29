@@ -48,6 +48,7 @@ essentials, then the pedagogy fields:
 | 7 | `deep_dive` | `on` | Offer the optional "want to go deeper?" invite at lesson end. `on` \| `off`. |
 | 8 | `branch_convention` | `one branch per lesson, e.g. lesson-NN-<slug>` | Free text; the **branch-name pattern**. Consulted only when `auto_branch` is `on`. |
 | 9 | `auto_branch` | `on` (base `main`) | Ask whether each lesson should open a branch **from `main`**. `on` \| `off`. When `on`, the branch name follows `branch_convention` (the learner may override the pattern); when `off`, work stays on the current branch. `/lesson-init` only **records** the choice — it never creates the branch; `/teach` cuts it at lesson start. |
+| 10 | `auto_check_new_lessons` | `on` | Ask whether to auto-check for newer Laravel releases **in the background at lesson completion** (ADR-0007). `on` \| `off`. When `on`, finishing a lesson fires a read-only discovery sub-agent that proposes new lessons (never generates them); when `off`, nothing fires and `/lesson-update` stays manually invocable. Fail-soft: a failed check is skipped silently. |
 
 ## Step 3 — Write `learning-config.md`
 
@@ -56,6 +57,20 @@ comments from `learning-config.example.md` (the file is documentation outside th
 YAML inside). Keep the `# --- Essentials ---` / `# --- Pedagogy ---` sections. Persist
 `auto_branch` (with its base branch) next to `branch_convention` in the pedagogy section;
 do **not** create or switch any git branch here — `/lesson-init` only writes config.
+
+Also write the `# --- Lesson updates (/lesson-update) ---` section. Only
+`auto_check_new_lessons` comes from the interview (question #10); the rest is **seeded
+state**, not preferences — copy the defaults verbatim from `learning-config.example.md`:
+
+- `lesson_sources` — the ordered fallback chain (laravel-news → Laravel Daily).
+- `lesson_changelog` — `laravel/framework` (cross-check only).
+- `laravel_version_scanned` / `laravel_version_covered` — both seed to the version the 12
+  existing lessons reach (currently `"13.8"`); do **not** ask the learner for these.
+- `lessons_skipped` — `[]`.
+- `last_checked` — `null` (never run yet).
+
+Never prompt for the seeded fields; a fresh config always starts from these values, and on a
+re-run they are preserved per the *Re-running* rule (only `auto_check_new_lessons` is re-asked).
 
 ## Step 4 — Write the output style to `.claude/settings.local.json`
 

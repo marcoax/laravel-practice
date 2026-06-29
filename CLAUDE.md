@@ -60,6 +60,17 @@ capture completion and reflection with two writes (see ADR-0004):
    numeric `id` in `index.html`'s `LESSONS` array (lesson 01 → `"1"`).
 2. **Write/update the learning record** `learning-records/NNNN-<slug>.md` — the narrative
    outcome and key insight.
+3. **(Optional) Fire the background lesson-update check** — only when
+   `auto_check_new_lessons: on` in `learning-config.md` (ADR-0007). After the two writes
+   above, spawn a **read-only background discovery sub-agent** that runs steps 1–3 of
+   `/lesson-update` (discover → filter against `laravel_version_scanned` / `lessons_skipped`),
+   then reports `N candidates → view now or later?`. **Hard boundary:** the sub-agent
+   *discovers and proposes only* — it may advance `laravel_version_scanned` / `last_checked`,
+   but it must **never** generate lessons, advance `laravel_version_covered`, or touch
+   `lessons_skipped` (those happen only on the learner's explicit accept/skip in the
+   foreground). **Fail-soft:** a failed check (e.g. network down) is skipped silently and
+   never blocks the gate or delays moving on. The trigger is **lesson completion**, not
+   `teach-lesson` startup. `/lesson-update` stays manually invocable regardless of the flag.
 
 `learning-records/` is the narrative source of truth; `progress.json` is the structured
 mirror the tracker UI reads. `index.html` auto-loads `progress.json` on open (graceful
