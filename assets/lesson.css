@@ -136,6 +136,48 @@ th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-
 }
 .verdict strong { color: var(--accent); }
 
+/* ---- Primary source callout ---- */
+.primary-source {
+  background: linear-gradient(to right, var(--accent-soft), var(--bg));
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--accent);
+  padding: 1rem 1.2rem;
+  margin: 1.6rem 0;
+  border-radius: 0 4px 4px 0;
+}
+.primary-source .label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.4rem;
+}
+.primary-source .source-link {
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-bottom-width: 2px;
+}
+.primary-source .why {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.primary-source .secondary {
+  margin: 0.7rem 0 0;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--rule);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.primary-source .secondary .label-inline {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 /* ---- Recall quiz widget ---- */
 .quiz { margin: 1.4rem 0; }
 .quiz details {

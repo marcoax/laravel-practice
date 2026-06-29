@@ -20,6 +20,15 @@ app, with your AI assistant or by hand.
 | 11 | Vector search / semantic search | 13.0 | new |
 | 12 | JSON:API Resources | 13.0 | new |
 
+## Primary source per lesson
+
+Every rendered lesson (`NN-*.html`) carries a prominent **primary source** callout —
+the single best resource to read next for deeper study — distinct from the secondary
+citations listed in the `.meta` header (see [issue #12](../../../issues/12)). New
+lessons inherit the convention from [`_template.md`](./_template.md)'s `## Sources`
+section. All lessons rendered so far (**01–07**) have been **retro-fitted** with the
+callout; later lessons get it at generation time.
+
 ## Writing your own lessons
 
 Start from [`_template.md`](./_template.md), copy it with a new number and fill it
