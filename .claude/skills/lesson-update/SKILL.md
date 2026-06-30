@@ -8,8 +8,8 @@ argument-hint: "(no arguments — it scans, proposes, and on accept generates)"
 
 Discover Laravel releases newer than the existing lessons cover, propose **one lesson per new
 version**, and on the learner's accept write it into `lessons/`. Grounded in **ADR-0005 / 0006 /
-0007** — read them if a decision here is unclear; they are the source of truth, this file is the
-procedure.
+0007 / 0010** — read them if a decision here is unclear; they are the source of truth, this file is
+the procedure.
 
 ## The one principle everything rests on
 
@@ -25,7 +25,7 @@ Read these fields from `learning-config.md` at the repo root (authoritative per 
 
 | field | role |
 |-------|------|
-| `lesson_sources` | editorial blogs: laravel-news (primary) → Laravel Daily (fallback) |
+| `lesson_sources` | editorial sources as **structured entries** (`name`/`transport`/`feed`/`fallback_url`). Laravel News (primary) is read via two transports — Telegram feed → URL-probe fallback — then Laravel Daily (ADR-0010). |
 | `lesson_changelog` | Laravel framework repo — **cross-check only**, never discovers alone |
 | `laravel_version_scanned` | high-water cursor: highest version already examined. "New = > scanned". **Not derivable.** |
 | `laravel_version_covered` | highest version turned into a lesson. **Mirror** of `origin: local` files; kept explicit for the README. Advance only on real generation. |
@@ -52,10 +52,29 @@ generate) are always foreground, always gated by the human accept/skip.
 Load the fields above. `laravel_version_scanned` is the floor: only versions above it are candidates.
 
 ### 2. Discover from the editorial sources
-Read laravel-news's release index for versions newer than `scanned`. **Fallback chain:** Laravel
-Daily, then probe the predictable `laravel-13-N-0` URL pattern, **tolerating 404 gaps** (e.g.
-`13-11-0` 404s while `13-12-0` exists). Use `lesson_changelog` only to cross-check version numbers
-and ordering. **An unreachable source is skipped with a notice; execution continues** with the rest.
+Two levels — don't conflate them (ADR-0010): **sources** are the editorial filter; a source may
+have more than one **transport** (how it's read).
+
+**Laravel News (primary source)** — read via transports **in order**:
+1. **Telegram feed** `https://t.me/s/laravelnews` — primary transport; public, auth-free preview
+   with structured title + canonical article link + publication date.
+2. **URL-pattern probe** `https://laravel-news.com/laravel-13-{minor}-0` — fallback transport, used
+   only when the feed is unreachable; **tolerate 404 gaps** (`13-11-0` 404s while `13-12-0` exists).
+
+**Laravel Daily (fallback source)** — a *separate* editorial source, not a Laravel News transport;
+tried only after Laravel News yields nothing.
+
+**The feed is a firehose, not a release index** — it republishes *all* Laravel News posts
+(articles, packages, tutorials). Treat a post as a release announcement when **its article link
+matches `laravel-news.com/laravel-13-N-0` OR its title matches `Laravel X.Y`** (link-OR-title);
+ignore the rest. Take the version and date **from the post**, not from a probe.
+
+**Walk back bounded:** paginate with `?before=<id>` until a post is **older than `last_checked`**,
+capped at **~5 pages** — whichever comes first. On the first run `last_checked` is `null`, so the
+page cap is the only stop.
+
+Use `lesson_changelog` only to cross-check version numbers / patch level and ordering. **An
+unreachable source is skipped with a notice; execution continues** with the rest.
 
 ### 3. Filter to the genuinely new
 Keep versions that are (a) `> laravel_version_scanned` and (b) not in `lessons_skipped`. A version
@@ -75,12 +94,10 @@ Write each accepted lesson into `lessons/` from `lessons/_template.md`:
 - **YAML frontmatter (generated lessons only):** `version: <x.y.z>` and `origin: local`. Do **not**
   retrofit the 12 existing lessons (ADR-0006).
 - **Brief in the `language.docs` language (English).** HTML render stays a later `/teach` step.
-- **Generate in default mode, never Learn by Doing.** This workspace defaults to the `Learning`
-  output style, but lesson generation is *content authoring*, not co-writing application code on a
-  design decision — so the output style does not apply here. Emit **complete** briefs: **never leave
-  a `TODO(human)` block** or a placeholder line for the learner to fill. The Learn-by-Doing
-  interaction belongs to `/teach` (the *how* of teaching), not to `/lesson-update` (which authors the
-  source material). See ADR-0009.
+- **Generate in default mode, never Learn by Doing (ADR-0009).** Lesson generation is *content
+  authoring*, not co-writing code on a design decision — so the `Learning` output style does **not**
+  apply here. Emit **complete** briefs: never a `TODO(human)` block or placeholder line.
+  Learn-by-Doing belongs to `/teach`, not to `/lesson-update`.
 
 ### 6. Update state (only for what actually happened)
 - Advance `laravel_version_scanned` to the highest version examined.
@@ -100,10 +117,3 @@ same *version* is now covered by both a local and an upstream lesson."
 - On a duplicate version, **flag it and offer the choice — default: keep both** (non-destructive,
   always safe). **Merge** (combine into one file) is **explicit opt-in only** — auto-combining
   content is the riskiest move in the flow.
-
-## Don't
-- Don't key discovery, dedup, or collision on a feature name — only on `version:`.
-- Don't let the background path write lessons, advance `covered`, or touch `lessons_skipped`.
-- Don't advance `covered` for a version you only scanned but didn't generate.
-- Don't retrofit frontmatter onto the 12 existing lessons.
-- Don't block the lifecycle gate when a source is unreachable — skip, notice, continue.

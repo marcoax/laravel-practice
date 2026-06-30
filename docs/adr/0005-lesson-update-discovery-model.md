@@ -1,6 +1,6 @@
 # ADR-0005 — /lesson-update discovery model: version as unit, blogs as editorial filter
 
-**Status:** Accepted (2026-06-29)
+**Status:** Accepted (2026-06-29) — *read transport amended by [ADR-0010](0010-lesson-update-telegram-transport.md): Laravel News is now read primarily via its Telegram feed, with the URL-pattern probe demoted to fallback. The editorial model below is unchanged.*
 
 ## Context
 

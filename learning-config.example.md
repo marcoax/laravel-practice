@@ -56,13 +56,20 @@ auto_branch_base: main
 # --- Lesson updates (/lesson-update) ---
 
 # Editorial discovery sources, in fallback order: a release is lesson-worthy if
-# *either* blog wrote about it — laravel-news (primary) → Laravel Daily (fallback).
-# These blogs both discover and editorially filter releases (ADR-0005).
-# Ordered fallback chain — first entry is primary, the rest are tried in order if it
-# is unreachable. Discovery (ADR-0007 sub-agent) walks this list top to bottom.
+# *either* source wrote about it — Laravel News (primary) → Laravel Daily (fallback).
+# These sources both discover and editorially filter releases (ADR-0005).
+# Structured entries (ADR-0010): Laravel News has ONE editorial identity but TWO read
+# transports — the Telegram feed (primary) and a URL-pattern probe (fallback used only
+# when the feed is unreachable). Discovery (ADR-0007 sub-agent) walks this list top to
+# bottom, and within Laravel News tries `transport`/`feed` first, then `fallback_url`.
 lesson_sources:
-  - laravel-news.com   # primary
-  - laraveldaily.com   # fallback
+  - name: laravel-news
+    transport: telegram                                          # primary read path (ADR-0010)
+    feed: https://t.me/s/laravelnews                             # public, auth-free preview endpoint
+    fallback_url: https://laravel-news.com/laravel-13-{minor}-0  # URL probe, only when the feed is down
+  - name: laraveldaily
+    transport: web
+    feed: https://laraveldaily.com                              # broader editorial fallback
 
 # Changelog cross-check only: confirms version numbers/ordering and enriches detail,
 # but never surfaces a release on its own (ADR-0005). The Laravel framework repo.
