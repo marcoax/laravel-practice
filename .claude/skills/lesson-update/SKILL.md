@@ -1,13 +1,13 @@
 ---
 name: lesson-update
-description: Discover new Laravel releases from the editorial sources (laravel-news → Laravel Daily), propose one lesson per new version, and — on the learner's accept — generate it into lessons/ ready for a PR. Use when the learner wants to check for new Laravel versions / lessons, asks "are there new lessons?", "controlla nuove versioni", "update the lessons", "any Laravel releases I'm missing?", or runs /lesson-update. Also the discovery engine the lesson-completion auto-check (ADR-0007) runs in the background.
+description: Discover new Laravel releases from the editorial sources in learning-config.md (Laravel News, Laravel Daily), propose one lesson per new version, and — on the learner's accept — generate it into lessons/ ready for a PR. Use when the learner wants to check for new Laravel versions / lessons, asks "are there new lessons?", "controlla nuove versioni", "update the lessons", "any Laravel releases I'm missing?", or runs /lesson-update. Also the discovery engine the lesson-completion auto-check (ADR-0007) runs in the background.
 argument-hint: "(no arguments — it scans, proposes, and on accept generates)"
 ---
 
 Discover Laravel releases newer than the existing lessons cover, propose **one lesson per new
 version**, and on the learner's accept write it into `lessons/`. Grounded in **ADR-0005 / 0006 /
-0007 / 0010** — read them if a decision here is unclear; they are the source of truth, this file is
-the procedure.
+0007 / 0010 / 0011** — read them if a decision here is unclear; they are the source of truth, this
+file is the procedure.
 
 ## The one principle everything rests on
 
@@ -23,7 +23,7 @@ Read these fields from `learning-config.md` at the repo root (authoritative per 
 
 | field | role |
 |-------|------|
-| `lesson_sources` | editorial sources as **structured entries** (`name`/`transport`/`feed`/`fallback_url`). Laravel News (primary) is read via two transports — Telegram feed → URL-probe fallback — then Laravel Daily (ADR-0010). |
+| `lesson_sources` | **the** source list — single source of truth for *which* sources, *what* URLs, *what* order. Structured entries (`name`/`transport`/`feed`/`fallback_url?`): one `transport` per source; `fallback_url` is a field of that handler, not a second transport (ADR-0010/0011). The skill iterates this list — **it hardcodes no URLs.** |
 | `lesson_changelog` | Laravel framework repo — **cross-check only**, never discovers alone |
 | `laravel_version_scanned` | high-water cursor: highest version already examined. "New = > scanned". **Not derivable.** |
 | `laravel_version_covered` | highest version turned into a lesson. **Mirror** of `origin: local` files; kept explicit for the README. Advance only on real generation. |
@@ -49,27 +49,31 @@ generate) are always foreground, always gated by the human accept/skip.
 ### 1. Read state
 Load the fields above. `laravel_version_scanned` is the floor: only versions above it are candidates.
 
-### 2. Discover from the editorial sources
-Two levels — don't conflate them (ADR-0010): **sources** are the editorial filter; a source may
-have more than one **transport** (how it's read).
+### 2. Discover by iterating `lesson_sources`
+Config owns *which* sources and URLs; this step owns *how* to read each `transport`. **Do not
+hardcode source names or URLs here** — they live in `lesson_sources` (ADR-0011).
 
-**Laravel News (primary source)** — read via transports **in order**:
-1. **Telegram feed** `https://t.me/s/laravelnews` — primary transport; public, auth-free preview
-   with structured title + canonical article link + publication date.
-2. **URL-pattern probe** `https://laravel-news.com/laravel-13-{minor}-0` — fallback transport, used
-   only when the feed is unreachable; **tolerate 404 gaps** (`13-11-0` 404s while `13-12-0` exists).
+**Union, not fallback chain (ADR-0011, resolving ADR-0005).** Query **every** entry in
+`lesson_sources` and **union** the versions they yield — a release counts if *any* source wrote
+about it. Never stop at the first source that yields candidates: a release only the second source
+mentions must still surface. Each post yields a `(version, date)` taken **from the post**, not
+guessed.
 
-**Laravel Daily (fallback source)** — a *separate* editorial source, not a Laravel News transport;
-tried only after Laravel News yields nothing.
+Dispatch on each entry's `transport`:
 
-**The feed is a firehose, not a release index** — it republishes *all* Laravel News posts
-(articles, packages, tutorials). Treat a post as a release announcement when **its article link
-matches `laravel-news.com/laravel-13-N-0` OR its title matches `Laravel X.Y`** (link-OR-title);
-ignore the rest. Take the version and date **from the post**, not from a probe.
-
-**Walk back bounded:** paginate with `?before=<id>` until a post is **older than `last_checked`**,
-capped at **~5 pages** — whichever comes first. On the first run `last_checked` is `null`, so the
-page cap is the only stop.
+- **`telegram`** — read `feed` as a firehose: the channel republishes *all* posts (articles,
+  packages, tutorials), not just releases. Treat a post as a release announcement when **its
+  article link matches `…/laravel-<major>-<minor>-0` OR its title matches `Laravel X.Y`**
+  (link-OR-title); ignore the rest. **Walk back bounded:** paginate `?before=<id>` until a post is
+  **older than `last_checked`**, capped at **~5 pages** — whichever first; on the first run
+  `last_checked` is `null`, so the page cap is the only stop. If `feed` is unreachable, probe
+  `fallback_url` (interpolate `{minor}`), **tolerating 404 gaps** (`13-11-0` 404s while `13-12-0`
+  exists). `fallback_url` is this handler's backstop, **not** a separate transport.
+- **`web`** — fetch `feed` and scan the page's anchor links + headings with the **same
+  link-OR-title matcher** (`/laravel-<major>-<minor>-0` or `Laravel X.Y`); take version + date from
+  the matched post. **Best-effort:** a `web` source that yields nothing contributes nothing — that
+  is not an error.
+- **unknown `transport`** — skip with a notice and continue (same fail-soft rule below).
 
 Use `lesson_changelog` only to cross-check version numbers / patch level and ordering. **An
 unreachable source is skipped with a notice; execution continues** with the rest.

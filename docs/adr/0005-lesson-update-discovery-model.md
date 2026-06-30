@@ -1,6 +1,6 @@
 # ADR-0005 — /lesson-update discovery model: version as unit, blogs as editorial filter
 
-**Status:** Accepted (2026-06-29) — *read transport amended by [ADR-0010](0010-lesson-update-telegram-transport.md): Laravel News is now read primarily via its Telegram feed, with the URL-pattern probe demoted to fallback. The editorial model below is unchanged.*
+**Status:** Accepted (2026-06-29) — *read transport amended by [ADR-0010](0010-lesson-update-telegram-transport.md): Laravel News is now read primarily via its Telegram feed, with the URL-pattern probe demoted to fallback. Discovery semantics amended by [ADR-0011](0011-lesson-update-config-driven-source-dispatch.md): the "fallback chain" phrasing below is resolved to a **union** — all sources are queried and a release counts if **any** wrote about it (the "either source" rule wins). The editorial model below is otherwise unchanged.*
 
 ## Context
 

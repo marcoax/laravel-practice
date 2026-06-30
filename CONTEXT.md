@@ -66,11 +66,13 @@ Use these terms in issues, ADRs, skill prompts, and code. Avoid the synonyms not
   drift across sources). _Avoid:_ "(version, feature)" as a key, "topic matching". See
   ADR-0005.
 
-- **editorial filter sources** — the blogs `/lesson-update` discovers releases from, as a
-  fallback chain: **laravel-news** (primary) → **Laravel Daily** (fallback). A release worth
-  a lesson is one *either* blog covered; a release neither covers is skipped silently
-  (accepted limitation — the gap is the filter). _Avoid:_ treating these as a complete
-  release index. See ADR-0005.
+- **editorial filter sources** — the blogs `/lesson-update` discovers releases from, declared in
+  `lesson_sources` (the single source of truth; the skill hardcodes no URLs). Discovery queries
+  them **all and unions** the result: a release worth a lesson is one *any* source covered; a
+  release none covers is skipped silently (accepted limitation — the gap is the filter). Each
+  source has one **transport** (how it's read — `telegram`, `web`) plus an optional `fallback_url`
+  backstop. _Avoid:_ a "fallback chain" that stops at the first source; treating these as a
+  complete release index; calling `fallback_url` a transport. See ADR-0005/0010/0011.
 
 - **changelog cross-check** — the Laravel changelog used by `/lesson-update` to confirm
   version numbers and ordering and to enrich detail, but **not** as an independent discovery

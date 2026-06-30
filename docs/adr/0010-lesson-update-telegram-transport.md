@@ -1,6 +1,9 @@
 # ADR-0010 — /lesson-update: Telegram as the primary read transport for Laravel News
 
-**Status:** Accepted (2026-06-30)
+**Status:** Accepted (2026-06-30) — *extended by [ADR-0011](0011-lesson-update-config-driven-source-dispatch.md):
+the skill now iterates `lesson_sources` (config = single source of truth, no hardcoded URLs) and
+unions across sources. The "two transports" framing below is superseded by "one `transport` per
+source + an optional `fallback_url` field"; the read mechanics are otherwise unchanged.*
 
 ## Context
 

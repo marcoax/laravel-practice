@@ -55,13 +55,14 @@ auto_branch_base: main
 
 # --- Lesson updates (/lesson-update) ---
 
-# Editorial discovery sources, in fallback order: a release is lesson-worthy if
-# *either* source wrote about it — Laravel News (primary) → Laravel Daily (fallback).
-# These sources both discover and editorially filter releases (ADR-0005).
-# Structured entries (ADR-0010): Laravel News has ONE editorial identity but TWO read
-# transports — the Telegram feed (primary) and a URL-pattern probe (fallback used only
-# when the feed is unreachable). Discovery (ADR-0007 sub-agent) walks this list top to
-# bottom, and within Laravel News tries `transport`/`feed` first, then `fallback_url`.
+# Editorial discovery sources — the single source of truth for which sources /lesson-update
+# reads, their URLs, and order. A release is lesson-worthy if *any* source wrote about it:
+# discovery queries them ALL and unions the result (ADR-0011, resolving ADR-0005). These
+# sources both discover and editorially filter releases (ADR-0005).
+# Structured entries (ADR-0010/0011): each source has ONE `transport` plus an optional
+# `fallback_url` (a backstop for that handler, NOT a second transport). Laravel News is read
+# via its Telegram `feed`, falling back to the URL-probe `fallback_url` only when the feed is
+# down. The skill iterates this list and dispatches on `transport` — it hardcodes no URLs.
 lesson_sources:
   - name: laravel-news
     transport: telegram                                          # primary read path (ADR-0010)

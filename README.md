@@ -86,9 +86,9 @@ The current lessons cover Laravel **up to version 13.8**. Laravel keeps shipping
 **`/lesson-update`** looks for releases newer than that and turns the worthwhile ones into
 new lessons:
 
-1. **Discover** new releases from the editorial sources — [Laravel News](https://laravel-news.com)
-   (primary) → [Laravel Daily](https://laraveldaily.com) (fallback). A release is
-   lesson-worthy only if one of the blogs wrote about it.
+1. **Discover** new releases from the editorial sources listed in `learning-config.md`
+   ([Laravel News](https://laravel-news.com), [Laravel Daily](https://laraveldaily.com), …),
+   querying them all. A release is lesson-worthy if *any* of the sources wrote about it.
 2. **Propose one lesson per release** (named by version, e.g. `13.17-…`), one at a time —
    you accept or skip each.
 3. **Generate** the accepted ones into [`/lessons`](./lessons), ready to run with `/teach`.

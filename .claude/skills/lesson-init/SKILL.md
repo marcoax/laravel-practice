@@ -57,8 +57,8 @@ Also write the `# --- Lesson updates (/lesson-update) ---` section. Only
 `auto_check_new_lessons` comes from the interview (question #10); the rest is **seeded
 state**, not preferences — copy the defaults verbatim from `learning-config.example.md`:
 
-- `lesson_sources` — the ordered, **structured** source list (Laravel News via Telegram feed
-  → URL-probe fallback, then Laravel Daily); copy the full shape verbatim (ADR-0010).
+- `lesson_sources` — the **structured** source list, one `transport` per source (+ optional
+  `fallback_url`); copy the full shape verbatim (ADR-0010/0011).
 - `lesson_changelog` — `laravel/framework` (cross-check only).
 - `laravel_version_scanned` / `laravel_version_covered` — both seed to the version the 12
   existing lessons reach (currently `"13.8"`).
