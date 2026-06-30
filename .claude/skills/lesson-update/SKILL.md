@@ -4,8 +4,6 @@ description: Discover new Laravel releases from the editorial sources (laravel-n
 argument-hint: "(no arguments — it scans, proposes, and on accept generates)"
 ---
 
-# lesson-update
-
 Discover Laravel releases newer than the existing lessons cover, propose **one lesson per new
 version**, and on the learner's accept write it into `lessons/`. Grounded in **ADR-0005 / 0006 /
 0007 / 0010** — read them if a decision here is unclear; they are the source of truth, this file is
@@ -97,7 +95,6 @@ Write each accepted lesson into `lessons/` from `lessons/_template.md`:
 - **Generate in default mode, never Learn by Doing (ADR-0009).** Lesson generation is *content
   authoring*, not co-writing code on a design decision — so the `Learning` output style does **not**
   apply here. Emit **complete** briefs: never a `TODO(human)` block or placeholder line.
-  Learn-by-Doing belongs to `/teach`, not to `/lesson-update`.
 
 ### 6. Update state (only for what actually happened)
 - Advance `laravel_version_scanned` to the highest version examined.

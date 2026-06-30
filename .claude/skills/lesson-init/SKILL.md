@@ -1,21 +1,20 @@
 ---
 name: lesson-init
-description: One-shot setup for this Laravel 12→13 learning workspace. Interviews the learner one question at a time (each with a recommended default) and writes their per-user learning-config.md plus the local output-style override. Run once per fork; distinct from /teach.
+description: One-shot setup for this Laravel 12→13 workspace — interviews you, then writes learning-config.md and the local output-style override. Run once per fork.
 disable-model-invocation: true
 argument-hint: "(no arguments — it interviews you)"
 ---
 
-The user wants to set up this teaching workspace. `/lesson-init` is a **one-shot bootstrap**,
-run once per fork, distinct from `/teach` (which runs the lessons). Your job is to interview
-the learner, then write two files:
+`/lesson-init` is a one-shot bootstrap, run once per fork, distinct from `/teach` (which runs
+the lessons). Interview the learner, then write two files:
 
-1. **`learning-config.md`** at the repo root — the per-user, git-ignored config that every
-   later session treats as authoritative (see `CLAUDE.md` → *Config binding*, ADR-0001/0003).
-2. **`.claude/settings.local.json`** — the git-ignored, higher-precedence settings file that
-   actually *enforces* the chosen output style.
+1. **`learning-config.md`** at the repo root — the per-user, git-ignored config every later
+   session treats as authoritative (see `CLAUDE.md` → *Config binding*, ADR-0001/0003).
+2. **`.claude/settings.local.json`** — the git-ignored, higher-precedence file that *enforces*
+   the chosen output style.
 
-Read `learning-config.example.md` (the tracked schema) and `CONTEXT.md` before you start, so
-your output matches the canonical field names and the repo's vocabulary.
+First read `learning-config.example.md` (the tracked schema) and `CONTEXT.md`, so your output
+matches the canonical field names and the repo's vocabulary.
 
 ## Step 1 — Detect first-run vs re-run
 
@@ -27,15 +26,12 @@ Before asking anything, check whether `learning-config.md` already exists at the
 
 ## Step 2 — Interview, one question at a time
 
-Ask **one question per turn** using the `AskUserQuestion` tool. Every question ships a
-**recommended default as the first option, labelled "(recommended)"**, so the learner can
-accept the whole setup quickly. Ask the `language` question (#4) **first of all**, then
-phrase every subsequent question in the learner's chosen `chat` language; keep the YAML
-field names in English. On a re-run, the recommended default is the learner's *current*
-value, not the template default.
-
-Ask `language` first (it sets the language for the rest of the interview), then the other
-essentials, then the pedagogy fields:
+Ask **one question per turn** with `AskUserQuestion`. Each question's **first option is the
+recommended default, labelled "(recommended)"**, so the learner can accept the whole setup
+quickly. Ask `language` (#1) **first** — it sets the language for the rest of the interview;
+phrase every later question in the learner's chosen `chat` language, but keep the YAML field
+names in English. On a re-run, each recommended default is the learner's *current* value, not
+the template default.
 
 | # | Field | Recommended default | Notes / options |
 |---|-------|---------------------|-----------------|
@@ -55,8 +51,7 @@ essentials, then the pedagogy fields:
 Render the answers into the YAML block, preserving the structure and the explanatory
 comments from `learning-config.example.md` (the file is documentation outside the block,
 YAML inside). Keep the `# --- Essentials ---` / `# --- Pedagogy ---` sections. Persist
-`auto_branch` (with its base branch) next to `branch_convention` in the pedagogy section;
-do **not** create or switch any git branch here — `/lesson-init` only writes config.
+`auto_branch` (with its base branch) next to `branch_convention` in the pedagogy section.
 
 Also write the `# --- Lesson updates (/lesson-update) ---` section. Only
 `auto_check_new_lessons` comes from the interview (question #10); the rest is **seeded
@@ -66,12 +61,12 @@ state**, not preferences — copy the defaults verbatim from `learning-config.ex
   → URL-probe fallback, then Laravel Daily); copy the full shape verbatim (ADR-0010).
 - `lesson_changelog` — `laravel/framework` (cross-check only).
 - `laravel_version_scanned` / `laravel_version_covered` — both seed to the version the 12
-  existing lessons reach (currently `"13.8"`); do **not** ask the learner for these.
+  existing lessons reach (currently `"13.8"`).
 - `lessons_skipped` — `[]`.
 - `last_checked` — `null` (never run yet).
 
-Never prompt for the seeded fields; a fresh config always starts from these values, and on a
-re-run they are preserved per the *Re-running* rule (only `auto_check_new_lessons` is re-asked).
+Never prompt for these seeded fields. A fresh config starts from the values above; on a re-run
+they are preserved per the *Re-running* rule (only `auto_check_new_lessons` is re-asked).
 
 ## Step 4 — Write the output style to `.claude/settings.local.json`
 
@@ -80,13 +75,11 @@ never overwrite: read the current JSON, set the top-level `"outputStyle"` key to
 value, and preserve every other key (especially `permissions`). The tracked
 `.claude/settings.json` stays neutral (`{}`) — do not write the style there.
 
-`model` is **not** enforced anywhere; it lives only in `learning-config.md` as advice.
-
 ## Re-running (update mode)
 
 When `learning-config.md` already exists, you must reconcile the new answers with the
 existing learner state rather than blindly overwriting it (acceptance criterion in issue #4,
-ADR-0002). Decide and document the exact reconciliation strategy here.
+ADR-0002):
 
 1. **Pre-fill, don't reset.** Parse the current `learning-config.md` YAML and use each
    stored value as that question's recommended default (first option, "(recommended)").
