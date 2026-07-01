@@ -93,8 +93,16 @@ Write each accepted lesson into `lessons/` from `lessons/_template.md`:
 - **Filename: version-pure**, full patch level, e.g. `13.17-….md`. **No topic slug** (a release
   aggregates many changes — picking one would be arbitrary). The version prefix deliberately breaks
   the `01/02/03…` sequence; that makes an upstream collision *visible and expected*.
-- **YAML frontmatter (generated lessons only):** `version: <x.y.z>` and `origin: local`. Do **not**
-  retrofit the 12 existing lessons (ADR-0006).
+- **YAML frontmatter (generated lessons only):** `version: <x.y.z>`, `origin: local`, and
+  `title: <slug>` — a **concise** kebab-case slug capturing the concept, not a full transcription
+  of the `# Lesson X.Y — <title>` heading: drop prepositions/filler ("from", "with", "your") and
+  parenthetical technical detail (a method name, a class), keep it to **2–4 words**. E.g. "HTML
+  password rules from your validation rules" → `html-password-rules`, "Bulk job dispatch with
+  Bus::bulk()" → `bulk-job-dispatch` (the `Bus::bulk()` detail belongs in the lesson body, not
+  the menu row). Write it **once, here, at generation time** — it is the single source of truth
+  for how the lesson's title is displayed everywhere downstream (the `teach-lesson` menu reads
+  this field rather than re-deriving it from the heading). Do **not** retrofit the 12 existing
+  lessons (ADR-0006).
 - **Brief in the `language.docs` language (English).** HTML render stays a later `/teach` step.
 - **Generate in default mode, never Learn by Doing (ADR-0009).** Lesson generation is *content
   authoring*, not co-writing code on a design decision — so the `Learning` output style does **not**
