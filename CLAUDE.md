@@ -47,16 +47,16 @@ This repo is a neutral, forkable template; the learner's choices are per-user an
 git-ignored. If **`learning-config.md`** exists at the repo root, treat its values as
 **authoritative** — the reference project, the language split (chat/lessons vs docs),
 and the pedagogy fields (`practice_default`, `quiz_format`, `deep_dive`,
-`branch_convention`). The output style is enforced separately via
-`.claude/settings.local.json`; `model` is advisory only. If `learning-config.md` is
-**absent**, suggest running **`/lesson-init`** to create it. See
-`learning-config.example.md` for the schema and ADR-0001/0003.
+`branch_convention`). The shared output-style default lives in `.claude/settings.json`
+and can be overridden per user in `.claude/settings.local.json`; `model` is advisory
+only. If `learning-config.md` is **absent**, suggest running **`/lesson-init`** to
+create it. See `learning-config.example.md` for the schema and ADR-0001/0003.
 
 **Permission mode.** This workspace defaults to auto-accept edits via
 `permissions.defaultMode: "acceptEdits"` so `/teach` can write lessons, learning
-records, and `progress.json` without per-edit prompts. Like the output style, it lives
-in the **git-ignored** `.claude/settings.local.json` (per-user, not in the tracked
-template), so each contributor opts in on their own machine. See ADR-0008.
+records, and `progress.json` without per-edit prompts. The permission mode lives in the
+**git-ignored** `.claude/settings.local.json` (per-user, not in the tracked template),
+so each contributor opts in on their own machine. See ADR-0008.
 
 ## Lesson lifecycle
 

@@ -16,4 +16,8 @@
 # Per-user lesson setup (reference project, language, pedagogy). The schema
 # reference learning-config.example.md IS tracked. See ADR-0001.
 /learning-config.md
+
+# Per-user Claude Code preferences such as permission mode and local output-style
+# overrides. Shared defaults live in .claude/settings.json. See ADR-0003/0008.
+/.claude/settings.local.json
 .DS_Store

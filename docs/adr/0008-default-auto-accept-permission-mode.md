@@ -12,22 +12,21 @@ interrupt the lesson flow without adding safety in a content-only repo (no runna
 app, no `composer.json`/`artisan`).
 
 Claude Code exposes the default via `permissions.defaultMode`. The authoritative
-key/values come from the settings JSON schema
-(`https://www.schemastore.org/claude-code-settings.json`): allowed values include
-`default`, `acceptEdits`, `plan`, `bypassPermissions`, and `auto`. The well-established
-auto-accept-edits mode is **`acceptEdits`** (it auto-applies file edits while still
-prompting for riskier actions), which is what we want — not the broader
-`bypassPermissions`.
+key/values were checked against the current Claude Code settings documentation
+(`https://code.claude.com/docs/en/settings`) and CLI reference
+(`https://code.claude.com/docs/en/cli-reference`): allowed values include `default`,
+`acceptEdits`, `plan`, `auto`, `dontAsk`, and `bypassPermissions`. The
+well-established auto-accept-edits mode is **`acceptEdits`**, which is what we want —
+not the broader `bypassPermissions`.
 
 ## Decision
 
 - Set **`permissions.defaultMode: "acceptEdits"`** so the workspace opens in
   auto-accept mode with no manual per-session toggle.
 - **Scope: git-ignored `.claude/settings.local.json`** (per-user), *not* the tracked
-  `.claude/settings.json`. This is consistent with ADR-0003: the tracked settings file
-  stays **neutral** (the public template forces no per-user behaviour), and per-user
-  choices — output style, now also the permission mode — live in the git-ignored local
-  file that takes precedence.
+  `.claude/settings.json`. This keeps the auto-accept permission choice out of the shared
+  template while still allowing `.claude/settings.json` to carry shared non-permission
+  defaults such as the `Learning` output style.
 
 ## Consequences
 
@@ -35,4 +34,5 @@ prompting for riskier actions), which is what we want — not the broader
 - Forks/contributors do **not** inherit it (the file is git-ignored). To opt in, add
   `"permissions": { "defaultMode": "acceptEdits" }` to their own
   `.claude/settings.local.json`. `/lesson-init` is the natural place to offer writing it.
-- The public template remains neutral; ADR-0003's stance is preserved.
+- The public template does not force a permission mode; ADR-0003's per-user override
+  stance is preserved for local preferences.

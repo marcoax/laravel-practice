@@ -59,18 +59,18 @@ up the scaffolding and asks **you** to write the key 2–10 lines (a `TODO(human
 then gives feedback. That's the "understanding beats delegating" philosophy in practice.
 
 It is a separate setting from `/teach`: `/teach` decides *what* you learn; the Learning
-output style decides *how* you interact. Picking it is part of `/lesson-init`, which writes
-your choice to the git-ignored
-[`.claude/settings.local.json`](./.claude/settings.local.json) — so it stays per-user,
-while the tracked `settings.json` ships neutral:
+output style decides *how* you interact. The tracked `.claude/settings.json` ships the
+recommended shared default:
 
 ```json
 { "outputStyle": "Learning" }
 ```
 
-To change it later, run `/output-style` and pick `Learning` (or `default` to have the
-agent write the code for you). Other agents: replicate the behaviour by asking them to
-scaffold and leave the key decision to you.
+Picking a different style in `/lesson-init` writes your choice to the git-ignored
+[`.claude/settings.local.json`](./.claude/settings.local.json), which overrides the
+shared default for your machine only. To change it later, run `/output-style` and pick
+`Learning` (or `default` to have the agent write the code for you). Other agents:
+replicate the behaviour by asking them to scaffold and leave the key decision to you.
 
 ## How it works
 
