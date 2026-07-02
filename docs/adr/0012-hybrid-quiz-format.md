@@ -35,6 +35,8 @@ The pedagogy trade-off:
   its options remain as a paper drill. The answer key lives in the `data-answer`
   attribute — same openness as the recall widget, whose answers are plain HTML anyway.
 - **Authoring rules** (already in NOTES.md): options of equal length, no formatting cues.
+  Each fieldset uses its own radio `name` (`q1`, `q2`, …), otherwise radios of different
+  questions would form one group.
 - First user: **lesson 05** (`hasMany()` vs `hasSole()`, `Arr::only()` vs
   `Arr::onlyValues()`).
 
