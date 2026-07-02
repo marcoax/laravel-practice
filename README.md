@@ -132,6 +132,16 @@ backup, to move between devices, or to commit into your own fork.
 > then open <http://localhost:8000/index.html>. (No server? Use the **Import**
 > button to load `progress.json` by hand.)
 
+## Reading mode — the course shell
+
+`course.html` is an interactive reading companion to the tracker (ADR-0013). Served
+over the same local server (`http://localhost:8000/course.html`), it shows a
+**sidebar** — the lesson list with live done/todo status from `progress.json` — next
+to the rendered lesson. At the bottom of a lesson, **deepen buttons** prepare a
+ready-made prompt (one click copies it): paste it into your running Claude Code
+session, the agent patches the lesson HTML, and the shell reloads the page by itself.
+The shell is read-only on progress — status and notes still live in the tracker.
+
 ## Publishing the tracker (GitHub Pages)
 
 If you fork this and want the tracker live:

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Course · Laravel 12 → 13: Learn by Doing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f5f2eb; --bg-2: #ede9df;
+    --ink: #1a1814; --ink-2: #4a4540; --ink-3: #8a8075;
+    --accent: #EB695B; --accent-deep: #c0392b;
+    --border: #d5cfc4; --ok: #3f7d5a; --warn: #c9772f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Libre Baskerville', Georgia, serif; display: flex; overflow: hidden; }
+
+  aside { width: 320px; min-width: 240px; flex-shrink: 0; height: 100%; overflow-y: auto; border-right: 1px solid var(--border); padding: 1.4rem 1rem 2rem; }
+  .kicker { font-family: 'JetBrains Mono', monospace; font-size: .6rem; text-transform: uppercase; letter-spacing: .18em; color: var(--accent); margin-bottom: .5rem; }
+  aside h1 { font-size: 1.05rem; line-height: 1.3; font-weight: 700; letter-spacing: -.01em; margin-bottom: .8rem; }
+  aside h1 em { color: var(--accent); font-style: italic; }
+
+  .prog-meta { font-family: 'JetBrains Mono', monospace; font-size: .64rem; color: var(--ink-2); display: flex; justify-content: space-between; margin-bottom: .4rem; }
+  .prog-meta strong { color: var(--ok); }
+  .bar { height: 6px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 1rem; }
+  .bar-fill { height: 100%; background: var(--ok); width: 0%; transition: width .35s ease; }
+
+  nav a.item { display: flex; align-items: baseline; gap: .5rem; padding: .45rem .55rem; border-radius: 6px; text-decoration: none; color: var(--ink-2); font-size: .78rem; line-height: 1.45; border: 1px solid transparent; }
+  nav a.item:hover { background: var(--bg-2); }
+  nav a.item.active { border-color: var(--accent); background: rgba(235,105,91,.08); color: var(--ink); }
+  .dot { flex-shrink: 0; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--ink-3); position: relative; top: -1px; }
+  .dot.done  { background: var(--ok);   border-color: var(--ok); }
+  .dot.doing { background: var(--warn); border-color: var(--warn); }
+  .item .n { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--accent); flex-shrink: 0; }
+  .item.done .t { text-decoration: line-through; text-decoration-color: var(--ink-3); color: var(--ink-3); }
+
+  .sec-label { font-family: 'JetBrains Mono', monospace; font-size: .58rem; text-transform: uppercase; letter-spacing: .14em; color: var(--ink-3); margin: 1.1rem 0 .3rem .55rem; }
+
+  .side-foot { margin-top: 1.4rem; padding-top: .9rem; border-top: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--ink-3); line-height: 1.8; }
+  .side-foot a { color: var(--accent-deep); }
+  .side-foot code { background: var(--bg-2); border: 1px solid var(--border); border-radius: 3px; padding: 0 .3rem; }
+
+  main { flex: 1; height: 100%; display: flex; flex-direction: column; }
+  .pane-bar { font-family: 'JetBrains Mono', monospace; font-size: .64rem; color: var(--ink-3); padding: .45rem .9rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap: 1rem; }
+  .pane-bar .live { color: var(--ok); }
+  iframe { flex: 1; width: 100%; border: 0; background: #fff; }
+  .empty { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--ink-3); font-size: .85rem; font-style: italic; padding: 2rem; text-align: center; }
+</style>
+</head>
+<body>
+
+<aside>
+  <div class="kicker">// course shell</div>
+  <h1>Laravel 12 → 13 · <em>learn by doing</em></h1>
+  <div class="prog-meta"><span id="progLabel">0 / 12 done</span><span id="progPct">0%</span></div>
+  <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  <nav id="nav"></nav>
+  <div class="side-foot">
+    <a href="index.html">↗ tracker (index.html)</a><br>
+    status auto-syncs from <code>progress.json</code><br>
+    serve with <code>php -S localhost:8000</code>
+  </div>
+</aside>
+
+<main>
+  <div class="pane-bar">
+    <span id="paneTitle">no lesson open</span>
+    <span id="paneLive"></span>
+  </div>
+  <div class="empty" id="empty">Pick a lesson from the sidebar.<br>The page reloads by itself when the agent updates it.</div>
+  <iframe id="pane" title="Lesson" style="display:none"></iframe>
+</main>
+
+<script>
+// Same catalogue as index.html (ADR-0013: extract to a shared asset if it drifts).
+var LESSONS = [
+  { id:1,  n:"01", slug:"01-eloquent-casts",                 title:"Eloquent casts: AsHtmlString, AsCollection::of(), #[UseEloquentBuilder]" },
+  { id:2,  n:"02", slug:"02-query-builder-pipelines",        title:"Query Builder Pipelines and shouldRun() in migrations" },
+  { id:3,  n:"03", slug:"03-queue-fail-on-exception",        title:"Queue: FailOnException middleware" },
+  { id:4,  n:"04", slug:"04-duration-and-http-helpers",      title:"Duration helpers and HTTP Client throwUnless()" },
+  { id:5,  n:"05", slug:"05-array-collection-gate-helpers",  title:"Array, Collection and Gate helpers (Gate + enum)" },
+  { id:6,  n:"06", slug:"06-php-83-upgrade",                 title:"PHP 8.3 minimum: upgrade checklist" },
+  { id:7,  n:"07", slug:"07-php-attributes",                 title:"PHP Attributes in the framework" },
+  { id:8,  n:"08", slug:"08-csrf-prevent-request-forgery",   title:"CSRF: PreventRequestForgery and Sec-Fetch-Site" },
+  { id:9,  n:"09", slug:"09-queue-route-interruptible-cache",title:"Queue: route(), Interruptible, Cache::touch()" },
+  { id:10, n:"10", slug:"10-ai-sdk",                         title:"Laravel AI SDK" },
+  { id:11, n:"11", slug:"11-vector-search",                  title:"Vector search and semantic search" },
+  { id:12, n:"12", slug:"12-json-api-resources",             title:"JSON:API Resources" }
+];
+// Rendered pages outside the tracked 12 (no status).
+var EXTRAS = [
+  { slug:"recap-12x", title:"Recap 12.x" },
+  { slug:"13.9.0",    title:"Laravel 13.9" },
+  { slug:"13.12.0",   title:"Laravel 13.12" }
+];
+
+var PROGRESS_POLL_MS = 4000;   // sidebar status from progress.json (ADR-0004 channel)
+var RELOAD_POLL_MS = 3000;     // active lesson content poll → auto-reload after agent edits
+
+var progress = {};             // { "<id>": {status, note} }
+var active = null;             // slug of the open lesson
+var lastBody = null;           // snapshot of the open lesson's HTML
+
+function lessonUrl(slug){ return "lessons/" + slug + ".html"; }
+function statusOf(id){ return (progress[id] && progress[id].status) || "todo"; }
+
+function renderProgressBar(){
+  var done = LESSONS.filter(function(l){ return statusOf(l.id)==="done"; }).length;
+  var pct = Math.round(done/LESSONS.length*100);
+  document.getElementById("barFill").style.width = pct+"%";
+  document.getElementById("progLabel").innerHTML = "<strong>"+done+"</strong> / "+LESSONS.length+" done";
+  document.getElementById("progPct").textContent = pct+"%";
+}
+
+function renderNav(){
+  var nav = document.getElementById("nav");
+  nav.innerHTML = "";
+  LESSONS.forEach(function(l){
+    var st = statusOf(l.id);
+    var a = document.createElement("a");
+    a.className = "item " + st + (active===l.slug ? " active" : "");
+    a.href = "#" + l.slug;
+    a.innerHTML = '<span class="dot '+st+'"></span><span class="n">'+l.n+'</span><span class="t">'+l.title+'</span>';
+    nav.appendChild(a);
+  });
+  var lbl = document.createElement("div");
+  lbl.className = "sec-label";
+  lbl.textContent = "extras";
+  nav.appendChild(lbl);
+  EXTRAS.forEach(function(x){
+    var a = document.createElement("a");
+    a.className = "item" + (active===x.slug ? " active" : "");
+    a.href = "#" + x.slug;
+    a.innerHTML = '<span class="dot"></span><span class="t">'+x.title+'</span>';
+    nav.appendChild(a);
+  });
+}
+
+function openLesson(slug){
+  active = slug;
+  lastBody = null;
+  var pane = document.getElementById("pane");
+  pane.style.display = "";
+  document.getElementById("empty").style.display = "none";
+  pane.src = lessonUrl(slug);
+  var l = LESSONS.filter(function(x){ return x.slug===slug; })[0] ||
+          EXTRAS.filter(function(x){ return x.slug===slug; })[0];
+  document.getElementById("paneTitle").textContent = l ? lessonUrl(slug) + " — " + l.title : lessonUrl(slug);
+  document.getElementById("paneLive").textContent = "";
+  renderNav();
+}
+
+function onHash(){
+  var slug = location.hash.replace(/^#/, "");
+  if(slug && slug !== active) openLesson(slug);
+}
+
+// Sidebar status: same progress.json channel index.html uses (ADR-0004),
+// re-polled so agent-written completion shows up without a manual refresh.
+function pollProgress(){
+  fetch("progress.json", {cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+    .then(function(data){
+      progress = (data && data.progress) ? data.progress : (data || {});
+      renderProgressBar(); renderNav();
+    })
+    .catch(function(){ /* no progress.json — everything stays todo */ });
+}
+
+// Live half of the deepen loop (ADR-0013): when the agent rewrites the open
+// lesson file, the fetched content differs from the last snapshot and the
+// iframe reloads. Content comparison, not Last-Modified: php -S sends no
+// freshness headers for static files.
+function pollLessonFile(){
+  if(!active) return;
+  var slug = active;
+  fetch(lessonUrl(slug), {cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw 0; return r.text(); })
+    .then(function(body){
+      if(slug !== active) return;
+      if(lastBody !== null && body !== lastBody){
+        document.getElementById("pane").src = lessonUrl(slug) + "?t=" + Date.now();
+        document.getElementById("paneLive").textContent = "↻ updated " + new Date().toLocaleTimeString();
+        document.getElementById("paneLive").className = "live";
+      }
+      lastBody = body;
+    })
+    .catch(function(){ /* transient — keep polling */ });
+}
+
+window.addEventListener("hashchange", onHash);
+renderNav(); renderProgressBar();
+pollProgress(); onHash();
+setInterval(pollProgress, PROGRESS_POLL_MS);
+setInterval(pollLessonFile, RELOAD_POLL_MS);
+</script>
+</body>
+</html>

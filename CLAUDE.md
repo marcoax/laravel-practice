@@ -14,6 +14,9 @@ codebase you choose at setup (`/lesson-init`), recorded in the git-ignored
   reuse the shared stylesheet `assets/lesson.css`.
 - **`index.html`** — standalone progress tracker, saves to browser `localStorage`
   (Export/Import as JSON). No build step.
+- **`course.html`** — served reading shell: sidebar with live done/todo status +
+  lesson pane + click-to-deepen prompt-prefill buttons. Read-only on progress.
+  See ADR-0013.
 - `MISSION.md`, `NOTES.md`, `learning-records/` — `/teach` workspace state.
 
 ## Rules
