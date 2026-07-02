@@ -128,13 +128,18 @@ proceed to the hand-off — the page is a companion, never a prerequisite.**
    - `python3 -m http.server 8000` (or `python` on systems without `python3`).
    - Neither available, or the port is taken by something that isn't serving this repo →
      skip the page entirely, mention it in one line, move on.
-3. **Open the browser** at `http://localhost:8000/#<slug>` (the lesson's HTML
-   basename without `.html`, e.g. `#03-queue-fail-on-exception` or `#13.17.0`), using the
-   platform's opener: `open` (macOS), `xdg-open` (Linux), `start` (Windows). No opener →
-   just print the URL for the learner to click.
-
-It is fine if the lesson's `.html` does not exist yet — the page polls and shows it as
-soon as `/teach` writes it.
+3. **Check the lesson HTML exists** before opening anything: `lessons/<slug>.html` (the
+   same basename used in the URL fragment). Two cases:
+   - **Exists** → open the browser at `http://localhost:8000/#<slug>` now, using the
+     platform's opener: `open` (macOS), `xdg-open` (Linux), `start` (Windows). No opener →
+     just print the URL for the learner to click. This is the common case for a
+     re-run/already-done lesson (its `.html` was written in a prior session).
+   - **Missing** → **do not open the browser yet.** The page would just poll an empty
+     hash and look broken. Instead print the URL as plain text
+     (`http://localhost:8000/#<slug>`) so the learner can open it by hand whenever they
+     want, and note that it'll be opened automatically the moment the lesson HTML exists.
+     Remember this pending state for step 6 — open exactly once, the first time the file
+     appears.
 
 ### 6. Hand off to /teach
 
@@ -144,6 +149,13 @@ Resolve the exact path, then **run `/teach` in-session — do not ask the learne
 (main-sequence `lessons/<NN-slug>.md` or version-pure `lessons/<x.y.z>.md`), treating this repo
 as the teaching workspace. From there `/teach` owns the session (practice mode, scaffolding,
 `TODO(human)`, quiz).
+
+**If step 5 deferred the browser open** (the lesson `.html` didn't exist yet), keep
+following `/teach`'s flow as normal; the moment `/teach` writes `lessons/<slug>.html` for
+the first time (its usual generation step), open the browser then — same opener logic as
+step 5, fire once. If the file is still missing when the session ends (e.g. the learner
+stops before generation), leave it deferred; nothing to clean up, the learner already has
+the URL from step 5.
 
 ## Optional argument
 
