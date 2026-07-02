@@ -55,7 +55,7 @@
 <aside>
   <div class="kicker">// course shell</div>
   <h1>Laravel 12 → 13 · <em>learn by doing</em></h1>
-  <div class="prog-meta"><span id="progLabel">0 / 12 done</span><span id="progPct">0%</span></div>
+  <div class="prog-meta"><span id="progLabel">0 done</span><span id="progPct">0%</span></div>
   <div class="bar"><div class="bar-fill" id="barFill"></div></div>
   <nav id="nav"></nav>
   <div class="side-foot">
@@ -90,18 +90,23 @@ var LESSONS = [
   { id:11, n:"11", slug:"11-vector-search",                  title:"Vector search and semantic search" },
   { id:12, n:"12", slug:"12-json-api-resources",             title:"JSON:API Resources" }
 ];
-// Pages outside the tracked 12: the 12.x recap plus every version-pure
-// lesson from /lesson-update, in version order (display ids 13, 14, … match
-// the /teach-lesson menu). A lesson without HTML yet just shows the empty
-// pane until /teach writes it — the shell polls and loads it on appearance.
-// /lesson-update appends here when it generates a new lesson (ADR-0013).
-var RECAP = { slug:"recap-12x", title:"Recap 12.x" };
-var EXTRAS = [
+// Version-pure lessons from /lesson-update — same course, same list, shown
+// right after lesson 12 with display ids 13, 14, … (matches the
+// /teach-lesson menu). Keyed in progress.json by version string (ADR-0006).
+// A lesson without HTML yet shows an empty pane until /teach writes it —
+// the shell polls and loads the page on appearance. /lesson-update appends
+// here when it generates a new lesson (ADR-0013).
+var VERSION_LESSONS = [
   { slug:"13.9.0",  ver:"13.9",  title:"html-password-rules" },
   { slug:"13.12.0", ver:"13.12", title:"scheduler-metadata-opt-out-listener-discovery" },
   { slug:"13.13.0", ver:"13.13", title:"bulk-job-dispatch" },
   { slug:"13.15.0", ver:"13.15", title:"typed-translation-accessors" },
   { slug:"13.17.0", ver:"13.17", title:"first-class-route-metadata" }
+];
+// Major-release recaps — the only side section: evolving review pages, not
+// course steps (a future recap-13x lands here).
+var RECAPS = [
+  { slug:"recap-12x", title:"Recap 12.x" }
 ];
 
 var PROGRESS_POLL_MS = 4000;   // sidebar status from progress.json (ADR-0004 channel)
@@ -116,10 +121,12 @@ function lessonUrl(slug){ return "lessons/" + slug + ".html"; }
 function statusOf(id){ return (progress[id] && progress[id].status) || "todo"; }
 
 function renderProgressBar(){
-  var done = LESSONS.filter(function(l){ return statusOf(l.id)==="done"; }).length;
-  var pct = Math.round(done/LESSONS.length*100);
+  var all = LESSONS.map(function(l){ return l.id; })
+    .concat(VERSION_LESSONS.map(function(x){ return x.slug; }));
+  var done = all.filter(function(id){ return statusOf(id)==="done"; }).length;
+  var pct = Math.round(done/all.length*100);
   document.getElementById("barFill").style.width = pct+"%";
-  document.getElementById("progLabel").innerHTML = "<strong>"+done+"</strong> / "+LESSONS.length+" done";
+  document.getElementById("progLabel").innerHTML = "<strong>"+done+"</strong> / "+all.length+" done";
   document.getElementById("progPct").textContent = pct+"%";
 }
 
@@ -134,23 +141,24 @@ function renderNav(){
     a.innerHTML = '<span class="dot '+st+'"></span><span class="n">'+l.n+'</span><span class="t">'+l.title+'</span>';
     nav.appendChild(a);
   });
-  var lbl = document.createElement("div");
-  lbl.className = "sec-label";
-  lbl.textContent = "extras";
-  nav.appendChild(lbl);
-  var recap = document.createElement("a");
-  recap.className = "item" + (active===RECAP.slug ? " active" : "");
-  recap.href = "#" + RECAP.slug;
-  recap.innerHTML = '<span class="dot"></span><span class="t">'+RECAP.title+'</span>';
-  nav.appendChild(recap);
-  EXTRAS.forEach(function(x, i){
-    // version-pure lessons are keyed by version string in progress.json (ADR-0006)
+  VERSION_LESSONS.forEach(function(x, i){
     var st = statusOf(x.slug);
     var a = document.createElement("a");
     a.className = "item " + st + (active===x.slug ? " active" : "");
     a.href = "#" + x.slug;
     a.innerHTML = '<span class="dot '+st+'"></span><span class="n">'+(13+i)+'</span>'+
       '<span class="t">'+x.title+' ('+x.ver+')</span>';
+    nav.appendChild(a);
+  });
+  var lbl = document.createElement("div");
+  lbl.className = "sec-label";
+  lbl.textContent = "recap";
+  nav.appendChild(lbl);
+  RECAPS.forEach(function(x){
+    var a = document.createElement("a");
+    a.className = "item" + (active===x.slug ? " active" : "");
+    a.href = "#" + x.slug;
+    a.innerHTML = '<span class="dot"></span><span class="t">'+x.title+'</span>';
     nav.appendChild(a);
   });
 }
@@ -164,8 +172,8 @@ function openLesson(slug){
   document.getElementById("empty").style.display = "none";
   pane.src = lessonUrl(slug);
   var l = LESSONS.filter(function(x){ return x.slug===slug; })[0] ||
-          EXTRAS.filter(function(x){ return x.slug===slug; })[0] ||
-          (RECAP.slug===slug ? RECAP : null);
+          VERSION_LESSONS.filter(function(x){ return x.slug===slug; })[0] ||
+          RECAPS.filter(function(x){ return x.slug===slug; })[0];
   document.getElementById("paneTitle").textContent = l ? lessonUrl(slug) + " — " + l.title : lessonUrl(slug);
   document.getElementById("paneLive").textContent = "";
   renderNav();
