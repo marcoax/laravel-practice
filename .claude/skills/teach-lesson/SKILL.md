@@ -13,7 +13,7 @@ delegate the whole teaching session to `/teach`.
    the lesson lifecycle (`CLAUDE.md` → *Lesson lifecycle*: `progress.json` + learning record).
 2. **One final action: hand off to `/teach`.** Build the menu, resolve the lesson, then
    execute `/teach` for it **in-session** — never ask the learner to type a command. The
-   course-shell warm-up (step 5) is a best-effort side step; the hand-off stays the final act.
+   course-page warm-up (step 5) is a best-effort side step; the hand-off stays the final act.
 3. **Lessons are whatever is on disk**, never a hardcoded list.
 
 ## Flow
@@ -77,10 +77,10 @@ both families: `id · title (version) · status`.
 - **Version**, for every row: read it from the `> Version:` line in the lesson's frontmatter/prose
   (e.g. `12.x, through 12.19` → show as `12.x–12.19`; a single version stays as-is). This is what
   lets the learner see the Laravel release(s) a lesson maps to at a glance, main-sequence or extra.
-- **Title**, for version-pure lessons: read the `title:` frontmatter field (a kebab-case slug,
-  written once at generation time by `/lesson-update` — see its step 5). Never re-derive it by
-  parsing the `# Lesson X.Y — <title>` heading here; the frontmatter is the single source of
-  truth. Never show a bare version number as the row label.
+- **Title**, for version-pure lessons: show a human-readable title, matching the course page.
+  Prefer the `LESSONS` entry in `index.html` for that version; if absent, read the title from
+  the `# Lesson X.Y — <title>` heading. Do not show the kebab-case frontmatter slug as the
+  learner-facing label; it remains metadata for generation/state, not the menu title.
 
 Use the learner's `language.chat` from `learning-config.md` (default English) for the menu text.
 
@@ -113,27 +113,27 @@ Which lesson? (default: next, 10)
 Prefer tappable options when available (first option = next/default). Otherwise accept a
 number, a slug, a version string, or "next"/Enter for the default.
 
-### 5. Start the course shell (best-effort, never blocking)
+### 5. Start the course page (best-effort, never blocking)
 
-Once the lesson is resolved, warm up the reading shell (`course.html`, ADR-0013) so the
-learner follows the lesson in the browser while `/teach` works. **Fail-soft at every step:
-if anything is missing or fails, skip silently and proceed to the hand-off — the shell is
-a companion, never a prerequisite.**
+Once the lesson is resolved, warm up the course page (`index.html`, the single served
+page — ADR-0013/0015) so the learner follows the lesson in the browser while `/teach`
+works. **Fail-soft at every step: if anything is missing or fails, skip silently and
+proceed to the hand-off — the page is a companion, never a prerequisite.**
 
 1. **Already serving?** Probe once: `curl -s -o /dev/null -w '%{http_code}' -m 1
-   http://localhost:8000/course.html`. A `200` means a server is already up — skip to 3.
+   http://localhost:8000/`. A `200` means a server is already up — skip to 3.
 2. **Start a server** from the repo root, in the background, with whatever is on this
    machine — check availability first (`command -v`), don't assume:
    - `php -S localhost:8000` (first choice: a Laravel learner has PHP), else
    - `python3 -m http.server 8000` (or `python` on systems without `python3`).
    - Neither available, or the port is taken by something that isn't serving this repo →
-     skip the shell entirely, mention it in one line, move on.
-3. **Open the browser** at `http://localhost:8000/course.html#<slug>` (the lesson's HTML
+     skip the page entirely, mention it in one line, move on.
+3. **Open the browser** at `http://localhost:8000/#<slug>` (the lesson's HTML
    basename without `.html`, e.g. `#03-queue-fail-on-exception` or `#13.17.0`), using the
    platform's opener: `open` (macOS), `xdg-open` (Linux), `start` (Windows). No opener →
    just print the URL for the learner to click.
 
-It is fine if the lesson's `.html` does not exist yet — the shell polls and shows it as
+It is fine if the lesson's `.html` does not exist yet — the page polls and shows it as
 soon as `/teach` writes it.
 
 ### 6. Hand off to /teach

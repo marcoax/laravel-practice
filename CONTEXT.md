@@ -9,7 +9,7 @@ for the decisions behind these terms. Created lazily via `/grill-with-docs`.
 The workspace splits cleanly into:
 
 - **Template (tracked, neutral, forkable)** — config, shared CSS, lesson briefs,
-  the progress tracker, the init skill, and neutral docs. Contains **no** mention of a
+  the course page, the init skill, and neutral docs. Contains **no** mention of a
   specific reference project.
 - **Per-user state (git-ignored)** — the learner's actual choices and progress:
   `learning-config.md`, `progress.json`, `MISSION.md`, `NOTES.md`,
@@ -44,16 +44,29 @@ Use these terms in issues, ADRs, skill prompts, and code. Avoid the synonyms not
 
 - **lesson lifecycle gate** — the end-of-lesson rule (in `CLAUDE.md`): before advancing,
   mark the lesson done and capture notes by updating **both** `progress.json` (structured,
-  for the tracker UI) and a `learning-records/NNNN-*.md` (narrative). See ADR-0004.
+  for the course page) and a `learning-records/NNNN-*.md` (narrative); for 13.x lessons,
+  then offer the recap (opt-in). See ADR-0004/0014.
 
-- **progress.json** — a git-ignored, agent-writable state file shaped like the tracker's
-  import payload (`{ progress: { <lesson-id>: { status, note } } }`). The bridge between the
-  filesystem (where the agent writes) and `index.html` (which lives in browser
-  localStorage). `index.html` auto-loads it. See ADR-0004.
+- **progress.json** — a git-ignored, agent-writable state file
+  (`{ progress: { <lesson-key>: { status, note } } }`), keyed by numeric id for core
+  lessons and by version string for release lessons. The bridge between the filesystem
+  (where the agent writes) and the course page (which polls it for status and notes).
+  See ADR-0004/0015.
 
-- **progress tracker** — `index.html`, the standalone localStorage-backed progress UI.
-  The agent cannot write its localStorage directly; it writes `progress.json` and the UI
-  reflects it. _Avoid:_ "dashboard". See ADR-0004.
+- **course page** — `index.html`, the single served entry page of the course: unified
+  sidebar (core + release lessons, continuous display numbering), live status from
+  `progress.json`, lesson pane with auto-reload, read-only note panel, deepen buttons.
+  Read-only on progress — the agent at the gate is the only writer. _Avoid:_ "progress
+  tracker", "course shell", "dashboard" (the standalone localStorage tracker and the
+  separate `course.html` shell were retired). See ADR-0013/0015.
+
+- **recap** — a per-major review page in `lessons/` (`recap-12x.html`,
+  `recap-13x.html`), listed in the course page's side section. Not a course step:
+  untracked in `progress.json`, never counted in completion. `recap-13x` is owned by
+  the lesson lifecycle gate — opt-in per 13.x lesson, created on first accept with a
+  backfill from the learning records, then grown hybrid (map row + interleaved quiz
+  questions + filo rosso rewritten only on pattern change). `recap-12x` is frozen.
+  _Avoid:_ "summary lesson", treating a recap as a lesson. See ADR-0014.
 
 - **/lesson-update** — the skill that discovers Laravel releases newer than the ones the
   existing lessons cover and, on the learner's approval, generates a lesson for each

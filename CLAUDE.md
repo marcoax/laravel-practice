@@ -12,11 +12,11 @@ codebase you choose at setup (`/lesson-init`), recorded in the git-ignored
   `lessons/_template.md`.
 - **`lessons/NN-*.html`** — the rendered lessons produced during `/teach` sessions; they
   reuse the shared stylesheet `assets/lesson.css`.
-- **`index.html`** — standalone progress tracker, saves to browser `localStorage`
-  (Export/Import as JSON). No build step.
-- **`course.html`** — served reading shell: sidebar with live done/todo status +
-  lesson pane + click-to-deepen prompt-prefill buttons. Read-only on progress.
-  See ADR-0013.
+- **`index.html`** — the single course page, served over a local static server: sidebar
+  with one unified lesson list (core + release lessons, continuous numbering) and live
+  done/todo status from `progress.json` + lesson pane + read-only note panel +
+  click-to-deepen prompt-prefill buttons. Read-only on progress (the agent is the only
+  writer, via `progress.json`). No build step. See ADR-0013/0015.
 - `MISSION.md`, `NOTES.md`, `learning-records/` — `/teach` workspace state.
 
 ## Rules
@@ -64,12 +64,28 @@ No lesson is left implicitly "done". At the **end of each lesson**, before movin
 capture completion and reflection with two writes (see ADR-0004):
 
 1. **Update `progress.json`** (git-ignored, at the repo root) — set the lesson's
-   `status` to `"done"` and store the learner's `note`. The file mirrors the tracker's
-   import payload: `{ "progress": { "<lesson-id>": { "status", "note" } } }`, keyed by the
-   numeric `id` in `index.html`'s `LESSONS` array (lesson 01 → `"1"`).
+   `status` to `"done"` and store the learner's `note`. Shape:
+   `{ "progress": { "<lesson-key>": { "status", "note" } } }`, keyed by the `key` in
+   `index.html`'s `LESSONS` array — the numeric id for core lessons (lesson 01 → `"1"`),
+   the version string for release lessons (e.g. `"13.9.0"`, ADR-0006).
 2. **Write/update the learning record** `learning-records/NNNN-<slug>.md` — the narrative
    outcome and key insight.
-3. **(Optional) Fire the background lesson-update check** — only when
+3. **(13.x lessons only) Offer the recap 13.x — opt-in** (ADR-0014). After the two
+   writes, if the completed lesson covers Laravel 13.x (core lessons 06–12 or any 13.x
+   release lesson), ask the learner: **"add this lesson to the recap 13.x?"**.
+   - **First accept** creates `lessons/recap-13x.html` with a **backfill** of *all*
+     completed 13.x material (core lessons 06–12 plus done release lessons), rebuilt
+     from the learning records, and adds the entry to `index.html`'s `RECAPS` array.
+   - **Later accepts grow it hybrid:** append the lesson's row to the map table; add
+     **1–2 quiz questions that actively interleave** with lessons already in the recap
+     (cross-lesson, never a per-lesson log); rewrite the **"filo rosso"** (cross-lesson
+     patterns) **only** when the new lesson confirms or breaks a pattern — otherwise
+     leave it untouched.
+   - The recap stays **untracked in `progress.json`** (precedent: `recap-12x`) — review
+     pages never inflate or block course completion.
+   - **Fail-soft:** a declined or failed recap update is skipped silently and never
+     blocks the gate.
+4. **(Optional) Fire the background lesson-update check** — only when
    `auto_check_new_lessons: on` in `learning-config.md` (ADR-0007). After the two writes
    above, spawn a **read-only background discovery sub-agent** that runs steps 1–3 of
    `/lesson-update` (discover → filter against `laravel_version_scanned` / `lessons_skipped`),
@@ -82,9 +98,9 @@ capture completion and reflection with two writes (see ADR-0004):
    `teach-lesson` startup. `/lesson-update` stays manually invocable regardless of the flag.
 
 `learning-records/` is the narrative source of truth; `progress.json` is the structured
-mirror the tracker UI reads. `index.html` auto-loads `progress.json` on open (graceful
-fallback when absent), so the browser tracker reflects the agent-written state without
-manual ticking. Keep the two writes in sync.
+mirror the course page reads. `index.html` polls `progress.json` (graceful fallback when
+absent), so the browser reflects the agent-written status and notes without manual
+ticking. Keep the two writes in sync.
 
 ## Agent skills
 

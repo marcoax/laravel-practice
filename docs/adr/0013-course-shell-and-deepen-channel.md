@@ -1,6 +1,8 @@
 # ADR-0013 — Course shell over a local server; prompt-prefill as the deepen channel
 
-**Status:** Accepted (2026-07-02)
+**Status:** Accepted (2026-07-02) — the "extends, not replaces" clause and the
+two-page catalogue duplication are superseded by ADR-0015 (the shell became the single
+course page, `index.html`); the deepen channel decision stands.
 
 ## Context
 
