@@ -77,10 +77,10 @@ both families: `id · title (version) · status`.
 - **Version**, for every row: read it from the `> Version:` line in the lesson's frontmatter/prose
   (e.g. `12.x, through 12.19` → show as `12.x–12.19`; a single version stays as-is). This is what
   lets the learner see the Laravel release(s) a lesson maps to at a glance, main-sequence or extra.
-- **Title**, for version-pure lessons: read the `title:` frontmatter field (a kebab-case slug,
-  written once at generation time by `/lesson-update` — see its step 5). Never re-derive it by
-  parsing the `# Lesson X.Y — <title>` heading here; the frontmatter is the single source of
-  truth. Never show a bare version number as the row label.
+- **Title**, for version-pure lessons: show a human-readable title, matching the course page.
+  Prefer the `LESSONS` entry in `index.html` for that version; if absent, read the title from
+  the `# Lesson X.Y — <title>` heading. Do not show the kebab-case frontmatter slug as the
+  learner-facing label; it remains metadata for generation/state, not the menu title.
 
 Use the learner's `language.chat` from `learning-config.md` (default English) for the menu text.
 

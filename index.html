@@ -173,7 +173,7 @@ function renderNote(){
   var note = (l && l.key) ? noteOf(l.key) : "";
   var btn = document.getElementById("noteToggle");
   var panel = document.getElementById("notePanel");
-  btn.style.display = note ? "" : "none";
+  btn.style.display = note ? "inline-block" : "none";
   btn.className = "note-toggle" + (noteOpen ? " on" : "");
   panel.className = "note-panel" + (note && noteOpen ? " open" : "");
   panel.textContent = note;
