@@ -103,6 +103,7 @@ var RELOAD_POLL_MS = 3000;     // active lesson content poll → auto-reload aft
 var progress = {};             // { "<id>": {status, note} }
 var active = null;             // slug of the open lesson
 var lastBody = null;           // snapshot of the open lesson's HTML
+var wasMissing = false;        // lesson HTML 404'd — reload as soon as it appears
 
 function lessonUrl(slug){ return "lessons/" + slug + ".html"; }
 function statusOf(id){ return (progress[id] && progress[id].status) || "todo"; }
@@ -142,6 +143,7 @@ function renderNav(){
 function openLesson(slug){
   active = slug;
   lastBody = null;
+  wasMissing = false;
   var pane = document.getElementById("pane");
   pane.style.display = "";
   document.getElementById("empty").style.display = "none";
@@ -173,19 +175,25 @@ function pollProgress(){
 // Live half of the deepen loop (ADR-0013): when the agent rewrites the open
 // lesson file, the fetched content differs from the last snapshot and the
 // iframe reloads. Content comparison, not Last-Modified: php -S sends no
-// freshness headers for static files.
+// freshness headers for static files. A missing file (the HTML is generated
+// mid-session by /teach) keeps polling and reloads on first appearance.
+function reloadPane(slug){
+  document.getElementById("pane").src = lessonUrl(slug) + "?t=" + Date.now();
+  document.getElementById("paneLive").textContent = "↻ updated " + new Date().toLocaleTimeString();
+  document.getElementById("paneLive").className = "live";
+}
 function pollLessonFile(){
   if(!active) return;
   var slug = active;
   fetch(lessonUrl(slug), {cache:"no-store"})
-    .then(function(r){ if(!r.ok) throw 0; return r.text(); })
+    .then(function(r){
+      if(!r.ok){ if(slug === active) wasMissing = true; return null; }
+      return r.text();
+    })
     .then(function(body){
-      if(slug !== active) return;
-      if(lastBody !== null && body !== lastBody){
-        document.getElementById("pane").src = lessonUrl(slug) + "?t=" + Date.now();
-        document.getElementById("paneLive").textContent = "↻ updated " + new Date().toLocaleTimeString();
-        document.getElementById("paneLive").className = "live";
-      }
+      if(body === null || slug !== active) return;
+      if(wasMissing || (lastBody !== null && body !== lastBody)) reloadPane(slug);
+      wasMissing = false;
       lastBody = body;
     })
     .catch(function(){ /* transient — keep polling */ });
