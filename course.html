@@ -90,11 +90,18 @@ var LESSONS = [
   { id:11, n:"11", slug:"11-vector-search",                  title:"Vector search and semantic search" },
   { id:12, n:"12", slug:"12-json-api-resources",             title:"JSON:API Resources" }
 ];
-// Rendered pages outside the tracked 12 (no status).
+// Pages outside the tracked 12: the 12.x recap plus every version-pure
+// lesson from /lesson-update, in version order (display ids 13, 14, … match
+// the /teach-lesson menu). A lesson without HTML yet just shows the empty
+// pane until /teach writes it — the shell polls and loads it on appearance.
+// /lesson-update appends here when it generates a new lesson (ADR-0013).
+var RECAP = { slug:"recap-12x", title:"Recap 12.x" };
 var EXTRAS = [
-  { slug:"recap-12x", title:"Recap 12.x" },
-  { slug:"13.9.0",    title:"Laravel 13.9" },
-  { slug:"13.12.0",   title:"Laravel 13.12" }
+  { slug:"13.9.0",  ver:"13.9",  title:"html-password-rules" },
+  { slug:"13.12.0", ver:"13.12", title:"scheduler-metadata-opt-out-listener-discovery" },
+  { slug:"13.13.0", ver:"13.13", title:"bulk-job-dispatch" },
+  { slug:"13.15.0", ver:"13.15", title:"typed-translation-accessors" },
+  { slug:"13.17.0", ver:"13.17", title:"first-class-route-metadata" }
 ];
 
 var PROGRESS_POLL_MS = 4000;   // sidebar status from progress.json (ADR-0004 channel)
@@ -131,11 +138,19 @@ function renderNav(){
   lbl.className = "sec-label";
   lbl.textContent = "extras";
   nav.appendChild(lbl);
-  EXTRAS.forEach(function(x){
+  var recap = document.createElement("a");
+  recap.className = "item" + (active===RECAP.slug ? " active" : "");
+  recap.href = "#" + RECAP.slug;
+  recap.innerHTML = '<span class="dot"></span><span class="t">'+RECAP.title+'</span>';
+  nav.appendChild(recap);
+  EXTRAS.forEach(function(x, i){
+    // version-pure lessons are keyed by version string in progress.json (ADR-0006)
+    var st = statusOf(x.slug);
     var a = document.createElement("a");
-    a.className = "item" + (active===x.slug ? " active" : "");
+    a.className = "item " + st + (active===x.slug ? " active" : "");
     a.href = "#" + x.slug;
-    a.innerHTML = '<span class="dot"></span><span class="t">'+x.title+'</span>';
+    a.innerHTML = '<span class="dot '+st+'"></span><span class="n">'+(13+i)+'</span>'+
+      '<span class="t">'+x.title+' ('+x.ver+')</span>';
     nav.appendChild(a);
   });
 }
@@ -149,7 +164,8 @@ function openLesson(slug){
   document.getElementById("empty").style.display = "none";
   pane.src = lessonUrl(slug);
   var l = LESSONS.filter(function(x){ return x.slug===slug; })[0] ||
-          EXTRAS.filter(function(x){ return x.slug===slug; })[0];
+          EXTRAS.filter(function(x){ return x.slug===slug; })[0] ||
+          (RECAP.slug===slug ? RECAP : null);
   document.getElementById("paneTitle").textContent = l ? lessonUrl(slug) + " — " + l.title : lessonUrl(slug);
   document.getElementById("paneLive").textContent = "";
   renderNav();

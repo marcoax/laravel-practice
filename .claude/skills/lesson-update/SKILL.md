@@ -111,6 +111,11 @@ Write each accepted lesson into `lessons/` from `lessons/_template.md`:
 - **Generate in default mode, never Learn by Doing (ADR-0009).** Lesson generation is *content
   authoring*, not co-writing code on a design decision — so the `Learning` output style does **not**
   apply here. Emit **complete** briefs: never a `TODO(human)` block or placeholder line.
+- **Register the lesson in the course shell (ADR-0013):** append one entry to the `EXTRAS`
+  array in `course.html`, keeping version order —
+  `{ slug:"<x.y.z>", ver:"<x.y>", title:"<the frontmatter slug>" }`. The `slug` is the HTML
+  basename (`lessons/<x.y.z>.html`, written later by `/teach`); the sidebar shows the lesson
+  immediately and loads the page when it appears.
 
 ### 6. Update state (only for what actually happened)
 - Advance `laravel_version_scanned` to the highest version examined.
