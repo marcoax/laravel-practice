@@ -7,7 +7,7 @@ bumps stay out.
 
 **46 releases → 12 lessons.**
 
-👉 Open the **[progress tracker](./index.html)** to follow where you are.
+👉 Serve the repo root and open the **[course page](./index.html)** to follow where you are.
 
 ## Getting started
 
@@ -113,42 +113,42 @@ Where useful, each lesson shows how the change was assessed for a **real referen
 project** — the one you pick at setup (`/lesson-init`) — as a concrete example, not as
 absolute truth.
 
-## Tracking your progress
+## The course page
 
-The tracker (`index.html`) saves automatically to your browser (`localStorage`).
-It also has **Export / Import**: download your progress as a `.json` file for
-backup, to move between devices, or to commit into your own fork.
+`index.html` is the single entry page for the course (ADR-0015). Serve the repo root
+and open it:
 
-> **Heads-up — open it over HTTP, not `file://`.** The tracker auto-loads the
-> agent-written `progress.json` with `fetch()`. Browsers block `fetch` of local
-> files when the page is opened by double-click (`file://`), so it silently falls
-> back to `localStorage` and your `/teach` progress won't show. Serve the folder
-> instead:
->
-> ```bash
-> php -S localhost:8000        # or: python3 -m http.server 8000
-> ```
->
-> then open <http://localhost:8000/index.html>. (No server? Use the **Import**
-> button to load `progress.json` by hand.)
+```bash
+php -S localhost:8000        # or: python3 -m http.server 8000
+```
 
-## Reading mode — the course shell
+then open <http://localhost:8000/>. What you get:
 
-`course.html` is an interactive reading companion to the tracker (ADR-0013). Served
-over the same local server (`http://localhost:8000/course.html`), it shows a
-**sidebar** — the lesson list with live done/todo status from `progress.json` — next
-to the rendered lesson. At the bottom of a lesson, **deepen buttons** prepare a
-ready-made prompt (one click copies it): paste it into your running Claude Code
-session, the agent patches the lesson HTML, and the shell reloads the page by itself.
-The shell is read-only on progress — status and notes still live in the tracker.
+- **One unified lesson list** in the sidebar — the 12 core lessons and the
+  `/lesson-update`-generated release lessons, continuously numbered, with live
+  done/todo status and a progress bar.
+- **The rendered lesson** next to it, auto-reloading whenever the agent updates it.
+- **A read-only note panel** (the `✎ note` button) showing the agent-written note —
+  the verdicts and insights captured at the end of each lesson.
+- **Deepen buttons** at the bottom of a lesson (ADR-0013): one click copies a
+  ready-made prompt; paste it into your running Claude Code session, the agent
+  patches the lesson HTML, and the page reloads by itself.
 
-## Publishing the tracker (GitHub Pages)
+The page is read-only on progress: status and notes are written by the agent into
+`progress.json` at the end of each lesson (the *lesson lifecycle gate*), and the page
+polls that file. There is nothing to tick by hand.
 
-If you fork this and want the tracker live:
+> **Heads-up — serve it over HTTP, not `file://`.** The page loads `progress.json`
+> and the lessons with `fetch()`, which browsers block when the page is opened by
+> double-click (`file://`).
+
+## Publishing the course (GitHub Pages)
+
+If you fork this and want the course page live:
 
 1. Push your copy to GitHub.
 2. *Settings → Pages → Source: Deploy from a branch → `main` / root*.
-3. The tracker will be at `https://<your-username>.github.io/<repo-name>/`.
+3. The course will be at `https://<your-username>.github.io/<repo-name>/`.
 
 ## Sources
 

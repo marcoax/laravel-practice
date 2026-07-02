@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tracker · Laravel 12 → 13: Learn by Doing</title>
+<title>Laravel 12 → 13: Learn by Doing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
@@ -15,255 +15,239 @@
     --border: #d5cfc4; --ok: #3f7d5a; --warn: #c9772f;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { font-size: 16px; }
-  body { background: var(--bg); color: var(--ink); font-family: 'Libre Baskerville', Georgia, serif; line-height: 1.6; padding-bottom: 3rem; }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 0 1.2rem; }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Libre Baskerville', Georgia, serif; display: flex; overflow: hidden; }
 
-  header { padding: 2.2rem 0 1.2rem; }
-  .kicker { font-family: 'JetBrains Mono', monospace; font-size: .66rem; text-transform: uppercase; letter-spacing: .2em; color: var(--accent); margin-bottom: .8rem; }
-  h1 { font-size: clamp(1.5rem, 5vw, 2.1rem); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; margin-bottom: .8rem; }
-  h1 em { color: var(--accent); font-style: italic; }
-  .intro { font-size: .92rem; color: var(--ink-2); margin-bottom: 1.3rem; }
-  .intro code { font-family: 'JetBrains Mono', monospace; font-size: .82em; background: var(--bg-2); padding: .05rem .3rem; border-radius: 3px; border: 1px solid var(--border); }
+  aside { width: 320px; min-width: 240px; flex-shrink: 0; height: 100%; overflow-y: auto; border-right: 1px solid var(--border); padding: 1.4rem 1rem 2rem; }
+  .kicker { font-family: 'JetBrains Mono', monospace; font-size: .6rem; text-transform: uppercase; letter-spacing: .18em; color: var(--accent); margin-bottom: .5rem; }
+  aside h1 { font-size: 1.05rem; line-height: 1.3; font-weight: 700; letter-spacing: -.01em; margin-bottom: .8rem; }
+  aside h1 em { color: var(--accent); font-style: italic; }
 
-  .prog-meta { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--ink-2); display: flex; justify-content: space-between; margin-bottom: .5rem; }
+  .prog-meta { font-family: 'JetBrains Mono', monospace; font-size: .64rem; color: var(--ink-2); display: flex; justify-content: space-between; margin-bottom: .4rem; }
   .prog-meta strong { color: var(--ok); }
-  .bar { height: 8px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .bar { height: 6px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 1rem; }
   .bar-fill { height: 100%; background: var(--ok); width: 0%; transition: width .35s ease; }
 
-  .filters { display: flex; gap: .4rem; flex-wrap: wrap; margin: 1.4rem 0 .6rem; }
-  .fbtn { font-family: 'JetBrains Mono', monospace; font-size: .66rem; text-transform: uppercase; letter-spacing: .06em; padding: .35rem .7rem; border: 1px solid var(--border); border-radius: 20px; background: transparent; color: var(--ink-3); cursor: pointer; }
-  .fbtn.active { border-color: var(--accent); color: var(--accent); background: rgba(235,105,91,.08); }
+  nav a.item { display: flex; align-items: baseline; gap: .5rem; padding: .45rem .55rem; border-radius: 6px; text-decoration: none; color: var(--ink-2); font-size: .78rem; line-height: 1.45; border: 1px solid transparent; }
+  nav a.item:hover { background: var(--bg-2); }
+  nav a.item.active { border-color: var(--accent); background: rgba(235,105,91,.08); color: var(--ink); }
+  .dot { flex-shrink: 0; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--ink-3); position: relative; top: -1px; }
+  .dot.done  { background: var(--ok);   border-color: var(--ok); }
+  .dot.doing { background: var(--warn); border-color: var(--warn); }
+  .item .n { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--accent); flex-shrink: 0; }
+  .item .v { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--ink-3); }
+  .item.done .t { text-decoration: line-through; text-decoration-color: var(--ink-3); color: var(--ink-3); }
 
-  .card { border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,.45); padding: 1rem 1.1rem; margin: .7rem 0; }
-  .card.done { opacity: .62; }
-  .card-top { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: .5rem; }
-  .lz-n { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .68rem; color: var(--accent); background: rgba(235,105,91,.1); border: 1px solid var(--accent); border-radius: 4px; padding: .2rem .5rem; white-space: nowrap; }
-  .lz-ver { font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--ink-3); }
-  .lz-chip { font-family: 'JetBrains Mono', monospace; font-size: .56rem; text-transform: uppercase; letter-spacing: .08em; padding: .14rem .42rem; border-radius: 3px; border: 1px solid var(--border); color: var(--ink-3); margin-left: auto; }
-  .lz-chip.sec { border-color: var(--accent); color: var(--accent); }
-  .lz-chip.brk { border-color: var(--accent-deep); color: var(--accent-deep); }
-  .lz-title { font-size: 1rem; font-weight: 700; line-height: 1.4; margin-bottom: .5rem; }
-  .card.done .lz-title { text-decoration: line-through; text-decoration-color: var(--ink-3); }
-  .lz-meta { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .75rem; }
-  .lz-eg { font-family: 'JetBrains Mono', monospace; font-size: .58rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); padding: .14rem .42rem; border: 1px dashed var(--border); border-radius: 3px; }
-  .lz-eg b { color: var(--ink-2); font-weight: 700; }
-  .lz-link { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--accent-deep); text-decoration: none; border-bottom: 1px solid rgba(192,57,43,.3); }
+  .sec-label { font-family: 'JetBrains Mono', monospace; font-size: .58rem; text-transform: uppercase; letter-spacing: .14em; color: var(--ink-3); margin: 1.1rem 0 .3rem .55rem; }
 
-  .states { display: flex; gap: .4rem; flex-wrap: wrap; }
-  .sbtn { flex: 1; min-width: 92px; font-family: 'JetBrains Mono', monospace; font-size: .64rem; text-transform: uppercase; letter-spacing: .05em; padding: .45rem .3rem; border: 1px solid var(--border); border-radius: 5px; background: transparent; color: var(--ink-3); cursor: pointer; text-align: center; }
-  .sbtn.on-todo  { border-color: var(--ink-3); color: var(--ink); background: var(--bg-2); }
-  .sbtn.on-doing { border-color: var(--warn);  color: #fff; background: var(--warn); }
-  .sbtn.on-done  { border-color: var(--ok);    color: #fff; background: var(--ok); }
+  .side-foot { margin-top: 1.4rem; padding-top: .9rem; border-top: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--ink-3); line-height: 1.8; }
+  .side-foot code { background: var(--bg-2); border: 1px solid var(--border); border-radius: 3px; padding: 0 .3rem; }
 
-  .note-toggle { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--ink-3); background: none; border: none; cursor: pointer; margin-top: .6rem; padding: 0; text-decoration: underline; text-underline-offset: 2px; }
-  .note-box { margin-top: .55rem; display: none; }
-  .note-box.open { display: block; }
-  .note-box textarea { width: 100%; font-family: 'JetBrains Mono', monospace; font-size: .76rem; color: var(--ink); background: var(--bg-2); border: 1px solid var(--border); border-radius: 5px; padding: .5rem .6rem; resize: vertical; min-height: 56px; line-height: 1.5; }
-
-  footer { margin-top: 2rem; padding-top: 1.2rem; border-top: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: .64rem; color: var(--ink-3); }
-  .foot-actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem; }
-  .fa-btn { font-family: 'JetBrains Mono', monospace; font-size: .62rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); background: none; border: 1px solid var(--border); border-radius: 5px; padding: .35rem .7rem; cursor: pointer; }
-  .fa-btn.danger { color: var(--accent-deep); }
-  .foot-note { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-  .foot-note a { color: var(--accent-deep); }
+  main { flex: 1; height: 100%; display: flex; flex-direction: column; }
+  .pane-bar { font-family: 'JetBrains Mono', monospace; font-size: .64rem; color: var(--ink-3); padding: .45rem .9rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 1rem; }
+  .pane-bar .live { color: var(--ok); }
+  #paneTitle { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .note-toggle { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--accent-deep); background: none; border: 1px solid var(--border); border-radius: 4px; padding: .15rem .55rem; cursor: pointer; white-space: nowrap; display: none; }
+  .note-toggle.on { border-color: var(--accent); background: rgba(235,105,91,.08); }
+  /* Read-only note panel: renders the agent-written `note` from progress.json
+     for the active lesson (ADR-0004 channel — no new writer, no new state). */
+  .note-panel { display: none; border-bottom: 1px solid var(--border); background: var(--bg-2); padding: .7rem .9rem; font-family: 'JetBrains Mono', monospace; font-size: .7rem; line-height: 1.65; color: var(--ink-2); max-height: 32vh; overflow-y: auto; white-space: pre-wrap; }
+  .note-panel.open { display: block; }
+  iframe { flex: 1; width: 100%; border: 0; background: #fff; }
+  .empty { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--ink-3); font-size: .85rem; font-style: italic; padding: 2rem; text-align: center; }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header>
-    <div class="kicker">// laravel 12 → 13 · learn by doing</div>
-    <h1>Where <em>you</em> are</h1>
-    <p class="intro">Twelve lessons, oldest first. Mark each one and note what it means <strong>for your project</strong>. Practice on your own codebase or a fresh Laravel app (<code>laravel new practice-app</code>). The lessons live in <code>/lessons</code>.</p>
-    <div class="prog-meta"><span id="progLabel">0 / 12 done</span><span id="progPct">0%</span></div>
-    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
-  </header>
+<aside>
+  <div class="kicker">// course</div>
+  <h1>Laravel 12 → 13 · <em>learn by doing</em></h1>
+  <div class="prog-meta"><span id="progLabel">0 done</span><span id="progPct">0%</span></div>
+  <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  <nav id="nav"></nav>
+  <div class="side-foot">
+    status &amp; notes auto-sync from <code>progress.json</code><br>
+    serve with <code>php -S localhost:8000</code>
+  </div>
+</aside>
 
-  <div class="filters" id="filters"></div>
-  <div id="list"></div>
-
-  <footer>
-    <div class="foot-actions">
-      <button class="fa-btn" id="exportBtn">Export JSON</button>
-      <button class="fa-btn" id="importBtn">Import JSON</button>
-      <button class="fa-btn danger" id="resetBtn">Reset</button>
-      <input type="file" id="importFile" accept="application/json,.json" style="display:none" />
-    </div>
-    <div class="foot-note">
-      <span id="saveNote">Saved in your browser</span>
-      <span>Laravel 12 → 13 · learn by doing</span>
-    </div>
-  </footer>
-
-</div>
+<main>
+  <div class="pane-bar">
+    <span id="paneTitle">no lesson open</span>
+    <span id="paneLive"></span>
+    <button type="button" class="note-toggle" id="noteToggle">✎ note</button>
+  </div>
+  <div class="note-panel" id="notePanel"></div>
+  <div class="empty" id="empty">Pick a lesson from the sidebar.<br>The page reloads by itself when the agent updates it.</div>
+  <iframe id="pane" title="Lesson" style="display:none"></iframe>
+</main>
 
 <script>
+// One unified catalogue (ADR-0015): core lessons and release lessons in a
+// single list, continuous display numbering. `key` is the progress.json key —
+// numeric id for the 12 core lessons, version string for release lessons
+// (the version stays the identity per ADR-0005/0006; the number is display
+// only). /lesson-update appends new release lessons here, in version order.
 var LESSONS = [
-  { id:1,  n:"01", ver:"12.x → 12.19",          type:"new", eg:"yes",   slug:"01-eloquent-casts",                 title:"Eloquent casts: AsHtmlString, AsCollection::of(), #[UseEloquentBuilder]" },
-  { id:2,  n:"02", ver:"12.4",                  type:"new", eg:"maybe", slug:"02-query-builder-pipelines",        title:"Query Builder Pipelines and shouldRun() in migrations" },
-  { id:3,  n:"03", ver:"12.19",                 type:"new", eg:"maybe", slug:"03-queue-fail-on-exception",        title:"Queue: FailOnException middleware" },
-  { id:4,  n:"04", ver:"12.40 · 12.41",         type:"new", eg:"yes",   slug:"04-duration-and-http-helpers",      title:"Duration helpers and HTTP Client throwUnless()" },
-  { id:5,  n:"05", ver:"12.45 · 12.46",         type:"new", eg:"yes",   slug:"05-array-collection-gate-helpers",  title:"Array, Collection and Gate helpers (Gate + enum)" },
-  { id:6,  n:"06", ver:"13.0",                  type:"brk", eg:"yes",   slug:"06-php-83-upgrade",                 title:"PHP 8.3 minimum: upgrade checklist" },
-  { id:7,  n:"07", ver:"13.0 → 13.8",           type:"new", eg:"maybe", slug:"07-php-attributes",                 title:"PHP Attributes in the framework" },
-  { id:8,  n:"08", ver:"13.0",                  type:"sec", eg:"yes",   slug:"08-csrf-prevent-request-forgery",   title:"CSRF: PreventRequestForgery and Sec-Fetch-Site" },
-  { id:9,  n:"09", ver:"13.0 → 13.x",           type:"new", eg:"maybe", slug:"09-queue-route-interruptible-cache",title:"Queue: route(), Interruptible, Cache::touch()" },
-  { id:10, n:"10", ver:"13.0",                  type:"new", eg:"yes",   slug:"10-ai-sdk",                         title:"Laravel AI SDK" },
-  { id:11, n:"11", ver:"13.0",                  type:"new", eg:"yes",   slug:"11-vector-search",                  title:"Vector search and semantic search" },
-  { id:12, n:"12", ver:"13.0",                  type:"new", eg:"maybe", slug:"12-json-api-resources",             title:"JSON:API Resources" }
+  { key:"1",  slug:"01-eloquent-casts",                 title:"Eloquent casts: AsHtmlString, AsCollection::of(), #[UseEloquentBuilder]" },
+  { key:"2",  slug:"02-query-builder-pipelines",        title:"Query Builder Pipelines and shouldRun() in migrations" },
+  { key:"3",  slug:"03-queue-fail-on-exception",        title:"Queue: FailOnException middleware" },
+  { key:"4",  slug:"04-duration-and-http-helpers",      title:"Duration helpers and HTTP Client throwUnless()" },
+  { key:"5",  slug:"05-array-collection-gate-helpers",  title:"Array, Collection and Gate helpers (Gate + enum)" },
+  { key:"6",  slug:"06-php-83-upgrade",                 title:"PHP 8.3 minimum: upgrade checklist" },
+  { key:"7",  slug:"07-php-attributes",                 title:"PHP Attributes in the framework" },
+  { key:"8",  slug:"08-csrf-prevent-request-forgery",   title:"CSRF: PreventRequestForgery and Sec-Fetch-Site" },
+  { key:"9",  slug:"09-queue-route-interruptible-cache",title:"Queue: route(), Interruptible, Cache::touch()" },
+  { key:"10", slug:"10-ai-sdk",                         title:"Laravel AI SDK" },
+  { key:"11", slug:"11-vector-search",                  title:"Vector search and semantic search" },
+  { key:"12", slug:"12-json-api-resources",             title:"JSON:API Resources" },
+  { key:"13.9.0",  slug:"13.9.0",  ver:"13.9",  title:"HTML password rules from your validation rules" },
+  { key:"13.12.0", slug:"13.12.0", ver:"13.12", title:"Scheduler metadata & opt-out listener discovery" },
+  { key:"13.13.0", slug:"13.13.0", ver:"13.13", title:"Bulk job dispatch with Bus::bulk()" },
+  { key:"13.15.0", slug:"13.15.0", ver:"13.15", title:"Typed translation accessors" },
+  { key:"13.17.0", slug:"13.17.0", ver:"13.17", title:"First-class route metadata" }
+];
+// Major-release recaps — the only side section: evolving review pages, not
+// course steps, untracked in progress.json (ADR-0014). The lesson lifecycle
+// gate adds recap-13x here on its first opt-in creation.
+var RECAPS = [
+  { slug:"recap-12x", title:"Recap 12.x" }
 ];
 
-var STORE_KEY = "laravel-12-13-practice";
-var FILTERS = [ {id:"all",label:"All"}, {id:"todo",label:"To do"}, {id:"doing",label:"In progress"}, {id:"done",label:"Done"} ];
-var TYPE_LABEL = { sec:"security", brk:"breaking", new:"new" };
+var PROGRESS_POLL_MS = 4000;   // sidebar status + notes from progress.json (ADR-0004 channel)
+var RELOAD_POLL_MS = 3000;     // active lesson content poll → auto-reload after agent edits
 
-// storage: localStorage with in-memory fallback (for sandboxed previews)
-var mem = {};
-var store = {
-  get: function(k){ try { return localStorage.getItem(k); } catch(e){ return (k in mem) ? mem[k] : null; } },
-  set: function(k,v){ try { localStorage.setItem(k,v); } catch(e){ mem[k]=v; setSaveNote("Not persisted in this preview"); } }
-};
-function setSaveNote(t){ var el=document.getElementById("saveNote"); if(el) el.textContent=t; }
+var progress = {};             // { "<key>": {status, note} }
+var active = null;             // slug of the open lesson
+var noteOpen = false;          // note panel visibility (per open lesson)
+var lastBody = null;           // snapshot of the open lesson's HTML
+var wasMissing = false;        // lesson HTML 404'd — reload as soon as it appears
 
-var state = {};
-var activeFilter = "all";
-
-function defaults(){ var s={}; LESSONS.forEach(function(l){ s[l.id]={status:"todo",note:""}; }); return s; }
-
-function load(){
-  var raw = store.get(STORE_KEY);
-  try { state = raw ? JSON.parse(raw) : defaults(); } catch(e){ state = defaults(); }
-  LESSONS.forEach(function(l){ if(!state[l.id]) state[l.id]={status:"todo",note:""}; });
-  render();
-  loadProgressFile(); // refine from agent-written progress.json (async, optional)
+function lessonUrl(slug){ return "lessons/" + slug + ".html"; }
+function statusOf(key){ return (progress[key] && progress[key].status) || "todo"; }
+function noteOf(key){ return (progress[key] && progress[key].note) || ""; }
+function pad2(n){ return (n < 10 ? "0" : "") + n; }
+function findBySlug(slug){
+  return LESSONS.filter(function(x){ return x.slug===slug; })[0] ||
+         RECAPS.filter(function(x){ return x.slug===slug; })[0];
 }
-function save(){ store.set(STORE_KEY, JSON.stringify(state)); }
 
-// Auto-load the agent-written progress.json (lesson lifecycle gate, ADR-0004).
-// Graceful fallback: if the file is absent or unreadable (e.g. opened via file://),
-// keep the localStorage state untouched.
-function loadProgressFile(){
+function renderProgressBar(){
+  var done = LESSONS.filter(function(l){ return statusOf(l.key)==="done"; }).length;
+  var pct = Math.round(done/LESSONS.length*100);
+  document.getElementById("barFill").style.width = pct+"%";
+  document.getElementById("progLabel").innerHTML = "<strong>"+done+"</strong> / "+LESSONS.length+" done";
+  document.getElementById("progPct").textContent = pct+"%";
+}
+
+function renderNav(){
+  var nav = document.getElementById("nav");
+  nav.innerHTML = "";
+  LESSONS.forEach(function(l, i){
+    var st = statusOf(l.key);
+    var a = document.createElement("a");
+    a.className = "item " + st + (active===l.slug ? " active" : "");
+    a.href = "#" + l.slug;
+    a.innerHTML = '<span class="dot '+st+'"></span><span class="n">'+pad2(i+1)+'</span>'+
+      '<span class="t">'+l.title+(l.ver ? ' <span class="v">('+l.ver+')</span>' : '')+'</span>';
+    nav.appendChild(a);
+  });
+  var lbl = document.createElement("div");
+  lbl.className = "sec-label";
+  lbl.textContent = "recap";
+  nav.appendChild(lbl);
+  RECAPS.forEach(function(x){
+    var a = document.createElement("a");
+    a.className = "item" + (active===x.slug ? " active" : "");
+    a.href = "#" + x.slug;
+    a.innerHTML = '<span class="dot"></span><span class="t">'+x.title+'</span>';
+    nav.appendChild(a);
+  });
+}
+
+// Read-only note panel: the agent is the only writer (lesson lifecycle gate,
+// ADR-0004); the page just displays what progress.json holds for the active
+// lesson. Recaps have no key → no note, toggle hidden.
+function renderNote(){
+  var l = active ? findBySlug(active) : null;
+  var note = (l && l.key) ? noteOf(l.key) : "";
+  var btn = document.getElementById("noteToggle");
+  var panel = document.getElementById("notePanel");
+  btn.style.display = note ? "" : "none";
+  btn.className = "note-toggle" + (noteOpen ? " on" : "");
+  panel.className = "note-panel" + (note && noteOpen ? " open" : "");
+  panel.textContent = note;
+}
+
+function openLesson(slug){
+  active = slug;
+  lastBody = null;
+  wasMissing = false;
+  noteOpen = false;
+  var pane = document.getElementById("pane");
+  pane.style.display = "";
+  document.getElementById("empty").style.display = "none";
+  pane.src = lessonUrl(slug);
+  var l = findBySlug(slug);
+  document.getElementById("paneTitle").textContent = l ? lessonUrl(slug) + " — " + l.title : lessonUrl(slug);
+  document.getElementById("paneLive").textContent = "";
+  renderNav(); renderNote();
+}
+
+function onHash(){
+  var slug = location.hash.replace(/^#/, "");
+  if(slug && slug !== active) openLesson(slug);
+}
+
+// Sidebar status + notes: the agent-written progress.json (ADR-0004),
+// re-polled so completion recorded at the gate shows up without a refresh.
+function pollProgress(){
   fetch("progress.json", {cache:"no-store"})
     .then(function(r){ if(!r.ok) throw 0; return r.json(); })
     .then(function(data){
-      var prog = data && data.progress ? data.progress : data;
-      mergeProgress(prog);
-      save(); render();
-      setSaveNote("Synced from progress.json");
+      progress = (data && data.progress) ? data.progress : (data || {});
+      renderProgressBar(); renderNav(); renderNote();
     })
-    .catch(function(){ /* no progress.json — fall back to localStorage */ });
+    .catch(function(){ /* no progress.json — everything stays todo */ });
 }
 
-// Reconcile the agent-written `prog` ({ "<id>": {status, note} }) into `state`.
-// Precedence: progress.json drives `status` (the agent is the source of truth for
-// completion), but a non-empty local `note` is preserved when the file omits one,
-// so manual notes typed in the browser are never silently lost.
-function mergeProgress(prog){
-  if(!prog) return;
-  LESSONS.forEach(function(l){
-    var src = prog[l.id];
-    if(!src) return;
-    if(src.status) state[l.id].status = src.status;
-    if(src.note) state[l.id].note = src.note;
-  });
+// Live half of the deepen loop (ADR-0013): when the agent rewrites the open
+// lesson file, the fetched content differs from the last snapshot and the
+// iframe reloads. Content comparison, not Last-Modified: php -S sends no
+// freshness headers for static files. A missing file (the HTML is generated
+// mid-session by /teach) keeps polling and reloads on first appearance.
+function reloadPane(slug){
+  document.getElementById("pane").src = lessonUrl(slug) + "?t=" + Date.now();
+  document.getElementById("paneLive").textContent = "↻ updated " + new Date().toLocaleTimeString();
+  document.getElementById("paneLive").className = "live";
+}
+function pollLessonFile(){
+  if(!active) return;
+  var slug = active;
+  fetch(lessonUrl(slug), {cache:"no-store"})
+    .then(function(r){
+      if(!r.ok){ if(slug === active) wasMissing = true; return null; }
+      return r.text();
+    })
+    .then(function(body){
+      if(body === null || slug !== active) return;
+      if(wasMissing || (lastBody !== null && body !== lastBody)) reloadPane(slug);
+      wasMissing = false;
+      lastBody = body;
+    })
+    .catch(function(){ /* transient — keep polling */ });
 }
 
-function setStatus(id,s){ state[id].status=s; save(); render(); }
-function setNote(id,v){ state[id].note=v; save(); }
-
-function counts(){ var c={all:LESSONS.length,todo:0,doing:0,done:0}; LESSONS.forEach(function(l){ c[state[l.id].status]++; }); return c; }
-
-function renderProgress(){
-  var c=counts(), pct=Math.round(c.done/LESSONS.length*100);
-  document.getElementById("barFill").style.width=pct+"%";
-  document.getElementById("progLabel").innerHTML="<strong>"+c.done+"</strong> / "+LESSONS.length+" done";
-  document.getElementById("progPct").textContent=pct+"%";
-}
-function renderFilters(){
-  var c=counts(), el=document.getElementById("filters"); el.innerHTML="";
-  FILTERS.forEach(function(f){
-    var b=document.createElement("button");
-    b.className="fbtn"+(activeFilter===f.id?" active":"");
-    b.textContent=f.label+" ("+c[f.id]+")";
-    b.onclick=function(){ activeFilter=f.id; render(); };
-    el.appendChild(b);
-  });
-}
-function renderList(){
-  var list=document.getElementById("list"); list.innerHTML="";
-  var vis=LESSONS.filter(function(l){ return activeFilter==="all"||state[l.id].status===activeFilter; });
-  if(vis.length===0){
-    var e=document.createElement("p");
-    e.style.cssText="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--ink-3);padding:1.5rem 0;text-align:center;";
-    e.textContent="No lessons in this state.";
-    list.appendChild(e); return;
-  }
-  vis.forEach(function(l){
-    var st=state[l.id];
-    var card=document.createElement("div");
-    card.className="card"+(st.status==="done"?" done":"");
-    var chipCls = l.type==="sec" ? "sec" : (l.type==="brk" ? "brk" : "");
-    card.innerHTML =
-      '<div class="card-top">'+
-        '<span class="lz-n">Lesson '+l.n+'</span>'+
-        '<span class="lz-ver">'+l.ver+'</span>'+
-        '<span class="lz-chip '+chipCls+'">'+TYPE_LABEL[l.type]+'</span>'+
-      '</div>'+
-      '<div class="lz-title">'+l.title+'</div>'+
-      '<div class="lz-meta">'+
-        '<span class="lz-eg">your project <b>'+l.eg+'</b></span>'+
-        '<a class="lz-link" href="lessons/'+l.slug+'.md">↗ open lesson</a>'+
-      '</div>'+
-      '<div class="states">'+
-        '<button class="sbtn '+(st.status==="todo"?"on-todo":"")+'" data-s="todo">To do</button>'+
-        '<button class="sbtn '+(st.status==="doing"?"on-doing":"")+'" data-s="doing">In progress</button>'+
-        '<button class="sbtn '+(st.status==="done"?"on-done":"")+'" data-s="done">Done</button>'+
-      '</div>'+
-      '<button class="note-toggle">'+(st.note?"✎ note":"+ add note")+'</button>'+
-      '<div class="note-box'+(st.note?" open":"")+'"><textarea placeholder="Relevant to my project? Notes, links...">'+(st.note||"")+'</textarea></div>';
-    card.querySelectorAll(".sbtn").forEach(function(btn){ btn.onclick=function(){ setStatus(l.id,btn.getAttribute("data-s")); }; });
-    var nb=card.querySelector(".note-box");
-    card.querySelector(".note-toggle").onclick=function(){ nb.classList.toggle("open"); };
-    card.querySelector("textarea").oninput=function(e){ setNote(l.id,e.target.value); };
-    list.appendChild(card);
-  });
-}
-function render(){ renderProgress(); renderFilters(); renderList(); }
-
-// Export / Import / Reset
-function exportJSON(){
-  var payload = { app:"laravel-12-13-practice", version:1, exportedAt:new Date().toISOString(), progress:state };
-  var blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement("a");
-  a.href=url; a.download="laravel-12-13-progress.json";
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-function importJSON(file){
-  var reader=new FileReader();
-  reader.onload=function(ev){
-    try {
-      var data=JSON.parse(ev.target.result);
-      var prog = data && data.progress ? data.progress : data;
-      var next=defaults();
-      LESSONS.forEach(function(l){ if(prog[l.id]){ next[l.id]={ status: prog[l.id].status||"todo", note: prog[l.id].note||"" }; } });
-      state=next; save(); render();
-      setSaveNote("Imported");
-    } catch(e){ alert("Could not read this file as valid progress JSON."); }
-  };
-  reader.readAsText(file);
-}
-
-document.getElementById("exportBtn").onclick=exportJSON;
-document.getElementById("importBtn").onclick=function(){ document.getElementById("importFile").click(); };
-document.getElementById("importFile").onchange=function(e){ if(e.target.files && e.target.files[0]) importJSON(e.target.files[0]); e.target.value=""; };
-document.getElementById("resetBtn").onclick=function(){
-  if(confirm("Reset all 12 lessons? Notes will be cleared.")){ state=defaults(); save(); render(); }
+document.getElementById("noteToggle").onclick = function(){
+  noteOpen = !noteOpen;
+  renderNote();
 };
 
-load();
+window.addEventListener("hashchange", onHash);
+renderNav(); renderProgressBar(); renderNote();
+pollProgress(); onHash();
+setInterval(pollProgress, PROGRESS_POLL_MS);
+setInterval(pollLessonFile, RELOAD_POLL_MS);
 </script>
 </body>
 </html>

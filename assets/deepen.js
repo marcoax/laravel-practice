@@ -14,7 +14,7 @@
    Clicking a button copies its full data-prompt to the clipboard and shows
    it in a visible box as a manual-copy fallback; the learner pastes it into
    the running Claude Code session, the agent patches the lesson HTML, and
-   the course shell (course.html) reloads the page via Last-Modified polling.
+   the course page (index.html, ADR-0015) reloads the page via content polling.
 
    The data-msg-* attributes localize the feedback (lessons follow the
    learner's language.chat); omitted, they fall back to English.
