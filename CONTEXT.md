@@ -38,6 +38,12 @@ Use these terms in issues, ADRs, skill prompts, and code. Avoid the synonyms not
   the four essentials: `practice_default`, `quiz_format`, `deep_dive`, `branch_convention`.
   See ADR-0002.
 
+- **course baseline** — the Laravel major version the learner declares they already know
+  during `/lesson-init`. It controls which earlier major's lessons are hidden from the
+  learner-facing course flow and skipped by `/teach` while keeping the template's authored
+  lesson files intact.
+  _Avoid:_ "from version" when it implies a generic multi-major course engine.
+
 - **config binding** — the always-loaded instruction in `CLAUDE.md` that tells the agent
   to treat `learning-config.md` as authoritative when present, and to suggest `/lesson-init`
   when absent. See ADR-0003.
