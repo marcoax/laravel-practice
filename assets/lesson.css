@@ -244,6 +244,46 @@ th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-
 .mcq .mcq-feedback.is-correct { color: var(--insight-rule); }
 .mcq .mcq-feedback.is-wrong { color: var(--accent); }
 
+/* ---- Click-to-deepen widget (ADR-0013: prompt-prefill channel) ---- */
+.deepen {
+  border: 1px dashed var(--rule);
+  border-radius: 4px;
+  padding: 0.8rem 1rem 1rem;
+  margin-top: 2rem;
+}
+.deepen-lead {
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.deepen-btn {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  margin: 0 0.4rem 0.4rem 0;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--code-bg);
+  cursor: pointer;
+}
+.deepen-btn:hover { border-color: var(--accent); }
+.deepen-status {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  color: var(--insight-rule);
+}
+.deepen-prompt {
+  margin: 0.5rem 0 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--code-bg);
+  font-size: 0.78rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: all;
+}
+
 /* ---- Footer nav ---- */
 .lesson-nav {
   display: flex;
@@ -269,6 +309,7 @@ th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-
   .quiz details { break-inside: avoid; }
   .mcq { break-inside: avoid; }
   .mcq .mcq-check, .mcq .mcq-feedback { display: none; }
+  .deepen { display: none; }
   .quiz details[open] summary::before,
   .quiz summary::before { content: ""; }
   a { color: var(--ink); border: none; }
