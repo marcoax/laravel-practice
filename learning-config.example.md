@@ -47,16 +47,18 @@ quiz_format: recall
 # Offer the optional "want to go deeper on a question?" invitation at lesson end.
 deep_dive: on
 
-# How per-lesson work is isolated, if at all. Free text; the branch-name pattern.
-# Consulted only when auto_branch is on.
-branch_convention: "one branch per lesson, e.g. lesson-NN-<slug>"
+# How generated-brief work is isolated, if at all. Free text; the branch-name pattern.
+# Consulted only by /lesson-update, and only when auto_branch is on (ADR-0017).
+branch_convention: "one branch per generated brief, e.g. lesson-<x.y.z>-<slug>"
 
-# Whether each lesson opens a fresh branch cut from auto_branch_base (named via
-# branch_convention). on | off. /lesson-init only records this; /teach actually cuts
-# the branch at lesson start. Consulted only when on.
-auto_branch: off
+# Whether /lesson-update opens a fresh branch cut from auto_branch_base (named via
+# branch_convention) for each generated brief. on | off. Consulted ONLY by
+# /lesson-update — teach-lesson sessions never cut branches: all their output is
+# git-ignored, so a per-lesson branch would be guaranteed empty (ADR-0017).
+auto_branch: on
 
-# Base branch the per-lesson branch is cut from. Consulted only when auto_branch is on.
+# Base branch the per-brief branch is cut from. Consulted only by /lesson-update,
+# and only when auto_branch is on.
 auto_branch_base: main
 
 # --- Lesson updates (/lesson-update) ---

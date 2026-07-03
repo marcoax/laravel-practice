@@ -93,6 +93,11 @@ relevance questions) and ask **accept** or **skip**. The human absorbs the resid
 two blogs naming one change differently, a thin release. One version → one proposal.
 
 ### 5. Generate the accepted ones
+**Branch first (ADR-0017):** if `auto_branch: on` in `learning-config.md`, cut a fresh
+branch from `auto_branch_base`, one per generated brief, named per `branch_convention`;
+if `off`, write on the current branch. This flag is consulted **only here** — teaching
+sessions never cut branches.
+
 Write each accepted lesson into `lessons/` from `lessons/_template.md`:
 - **Filename: version-pure**, full patch level, e.g. `13.17-….md`. **No topic slug** (a release
   aggregates many changes — picking one would be arbitrary). The version prefix deliberately breaks

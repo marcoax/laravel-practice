@@ -167,6 +167,12 @@ Resolve the exact path, then **run `/teach` in-session — do not ask the learne
 as the teaching workspace. From there `/teach` owns the session (practice mode, scaffolding,
 `TODO(human)`, quiz).
 
+**The session stays on the current git branch regardless of `auto_branch`** — that flag is
+consulted only by `/lesson-update`; a teaching session's output is all git-ignored, so a
+per-lesson branch would be guaranteed empty (ADR-0017). Never cut a branch at lesson start.
+If a tracked file needs touching mid-session (a drift fix in a brief, an asset edit), propose
+a branch for that change at that moment — manually, not via `auto_branch`.
+
 **If step 5 deferred the browser open** (the lesson `.html` didn't exist yet), keep
 following `/teach`'s flow as normal; the moment `/teach` writes `lessons/<slug>.html` for
 the first time (its usual generation step), open the browser then — same opener logic as
