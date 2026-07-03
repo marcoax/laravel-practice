@@ -68,6 +68,19 @@ Use these terms in issues, ADRs, skill prompts, and code. Avoid the synonyms not
   tracker", "course shell", "dashboard" (the standalone localStorage tracker and the
   separate `course.html` shell were retired). See ADR-0013/0015/0018.
 
+- **learner-selected resource discovery** — an opt-in lesson extension where the learner
+  explicitly chooses whether the agent should search the web and YouTube for curated
+  deeper resources to attach to the lesson. It is offered at the lesson lifecycle gate;
+  the agent does not autonomously decide that a lesson is "high-value" enough to trigger
+  this step. Accepted resources must be very high-authority, preferably official or from
+  clearly recognized Laravel/PHP sources, and each link must state why it is worth the
+  learner's time. _Avoid:_ "high-value lesson trigger", generic SEO resources.
+
+- **RESOURCES.md** — the per-user `/teach` workspace index of trusted external resources,
+  grouped by lesson/topic and populated only through learner-selected resource discovery.
+  It complements the lesson HTML: the lesson carries the immediate read-next links, while
+  `RESOURCES.md` keeps a durable index. _Avoid:_ bare link dump, generic bibliography.
+
 - **progress endpoint** — `POST /progress` on `scripts/progress-server.php`, the router
   the repo is served with (`php -S localhost:8000 scripts/progress-server.php`). Lets the
   course page write a lesson's status into `progress.json` (validated, note-preserving,
