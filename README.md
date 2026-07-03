@@ -119,7 +119,7 @@ absolute truth.
 and open it:
 
 ```bash
-php -S localhost:8000        # or: python3 -m http.server 8000
+php -S localhost:8000 scripts/progress-server.php
 ```
 
 then open <http://localhost:8000/>. What you get:
@@ -136,9 +136,12 @@ then open <http://localhost:8000/>. What you get:
   ready-made prompt; paste it into your running Claude Code session, the agent
   patches the lesson HTML, and the page reloads by itself.
 
-The page is read-only on progress: status and notes are written by the agent into
-`progress.json` at the end of each lesson (the *lesson lifecycle gate*), and the page
-polls that file. There is nothing to tick by hand.
+Progress lives in one store, `progress.json`, with two writers (ADR-0018): the agent
+writes status and notes at the end of each lesson (the *lesson lifecycle gate*), and
+you can flip a lesson todo/doing/done yourself with the segmented control in the pane
+bar — the page posts it to the `scripts/progress-server.php` router. Notes stay
+agent-only. Served without the router (plain `php -S` or `python3 -m http.server`),
+the page still works but status clicks show a warning instead of saving.
 
 > **Heads-up — serve it over HTTP, not `file://`.** The page loads `progress.json`
 > and the lessons with `fetch()`, which browsers block when the page is opened by

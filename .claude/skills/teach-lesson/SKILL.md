@@ -141,7 +141,8 @@ proceed to the hand-off — the page is a companion, never a prerequisite.**
    http://localhost:8000/`. A `200` means a server is already up — skip to 3.
 2. **Start a server** from the repo root, in the background, with whatever is on this
    machine — check availability first (`command -v`), don't assume:
-   - `php -S localhost:8000` (first choice: a Laravel learner has PHP), else
+   - `php -S localhost:8000 scripts/progress-server.php` (first choice: a Laravel
+     learner has PHP; the router enables the page's manual status marking — ADR-0018), else
    - `python3 -m http.server 8000` (or `python` on systems without `python3`).
    - Neither available, or the port is taken by something that isn't serving this repo →
      skip the page entirely, mention it in one line, move on.
