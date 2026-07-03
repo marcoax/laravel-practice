@@ -12,11 +12,13 @@ codebase you choose at setup (`/lesson-init`), recorded in the git-ignored
   `lessons/_template.md`.
 - **`lessons/NN-*.html`** — the rendered lessons produced during `/teach` sessions; they
   reuse the shared stylesheet `assets/lesson.css`.
-- **`index.html`** — the single course page, served over a local static server: sidebar
-  with one unified lesson list (core + release lessons, continuous numbering) and live
-  done/todo status from `progress.json` + lesson pane + read-only note panel +
-  click-to-deepen prompt-prefill buttons. Read-only on progress (the agent is the only
-  writer, via `progress.json`). No build step. See ADR-0013/0015.
+- **`index.html`** — the single course page, served via
+  `php -S localhost:8000 scripts/progress-server.php`: sidebar with one unified lesson
+  list (core + release lessons, continuous numbering) and live todo/doing/done status
+  from `progress.json` + lesson pane + read-only note panel + click-to-deepen
+  prompt-prefill buttons + a segmented control to flip a lesson's status by hand
+  (written through the progress endpoint). Notes remain agent-only. No build step.
+  See ADR-0013/0015/0018.
 - `MISSION.md`, `NOTES.md`, `learning-records/` — `/teach` workspace state.
 
 ## Rules
@@ -66,6 +68,13 @@ so each contributor opts in on their own machine. See ADR-0008.
 
 ## Lesson lifecycle
 
+**At lesson start**, when a `/teach` session begins a lesson, set its `progress.json`
+`status` to `"doing"` (ADR-0018). The learner can flip status manually from the course
+page at any time — the page writes through the progress endpoint
+(`scripts/progress-server.php`) into the same `progress.json`; last write wins.
+A learner-flipped `"done"` **without** a learning record is a legitimate administrative
+closure ("not interested / did it on my own") — never nag about it or reconcile it back.
+
 No lesson is left implicitly "done". At the **end of each lesson**, before moving on,
 capture completion and reflection with two writes (see ADR-0004):
 
@@ -103,10 +112,11 @@ capture completion and reflection with two writes (see ADR-0004):
    never blocks the gate or delays moving on. The trigger is **lesson completion**, not
    `teach-lesson` startup. `/lesson-update` stays manually invocable regardless of the flag.
 
-`learning-records/` is the narrative source of truth; `progress.json` is the structured
-mirror the course page reads. `index.html` polls `progress.json` (graceful fallback when
-absent), so the browser reflects the agent-written status and notes without manual
-ticking. Keep the two writes in sync.
+`progress.json` is authoritative for **status** (one store, two writers — agent at the
+gate, learner via the progress endpoint; ADR-0018); `learning-records/` is the narrative
+source of truth for gate-closed lessons. `index.html` polls `progress.json` (graceful
+fallback when absent), so the browser reflects both writers' status and the agent-written
+notes. Keep the gate's two writes in sync.
 
 ## Agent skills
 
