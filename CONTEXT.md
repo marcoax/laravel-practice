@@ -53,18 +53,27 @@ Use these terms in issues, ADRs, skill prompts, and code. Avoid the synonyms not
   for the course page) and a `learning-records/NNNN-*.md` (narrative); for 13.x lessons,
   then offer the recap (opt-in). See ADR-0004/0014.
 
-- **progress.json** — a git-ignored, agent-writable state file
+- **progress.json** — a git-ignored state file
   (`{ progress: { <lesson-key>: { status, note } } }`), keyed by numeric id for core
-  lessons and by version string for release lessons. The bridge between the filesystem
-  (where the agent writes) and the course page (which polls it for status and notes).
-  See ADR-0004/0015.
+  lessons and by version string for release lessons. **Authoritative for status** (one
+  store, two writers — agent at the gate, learner via the progress endpoint); notes are
+  agent-only. The bridge between the filesystem and the course page (which polls it for
+  status and notes). See ADR-0004/0015/0018.
 
 - **course page** — `index.html`, the single served entry page of the course: unified
   sidebar (core + release lessons, continuous display numbering), live status from
-  `progress.json`, lesson pane with auto-reload, read-only note panel, deepen buttons.
-  Read-only on progress — the agent at the gate is the only writer. _Avoid:_ "progress
+  `progress.json`, lesson pane with auto-reload, read-only note panel, deepen buttons,
+  segmented status control. One store, two writers on progress (agent at the gate,
+  learner via the progress endpoint); notes remain agent-only. _Avoid:_ "progress
   tracker", "course shell", "dashboard" (the standalone localStorage tracker and the
-  separate `course.html` shell were retired). See ADR-0013/0015.
+  separate `course.html` shell were retired). See ADR-0013/0015/0018.
+
+- **progress endpoint** — `POST /progress` on `scripts/progress-server.php`, the router
+  the repo is served with (`php -S localhost:8000 scripts/progress-server.php`). Lets the
+  course page write a lesson's status into `progress.json` (validated, note-preserving,
+  atomic); GET requests fall through to plain static serving. Without it the page stays
+  readable and status clicks degrade loudly. _Avoid:_ "progress API", "backend" (it is a
+  ~55-line localhost tool, not a service). See ADR-0018.
 
 - **recap** — a per-major review page in `lessons/` (`recap-12x.html`,
   `recap-13x.html`), listed in the course page's side section. Not a course step:
