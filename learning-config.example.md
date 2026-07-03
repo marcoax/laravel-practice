@@ -49,7 +49,7 @@ deep_dive: on
 
 # How generated-brief work is isolated, if at all. Free text; the branch-name pattern.
 # Consulted only by /lesson-update, and only when auto_branch is on (ADR-0017).
-branch_convention: "one branch per generated brief, e.g. lesson-NN-<slug>"
+branch_convention: "one branch per generated brief, e.g. lesson-<x.y.z>-<slug>"
 
 # Whether /lesson-update opens a fresh branch cut from auto_branch_base (named via
 # branch_convention) for each generated brief. on | off. Consulted ONLY by

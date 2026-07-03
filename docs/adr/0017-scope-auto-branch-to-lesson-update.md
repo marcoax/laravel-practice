@@ -39,8 +39,11 @@ want for generated briefs. This also resolves the prior inconsistency where
 
 ## Consequences
 
-- teach-lesson sessions produce no throwaway branches; enforcement lives in the config
-  comments (which `/teach` reads at runtime) and in the `teach-lesson` hand-off, with no
-  change to the global `/teach` skill.
-- Existing configs with `auto_branch: on` and the old semantics are reinterpreted under
-  the new scope with no migration.
+- teach-lesson sessions produce no throwaway branches; enforcement lives in the tracked
+  skills — the branching step in `/lesson-update` and the hand-off guard in
+  `teach-lesson` — plus the config comments, with no change to the global `/teach` skill.
+- Existing configs with `auto_branch: on` need no value migration, but their comments
+  still carry the pre-0017 wording ("`/teach` cuts the branch at lesson start"). The
+  tracked skills override that text for `teach-lesson` sessions and `/lesson-update`;
+  only a direct `/teach` invocation reading a stale config could still be misled —
+  re-running `/lesson-init` refreshes the comments.
