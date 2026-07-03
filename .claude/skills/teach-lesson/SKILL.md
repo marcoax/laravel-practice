@@ -15,6 +15,9 @@ delegate the whole teaching session to `/teach`.
    execute `/teach` for it **in-session** — never ask the learner to type a command. The
    course-page warm-up (step 5) is a best-effort side step; the hand-off stays the final act.
 3. **Lessons are whatever is on disk**, never a hardcoded list.
+4. **The active path is baseline-filtered.** Read `course_baseline_major` from
+   `learning-config.md` (default `12`) and filter learner-facing lesson selection from
+   each lesson's `> Version:` metadata, never from file order or numeric prefix.
 
 ## Flow
 
@@ -30,6 +33,20 @@ ls lessons/[0-9]*.[0-9]*.[0-9]*.md 2>/dev/null | sort -V  # extra: version-pure,
 Exclude `_template.md`, `README.md`, and the rendered `.html` from both. Order the main sequence
 by numeric prefix; order the version-pure files by semantic version. If `lessons/` is missing or
 both globs are empty, stop and say so — you are probably not at the repo root.
+
+For every candidate lesson, read the first `> Version:` line from the `.md` file and parse the
+Laravel major version from that metadata. Examples: `Laravel 12.x, through 12.19`, `12.4`, and
+`12.45 · 12.46` are major `12`; `13.0`, `13.0 → 13.8`, and `13.17.0` are major `13`.
+
+Read `course_baseline_major` from `learning-config.md`. If the file is absent, malformed, or the
+field is absent, default to `12`. Supported choices are static: `12` and `13`. Before computing
+defaults, rendering a menu, or resolving direct requests, keep only lessons whose parsed major is
+greater than or equal to the baseline. This hides 12.x lessons for baseline `13` without deleting
+files or touching `progress.json`.
+
+If a direct argument resolves to a lesson outside the active baseline, stop with a short message
+that the requested lesson is outside the active course path. Do **not** print the hidden lesson's
+title, path, contents, or run `/teach` for it.
 
 ### 2. Read progress (read-only)
 
@@ -53,16 +70,16 @@ not-done is `01`). Don't block, don't ask. Never write to `progress.json`.
 
 ### 3. First not-done
 
-The first lesson, in numeric order, whose id is not `done`, **from the main sequence only**. This
-is the menu default. Version-pure lessons never displace it as the recommended default — they're
-surfaced as extra options, not the spine of the course.
+The first active lesson, in numeric order, whose id is not `done`, **from the baseline-filtered
+main sequence only**. This is the menu default. Version-pure lessons never displace it as the
+recommended default — they're surfaced as extra options, not the spine of the course.
 
 ### 4. Show the menu
 
-**One flat list, no main-vs-extra split.** The first not-done main-sequence lesson goes on top
-as the recommended default; below it, every lesson appears in a single sequence — main-sequence
-first in numeric order, then version-pure lessons appended in version order. Same row shape for
-both families: `id · title (version) · status`.
+**One flat list, no main-vs-extra split.** The first not-done active main-sequence lesson goes on
+top as the recommended default; below it, every active lesson appears in a single sequence —
+main-sequence first in numeric order, then version-pure lessons appended in version order. Same row
+shape for both families: `id · title (version) · status`.
 
 - **Display id, continuous across both families.** Main-sequence lessons keep their existing
   `01`…`12`. Version-pure lessons get the **next integers in sequence** — `13`, `14`, `15`… —
@@ -161,17 +178,21 @@ the URL from step 5.
 
 - **No argument** → menu above.
 - **Number ≤ 12, or slug** (`3`, `03`, `queue-fail-on-exception`) → skip the menu, resolve the
-  lesson by its `NN-` prefix or slug, hand off directly.
+  lesson by its `NN-` prefix or slug, then apply the baseline filter. If the resolved lesson is
+  hidden by `course_baseline_major`, stop as outside the active course path and do not hand off.
   - The number is the **file prefix**, not a list position: `3` and `03` both resolve to
     `lessons/03-*.md`.
   - If that lesson is already `done`, warn once (`⚠️ Lesson 03 is already done — re-running.`)
     then hand off anyway. No extra confirmation.
 - **Number > 12** (`13`, `14`…) → this is the **display id**, not a filename: recompute the
-  version-ordered list of version-pure lessons (step 1/4) and take the `(number - 12)`-th entry.
+  baseline-filtered, version-ordered list of version-pure lessons (step 1/4) and take the
+  `(number - 12)`-th entry.
   `13` is always the earliest not-yet-superseded version-pure lesson, `14` the next, etc. — never
   assume it maps to a file literally named `13-*.md` (it doesn't; those don't exist).
-- **Version string** (`13.17`, `13.17.0`) → resolve to the matching `lessons/<x.y.z>.md` by
-  prefix match on the version (`13.17` matches `13.17.0.md`), hand off directly.
+- **Version string** (`13.17`, `13.17.0`) → resolve to the matching active
+  `lessons/<x.y.z>.md` by prefix match on the version (`13.17` matches `13.17.0.md`), hand off
+  directly. If a version string matches only a hidden lesson, stop as outside the active course
+  path.
   - Both paths above share the **same already-done warn-then-proceed rule**: warn once, then
     hand off anyway. No extra confirmation.
   - No match → fall back to the menu.

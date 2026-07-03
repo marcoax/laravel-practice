@@ -23,8 +23,9 @@ Split the repo into two halves:
 
 `learning-config.md` holds: `output_style`, `reference_project` (a path; required — the
 "no project, concepts only" case is covered by `practice_default`, not by leaving this
-empty), `model` (advisory only — see ADR-0003), `language`, and the pedagogy fields
-(`practice_default`, `quiz_format`, `deep_dive`, `branch_convention`).
+empty), `model` (advisory only — see ADR-0003), `language`, `course_baseline_major`
+(added by ADR-0016), and the pedagogy fields (`practice_default`, `quiz_format`,
+`deep_dive`, `branch_convention`).
 
 As part of adopting this, the eraCms mentions in `CLAUDE.md`/`README`/`NOTES.md` are
 **neutralised now** to "your reference project (set by `/lesson-init`)".
