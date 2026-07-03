@@ -29,8 +29,8 @@ bumps stay out.
    Source: https://github.com/mattpocock/skills
 
 3. **Configure your workspace.** Run **`/lesson-init`** once: it asks a few questions
-   (reference project, language, output style, pedagogy) and writes them to a git-ignored
-   `learning-config.md` that every session then reads.
+   (reference project, language, output style, course baseline, pedagogy) and writes them
+   to a git-ignored `learning-config.md` that every session then reads.
    ```
    /lesson-init
    ```
@@ -127,6 +127,8 @@ then open <http://localhost:8000/>. What you get:
 - **One unified lesson list** in the sidebar — the 12 core lessons and the
   `/lesson-update`-generated release lessons, continuously numbered, with live
   done/todo status and a progress bar.
+- **Baseline filtering** from `learning-config.md`: `course_baseline_major: 12` shows the
+  full path, while `13` hides 12.x lessons and `recap-12x` from the active course page.
 - **The rendered lesson** next to it, auto-reloading whenever the agent updates it.
 - **A read-only note panel** (the `✎ note` button) showing the agent-written note —
   the verdicts and insights captured at the end of each lesson.

@@ -46,11 +46,17 @@ See `NOTES.md` for teaching preferences and `MISSION.md` for context.
 This repo is a neutral, forkable template; the learner's choices are per-user and
 git-ignored. If **`learning-config.md`** exists at the repo root, treat its values as
 **authoritative** — the reference project, the language split (chat/lessons vs docs),
-and the pedagogy fields (`practice_default`, `quiz_format`, `deep_dive`,
-`branch_convention`). The shared output-style default lives in `.claude/settings.json`
+`course_baseline_major`, and the pedagogy fields (`practice_default`, `quiz_format`,
+`deep_dive`, `branch_convention`). The shared output-style default lives in `.claude/settings.json`
 and can be overridden per user in `.claude/settings.local.json`; `model` is advisory
 only. If `learning-config.md` is **absent**, suggest running **`/lesson-init`** to
 create it. See `learning-config.example.md` for the schema and ADR-0001/0003.
+
+When `course_baseline_major` is `13`, learner-facing course flow must hide 12.x lessons
+and `recap-12x`, and `/teach` / `teach-lesson` must not propose or run 12.x lessons as
+part of the active path. The filter is based on each lesson brief's `> Version:`
+metadata, not numeric prefixes. Existing lesson files and `progress.json` entries stay
+intact so changing the baseline back to `12` restores the full path.
 
 **Permission mode.** This workspace defaults to auto-accept edits via
 `permissions.defaultMode: "acceptEdits"` so `/teach` can write lessons, learning

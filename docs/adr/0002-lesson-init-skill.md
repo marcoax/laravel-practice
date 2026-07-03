@@ -13,7 +13,7 @@ hand-copied documented checklist. The setup is a distinct, one-time concern; mix
 
 Add a dedicated **`/lesson-init`** skill, run **once per workspace**. It interviews the
 learner one question at a time and writes `learning-config.md`. It captures the **four
-essentials plus the pedagogy fields**:
+original essentials, the course baseline, plus the pedagogy fields**:
 
 1. `output_style` (default: **Learning** / Learn by Doing) — written to
    `.claude/settings.local.json`, see ADR-0003.
@@ -21,7 +21,8 @@ essentials plus the pedagogy fields**:
    yardstick.
 3. `model` (advisory; default Opus 4.8 + Fast mode).
 4. `language` (chat/lessons vs docs split; default: it / docs:en).
-5. Pedagogy fields: `practice_default` (concepts-only | throwaway-app | reference-project),
+5. `course_baseline_major` (static choices: `12` or `13`; default `12`, see ADR-0016).
+6. Pedagogy fields: `practice_default` (concepts-only | throwaway-app | reference-project),
    `quiz_format` (recall | multiple-choice), `deep_dive` (on/off), `branch_convention`.
 
 `/teach` stays focused on running lessons; `/lesson-init` only bootstraps.

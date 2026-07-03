@@ -31,6 +31,11 @@ language:
   chat: en
   docs: en
 
+# Laravel major version the learner already knows. Static choices for this authored
+# Laravel 12 -> 13 path: 12 keeps the full path visible; 13 starts at Laravel 13 and
+# hides 12.x material from learner-facing course flow.
+course_baseline_major: 12
+
 # --- Pedagogy ---
 
 # Where you practice by default: concepts-only | throwaway-app | reference-project.

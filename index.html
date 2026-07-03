@@ -88,7 +88,7 @@
 // numeric id for the 12 core lessons, version string for release lessons
 // (the version stays the identity per ADR-0005/0006; the number is display
 // only). /lesson-update appends new release lessons here, in version order.
-var LESSONS = [
+var ALL_LESSONS = [
   { key:"1",  slug:"01-eloquent-casts",                 title:"Eloquent casts: AsHtmlString, AsCollection::of(), #[UseEloquentBuilder]" },
   { key:"2",  slug:"02-query-builder-pipelines",        title:"Query Builder Pipelines and shouldRun() in migrations" },
   { key:"3",  slug:"03-queue-fail-on-exception",        title:"Queue: FailOnException middleware" },
@@ -110,7 +110,7 @@ var LESSONS = [
 // Major-release recaps — the only side section: evolving review pages, not
 // course steps, untracked in progress.json (ADR-0014). The lesson lifecycle
 // gate adds recap-13x here on its first opt-in creation.
-var RECAPS = [
+var ALL_RECAPS = [
   { slug:"recap-12x", title:"Recap 12.x" },
   { slug:"recap-13x", title:"Recap 13.x" }
 ];
@@ -118,6 +118,9 @@ var RECAPS = [
 var PROGRESS_POLL_MS = 4000;   // sidebar status + notes from progress.json (ADR-0004 channel)
 var RELOAD_POLL_MS = 3000;     // active lesson content poll → auto-reload after agent edits
 
+var courseBaselineMajor = 12;  // learning-config.md default; 12 preserves current behavior
+var LESSONS = ALL_LESSONS.slice();
+var RECAPS = ALL_RECAPS.slice();
 var progress = {};             // { "<key>": {status, note} }
 var active = null;             // slug of the open lesson
 var noteOpen = false;          // note panel visibility (per open lesson)
@@ -125,6 +128,7 @@ var lastBody = null;           // snapshot of the open lesson's HTML
 var wasMissing = false;        // lesson HTML 404'd — reload as soon as it appears
 
 function lessonUrl(slug){ return "lessons/" + slug + ".html"; }
+function lessonMdUrl(slug){ return "lessons/" + slug + ".md"; }
 function statusOf(key){ return (progress[key] && progress[key].status) || "todo"; }
 function noteOf(key){ return (progress[key] && progress[key].note) || ""; }
 function pad2(n){ return (n < 10 ? "0" : "") + n; }
@@ -133,9 +137,72 @@ function findBySlug(slug){
          RECAPS.filter(function(x){ return x.slug===slug; })[0];
 }
 
+function parseCourseBaseline(text){
+  var m = text.match(/^\s*course_baseline_major:\s*['"]?(12|13)['"]?\s*$/m);
+  return m ? Number(m[1]) : 12;
+}
+
+function loadCourseBaseline(){
+  return fetch("learning-config.md", {cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw 0; return r.text(); })
+    .then(parseCourseBaseline)
+    .catch(function(){ return 12; });
+}
+
+function versionLineFromMarkdown(markdown){
+  var m = markdown.match(/^>\s*Version:\s*(.+)$/m);
+  return m ? m[1] : "";
+}
+
+function lessonMajorFromVersion(versionText){
+  var versionSegment = versionText.split("·")[0];
+  var majors = [];
+  var re = /(?:^|[^\d.])(\d+)(?=\.(?:\d+|x)\b)/g;
+  var m;
+  while((m = re.exec(versionSegment)) !== null){
+    majors.push(Number(m[1]));
+  }
+  if(!majors.length) return null;
+  return Math.min.apply(Math, majors);
+}
+
+function loadLessonMetadata(){
+  return Promise.all(ALL_LESSONS.map(function(l){
+    return fetch(lessonMdUrl(l.slug), {cache:"no-store"})
+      .then(function(r){ if(!r.ok) throw 0; return r.text(); })
+      .then(function(markdown){
+        l.versionText = versionLineFromMarkdown(markdown);
+        l.major = lessonMajorFromVersion(l.versionText);
+      })
+      .catch(function(){
+        l.versionText = "";
+        l.major = null;
+      });
+  }));
+}
+
+function applyCourseFilters(){
+  LESSONS = ALL_LESSONS.filter(function(l){
+    return l.major === null || l.major >= courseBaselineMajor;
+  });
+  RECAPS = ALL_RECAPS.filter(function(x){
+    return !(courseBaselineMajor >= 13 && x.slug === "recap-12x");
+  });
+}
+
+function showEmpty(message){
+  active = null;
+  document.getElementById("pane").style.display = "none";
+  document.getElementById("empty").style.display = "";
+  document.getElementById("empty").innerHTML = message;
+  document.getElementById("paneTitle").textContent = "no lesson open";
+  document.getElementById("paneLive").textContent = "";
+  renderNav(); renderNote();
+}
+
 function renderProgressBar(){
   var done = LESSONS.filter(function(l){ return statusOf(l.key)==="done"; }).length;
-  var pct = Math.round(done/LESSONS.length*100);
+  var pct = LESSONS.length ? Math.round(done/LESSONS.length*100) : 0;
   document.getElementById("barFill").style.width = pct+"%";
   document.getElementById("progLabel").innerHTML = "<strong>"+done+"</strong> / "+LESSONS.length+" done";
   document.getElementById("progPct").textContent = pct+"%";
@@ -153,17 +220,19 @@ function renderNav(){
       '<span class="t">'+l.title+(l.ver ? ' <span class="v">('+l.ver+')</span>' : '')+'</span>';
     nav.appendChild(a);
   });
-  var lbl = document.createElement("div");
-  lbl.className = "sec-label";
-  lbl.textContent = "recap";
-  nav.appendChild(lbl);
-  RECAPS.forEach(function(x){
-    var a = document.createElement("a");
-    a.className = "item" + (active===x.slug ? " active" : "");
-    a.href = "#" + x.slug;
-    a.innerHTML = '<span class="dot"></span><span class="t">'+x.title+'</span>';
-    nav.appendChild(a);
-  });
+  if(RECAPS.length){
+    var lbl = document.createElement("div");
+    lbl.className = "sec-label";
+    lbl.textContent = "recap";
+    nav.appendChild(lbl);
+    RECAPS.forEach(function(x){
+      var a = document.createElement("a");
+      a.className = "item" + (active===x.slug ? " active" : "");
+      a.href = "#" + x.slug;
+      a.innerHTML = '<span class="dot"></span><span class="t">'+x.title+'</span>';
+      nav.appendChild(a);
+    });
+  }
 }
 
 // Read-only note panel: the agent is the only writer (lesson lifecycle gate,
@@ -181,6 +250,10 @@ function renderNote(){
 }
 
 function openLesson(slug){
+  if(!findBySlug(slug)){
+    showEmpty("This lesson is outside your active course path.");
+    return;
+  }
   active = slug;
   lastBody = null;
   wasMissing = false;
@@ -245,10 +318,19 @@ document.getElementById("noteToggle").onclick = function(){
 };
 
 window.addEventListener("hashchange", onHash);
-renderNav(); renderProgressBar(); renderNote();
-pollProgress(); onHash();
-setInterval(pollProgress, PROGRESS_POLL_MS);
-setInterval(pollLessonFile, RELOAD_POLL_MS);
+function init(){
+  Promise.all([loadCourseBaseline(), loadLessonMetadata()])
+    .then(function(results){
+      courseBaselineMajor = results[0];
+      applyCourseFilters();
+      renderNav(); renderProgressBar(); renderNote();
+      pollProgress(); onHash();
+      setInterval(pollProgress, PROGRESS_POLL_MS);
+      setInterval(pollLessonFile, RELOAD_POLL_MS);
+    });
+}
+
+init();
 </script>
 </body>
 </html>

@@ -17,7 +17,7 @@
 ## Decision
 
 - **Binding lives in `CLAUDE.md`** (always loaded): "If `learning-config.md` exists, its
-  values (language, reference project, pedagogy) are authoritative; if absent, suggest
+  values (language, reference project, course baseline, pedagogy) are authoritative; if absent, suggest
   `/lesson-init`."
 - **Output style** defaults to `Learning` in tracked **`.claude/settings.json`** so the
   teaching workspace starts in Learn-by-Doing mode. `/lesson-init` may write a user-specific
