@@ -20,4 +20,8 @@
 # Per-user Claude Code preferences such as permission mode and local output-style
 # overrides. Shared defaults live in .claude/settings.json. See ADR-0003/0008.
 /.claude/settings.local.json
+
+# Working specs/plans produced during design sessions — per-user scratch, not
+# template content. Durable decisions land in docs/adr/ instead.
+/specs/
 .DS_Store
