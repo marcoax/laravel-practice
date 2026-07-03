@@ -49,6 +49,18 @@
   #paneTitle { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .note-toggle { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--accent-deep); background: none; border: 1px solid var(--border); border-radius: 4px; padding: .15rem .55rem; cursor: pointer; white-space: nowrap; display: none; }
   .note-toggle.on { border-color: var(--accent); background: rgba(235,105,91,.08); }
+  /* Manual status marking (ADR-0018): compact segmented control, one segment
+     per state, active segment filled with the state color. */
+  .status-seg { display: none; white-space: nowrap; }
+  .status-seg button { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--ink-3); background: none; border: 1px solid var(--border); padding: .15rem .5rem; cursor: pointer; }
+  .status-seg button:first-child { border-radius: 4px 0 0 4px; }
+  .status-seg button + button { border-left: none; }
+  .status-seg button:last-child { border-radius: 0 4px 4px 0; }
+  .status-seg button.on { color: var(--bg); }
+  .status-seg button.on[data-status="todo"]  { background: var(--ink-3); border-color: var(--ink-3); }
+  .status-seg button.on[data-status="doing"] { background: var(--warn);  border-color: var(--warn); }
+  .status-seg button.on[data-status="done"]  { background: var(--ok);    border-color: var(--ok); }
+  .status-err { color: var(--warn); white-space: nowrap; }
   /* Read-only note panel: renders the agent-written `note` from progress.json
      for the active lesson (ADR-0004 channel — no new writer, no new state). */
   .note-panel { display: none; border-bottom: 1px solid var(--border); background: var(--bg-2); padding: .7rem .9rem; font-family: 'JetBrains Mono', monospace; font-size: .7rem; line-height: 1.65; color: var(--ink-2); max-height: 32vh; overflow-y: auto; white-space: pre-wrap; }
@@ -67,7 +79,7 @@
   <nav id="nav"></nav>
   <div class="side-foot">
     status &amp; notes auto-sync from <code>progress.json</code><br>
-    serve with <code>php -S localhost:8000</code>
+    serve with <code>php -S localhost:8000 scripts/progress-server.php</code>
   </div>
 </aside>
 
@@ -75,6 +87,12 @@
   <div class="pane-bar">
     <span id="paneTitle">no lesson open</span>
     <span id="paneLive"></span>
+    <span class="status-err" id="statusErr"></span>
+    <span class="status-seg" id="statusSeg">
+      <button type="button" data-status="todo">todo</button>
+      <button type="button" data-status="doing">doing</button>
+      <button type="button" data-status="done">done</button>
+    </span>
     <button type="button" class="note-toggle" id="noteToggle">✎ note</button>
   </div>
   <div class="note-panel" id="notePanel"></div>
@@ -197,6 +215,7 @@ function showEmpty(message){
   document.getElementById("empty").innerHTML = message;
   document.getElementById("paneTitle").textContent = "no lesson open";
   document.getElementById("paneLive").textContent = "";
+  document.getElementById("statusErr").textContent = "";
   renderNav(); renderNote();
 }
 
@@ -235,7 +254,7 @@ function renderNav(){
   }
 }
 
-// Read-only note panel: the agent is the only writer (lesson lifecycle gate,
+// Read-only note panel: notes remain agent-only (lesson lifecycle gate,
 // ADR-0004); the page just displays what progress.json holds for the active
 // lesson. Recaps have no key → no note, toggle hidden.
 function renderNote(){
@@ -247,6 +266,46 @@ function renderNote(){
   btn.className = "note-toggle" + (noteOpen ? " on" : "");
   panel.className = "note-panel" + (note && noteOpen ? " open" : "");
   panel.textContent = note;
+  renderStatusSeg();
+}
+
+// Manual status marking (ADR-0018): the segmented control shows only when the
+// active item has a progress.json key (recaps don't, ADR-0014). Status writes
+// go through POST /progress on scripts/progress-server.php — same store the
+// agent writes at the gate, so the 4s poll re-syncs both directions.
+function renderStatusSeg(){
+  var l = active ? findBySlug(active) : null;
+  var seg = document.getElementById("statusSeg");
+  if(!(l && l.key)){ seg.style.display = "none"; return; }
+  seg.style.display = "inline-block";
+  var st = statusOf(l.key);
+  var btns = seg.getElementsByTagName("button");
+  for(var i=0; i<btns.length; i++){
+    btns[i].className = btns[i].getAttribute("data-status")===st ? "on" : "";
+  }
+}
+
+function setStatus(key, status){
+  var prev = statusOf(key);
+  if(prev === status) return;
+  if(!progress[key]) progress[key] = {};
+  progress[key].status = status;                    // optimistic update
+  document.getElementById("statusErr").textContent = "";
+  renderProgressBar(); renderNav(); renderStatusSeg();
+  fetch("progress", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({key: key, status: status})
+  })
+    // Plain `php -S` answers unknown URIs with index.html and a 200, so a
+    // status check alone can't detect the missing router — require a JSON body.
+    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+    .catch(function(){                              // revert: no write endpoint
+      progress[key].status = prev;
+      renderProgressBar(); renderNav(); renderStatusSeg();
+      document.getElementById("statusErr").textContent =
+        "⚠ no write endpoint — serve with scripts/progress-server.php";
+    });
 }
 
 function openLesson(slug){
@@ -265,6 +324,7 @@ function openLesson(slug){
   var l = findBySlug(slug);
   document.getElementById("paneTitle").textContent = l ? lessonUrl(slug) + " — " + l.title : lessonUrl(slug);
   document.getElementById("paneLive").textContent = "";
+  document.getElementById("statusErr").textContent = "";
   renderNav(); renderNote();
 }
 
@@ -315,6 +375,12 @@ function pollLessonFile(){
 document.getElementById("noteToggle").onclick = function(){
   noteOpen = !noteOpen;
   renderNote();
+};
+
+document.getElementById("statusSeg").onclick = function(e){
+  var status = e.target.getAttribute && e.target.getAttribute("data-status");
+  var l = active ? findBySlug(active) : null;
+  if(status && l && l.key) setStatus(l.key, status);
 };
 
 window.addEventListener("hashchange", onHash);
