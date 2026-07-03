@@ -1,11 +1,11 @@
-# Laravel 12 → 13: Learn by Doing
+# Laravel Practice
 
-A hands-on path through what changed in Laravel **from 12.x to 13.x**, one lesson
-at a time, oldest first. No endless changelog: only the changes that affect *how*
-you build — new features, security, breaking changes. Bug fixes and dependency
-bumps stay out.
+Laravel Practice is a hands-on path through what changed in Laravel **from 12.x
+to 13.x**, one lesson at a time, oldest first. No endless changelog: only the
+changes that affect *how* you build — new features, security, breaking changes.
+Bug fixes and dependency bumps stay out.
 
-**46 releases → 12 lessons.**
+**Current lesson scope: 46 releases → 12 lessons.**
 
 👉 Serve the repo root and open the **[course page](./index.html)** to follow where you are.
 
