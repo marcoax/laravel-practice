@@ -39,3 +39,24 @@ _Example — (your project):_ your assessment here.
         detail pages listed under Secondary.
      3. Break ties by closest match to the core change first, then recency. -->
 <!-- The HTML carries this as a `.primary-source` callout; see lessons 01–07 for examples. -->
+
+<!-- Optional learner-selected resource discovery block:
+     Add this to the rendered lesson HTML only when the learner explicitly accepts the
+     end-of-lesson resource discovery prompt and the search finds sources that clear the
+     authority bar in ADR-0019. Keep it separate from the single `.primary-source` callout:
+
+     <section class="curated-resources">
+       <h2>Risorse autorevoli per approfondire</h2>
+       <ul>
+         <li>
+           <a href="...">Title</a>
+           <span class="resource-meta">Official docs · Laravel</span>
+           <p>Why authoritative; why it matters for this lesson.</p>
+         </li>
+       </ul>
+     </section>
+
+     Also add the same accepted resources to the git-ignored RESOURCES.md index. Maximum
+     4 resources per lesson: up to 2 official/primary sources and up to 2 recognized
+     community/talk/video sources. If nothing is authoritative enough, leave both files
+     unchanged and say so in chat. -->
