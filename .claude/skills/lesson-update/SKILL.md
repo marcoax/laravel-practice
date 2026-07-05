@@ -99,7 +99,7 @@ if `off`, write on the current branch. This flag is consulted **only here** — 
 sessions never cut branches.
 
 Write each accepted lesson into `lessons/` from `lessons/_template.md`:
-- **Filename: version-pure**, full patch level, e.g. `13.17-….md`. **No topic slug** (a release
+- **Filename: version-pure**, full patch level, e.g. `13.17.0.md`. **No topic slug** (a release
   aggregates many changes — picking one would be arbitrary). The version prefix deliberately breaks
   the `01/02/03…` sequence; that makes an upstream collision *visible and expected*.
 - **YAML frontmatter (generated lessons only):** `version: <x.y.z>`, `origin: local`, and

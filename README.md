@@ -89,7 +89,7 @@ new lessons:
 1. **Discover** new releases from the editorial sources listed in `learning-config.md`
    ([Laravel News](https://laravel-news.com), [Laravel Daily](https://laraveldaily.com), …),
    querying them all. A release is lesson-worthy if *any* of the sources wrote about it.
-2. **Propose one lesson per release** (named by version, e.g. `13.17-…`), one at a time —
+2. **Propose one lesson per release** (named by version, e.g. `13.17.0.md`), one at a time —
    you accept or skip each.
 3. **Generate** the accepted ones into [`/lessons`](./lessons), ready to run with `/teach`.
 
