@@ -19,7 +19,8 @@ Split the repo into two halves:
   the init skill, neutral docs. No specific reference project named.
 - **Per-user state (git-ignored):** the learner's choices live in a new
   **`learning-config.md`** at the repo root, alongside the already git-ignored
-  `MISSION.md`, `NOTES.md`, `learning-records/`, `lessons/*.html`.
+  `MISSION.md`, `NOTES.md`, `learning-records/`, `lessons/*.html`, and, from
+  ADR-0019, `RESOURCES.md`.
 
 `learning-config.md` holds: `output_style`, `reference_project` (a path; required — the
 "no project, concepts only" case is covered by `practice_default`, not by leaving this
@@ -34,6 +35,7 @@ As part of adopting this, the eraCms mentions in `CLAUDE.md`/`README`/`NOTES.md`
 
 - The template becomes genuinely forkable; no private project ships in the public repo.
 - A new always-loaded binding is needed so the agent reads `learning-config.md` (ADR-0003).
-- `.gitignore` must cover `learning-config.md` (and `progress.json`, ADR-0004).
+- `.gitignore` must cover `learning-config.md`, `progress.json` (ADR-0004), and
+  `RESOURCES.md` (ADR-0019).
 - Existing learner state (eraCms as reference) moves from tracked prose into the
   git-ignored `learning-config.md`.

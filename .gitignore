@@ -25,3 +25,4 @@
 # template content. Durable decisions land in docs/adr/ instead.
 /specs/
 .DS_Store
+

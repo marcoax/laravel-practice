@@ -178,6 +178,45 @@ th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-
   text-transform: uppercase;
 }
 
+/* ---- Learner-selected curated resources (ADR-0019) ---- */
+.curated-resources {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 0.9rem 1.1rem;
+  margin: 1.6rem 0;
+  background: #fff;
+}
+.curated-resources h2 {
+  border-bottom: 0;
+  margin: 0 0 0.7rem;
+  padding: 0;
+  font-size: 1.05rem;
+}
+.curated-resources ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.curated-resources li {
+  margin: 0.65rem 0;
+  font-size: 0.95rem;
+}
+.curated-resources li:first-child { margin-top: 0; }
+.curated-resources li:last-child { margin-bottom: 0; }
+.curated-resources .resource-meta {
+  display: block;
+  margin-top: 0.12rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.curated-resources p {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 /* ---- Recall quiz widget ---- */
 .quiz { margin: 1.4rem 0; }
 .quiz details {
@@ -308,6 +347,7 @@ th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; text-
   body { background: #fff; max-width: 100%; padding: 0; }
   .quiz details { break-inside: avoid; }
   .mcq { break-inside: avoid; }
+  .curated-resources { break-inside: avoid; }
   .mcq .mcq-check, .mcq .mcq-feedback { display: none; }
   .deepen { display: none; }
   .quiz details[open] summary::before,

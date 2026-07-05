@@ -19,7 +19,7 @@ conference talks, or first-party ecosystem channels. Generic SEO content, shallo
 YouTube videos, and undated API material are rejected.
 
 Consequences: `RESOURCES.md` becomes a per-user `/teach` workspace index, not a bare
-link dump; implementation should add it to `.gitignore`. If no source clears the
-authority bar, the agent reports that in chat and leaves files untouched. The existing
-single primary-source callout remains part of normal lesson generation; learner-selected
-resource discovery is an optional extension layered on top.
+link dump, and is ignored by git. If no source clears the authority bar, the agent
+reports that in chat and leaves files untouched. The existing single primary-source
+callout remains part of normal lesson generation; learner-selected resource discovery is
+an optional extension layered on top.

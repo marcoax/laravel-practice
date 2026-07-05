@@ -13,7 +13,7 @@ The workspace splits cleanly into:
   specific reference project.
 - **Per-user state (git-ignored)** — the learner's actual choices and progress:
   `learning-config.md`, `progress.json`, `MISSION.md`, `NOTES.md`,
-  `learning-records/`, `lessons/*.html`.
+  `learning-records/`, `lessons/*.html`, `RESOURCES.md`.
 
 See ADR-0001.
 
@@ -48,10 +48,11 @@ Use these terms in issues, ADRs, skill prompts, and code. Avoid the synonyms not
   to treat `learning-config.md` as authoritative when present, and to suggest `/lesson-init`
   when absent. See ADR-0003.
 
-- **lesson lifecycle gate** — the end-of-lesson rule (in `CLAUDE.md`): before advancing,
-  mark the lesson done and capture notes by updating **both** `progress.json` (structured,
-  for the course page) and a `learning-records/NNNN-*.md` (narrative); for 13.x lessons,
-  then offer the recap (opt-in). See ADR-0004/0014.
+- **lesson lifecycle gate** — the end-of-lesson rule (in `CLAUDE.md`): after recall and
+  the ordinary deep-dive invitation, offer learner-selected resource discovery; then,
+  before advancing, mark the lesson done and capture notes by updating **both**
+  `progress.json` (structured, for the course page) and a `learning-records/NNNN-*.md`
+  (narrative); for 13.x lessons, then offer the recap (opt-in). See ADR-0004/0014/0019.
 
 - **progress.json** — a git-ignored state file
   (`{ progress: { <lesson-key>: { status, note } } }`), keyed by numeric id for core

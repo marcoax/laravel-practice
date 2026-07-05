@@ -19,7 +19,8 @@ codebase you choose at setup (`/lesson-init`), recorded in the git-ignored
   prompt-prefill buttons + a segmented control to flip a lesson's status by hand
   (written through the progress endpoint). Notes remain agent-only. No build step.
   See ADR-0013/0015/0018.
-- `MISSION.md`, `NOTES.md`, `learning-records/` — `/teach` workspace state.
+- `MISSION.md`, `NOTES.md`, `learning-records/`, `RESOURCES.md` — `/teach`
+  workspace state.
 
 ## Rules
 
@@ -75,8 +76,31 @@ page at any time — the page writes through the progress endpoint
 A learner-flipped `"done"` **without** a learning record is a legitimate administrative
 closure ("not interested / did it on my own") — never nag about it or reconcile it back.
 
-No lesson is left implicitly "done". At the **end of each lesson**, before moving on,
-capture completion and reflection with two writes (see ADR-0004):
+No lesson is left implicitly "done". At the **end of each lesson**, after recall and the
+ordinary optional deep-dive invitation, offer **learner-selected resource discovery**
+(ADR-0019) before the final lifecycle writes:
+
+- Use the learner's `language.chat` from `learning-config.md`. Render a short prompt
+  equivalent to: **"Do you want me to search for highly authoritative web/YouTube
+  resources on this topic and add them to the lesson + RESOURCES.md?"**
+- **Declined or ignored:** do not search and do not change the lesson HTML or
+  `RESOURCES.md`; continue the lifecycle gate.
+- **Accepted:** search the web and YouTube, inspect candidates, and keep only very
+  authoritative sources: official docs, package docs, release notes, framework/source
+  repositories, or clearly recognized Laravel/PHP authors, maintainers, conference talks,
+  and first-party ecosystem channels. Reject generic SEO tutorials, listicles, undated
+  fast-moving API material, shallow videos, and marketing pages.
+- Add at most **4 resources**: up to 2 official/primary sources and up to 2
+  community/talk/video sources. Each accepted resource must include title, URL, type,
+  author/channel/publisher, why it is authoritative, and why it helps this lesson.
+- Patch both destinations: a compact localized `curated-resources` section near the
+  lesson's existing deeper-study / primary-source area, and `RESOURCES.md` as the durable
+  per-user index. Keep `RESOURCES.md` entries in English. Create `RESOURCES.md` lazily
+  on the first accepted discovery.
+- **Fail-soft:** if the web is thin, no candidate clears the authority bar, or the search
+  fails, say so in chat and leave files untouched. This never blocks lesson completion.
+
+Then capture completion and reflection with two writes (see ADR-0004):
 
 1. **Update `progress.json`** (git-ignored, at the repo root) — set the lesson's
    `status` to `"done"` and store the learner's `note`. Shape:
