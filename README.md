@@ -5,7 +5,8 @@ to 13.x**, one lesson at a time, oldest first. No endless changelog: only the
 changes that affect *how* you build — new features, security, breaking changes.
 Bug fixes and dependency bumps stay out.
 
-**Current lesson scope: 46 releases → 12 lessons.**
+**The course ships a core sequence of authored lessons, and grows on request:
+`/lesson-update` turns newer Laravel releases into new lessons whenever you ask.**
 
 👉 Serve the repo root and open the **[course page](./index.html)** to follow where you are.
 
@@ -74,7 +75,9 @@ replicate the behaviour by asking them to scaffold and leave the key decision to
 
 ## How it works
 
-- The **12 lessons** live in [`/lessons`](./lessons), numbered chronologically.
+- The lessons live in [`/lessons`](./lessons): the **core sequence** (`NN-*.md`, numbered
+  chronologically) plus the **release lessons** generated via `/lesson-update`
+  (version-named, e.g. `13.17.0.md`).
 - Each lesson is a *brief*: what changed, why it might matter, what to try, and a
   few questions to judge whether it's relevant **to your project**.
 - You can **use the provided lessons** or **write your own** starting from
@@ -82,9 +85,9 @@ replicate the behaviour by asking them to scaffold and leave the key decision to
 
 ## Staying up to date — `/lesson-update`
 
-The current lessons cover Laravel **up to version 13.8**. Laravel keeps shipping, so
-**`/lesson-update`** looks for releases newer than that and turns the worthwhile ones into
-new lessons:
+Laravel keeps shipping, so the course never claims to be "complete":
+**`/lesson-update`** looks for releases newer than the ones already covered (tracked in
+`learning-config.md`) and turns the worthwhile ones into new lessons:
 
 1. **Discover** new releases from the editorial sources listed in `learning-config.md`
    ([Laravel News](https://laravel-news.com), [Laravel Daily](https://laraveldaily.com), …),
@@ -124,7 +127,7 @@ php -S localhost:8000 scripts/progress-server.php
 
 then open <http://localhost:8000/>. What you get:
 
-- **One unified lesson list** in the sidebar — the 12 core lessons and the
+- **One unified lesson list** in the sidebar — the core lessons and the
   `/lesson-update`-generated release lessons, continuously numbered, with live
   done/todo status and a progress bar.
 - **Baseline filtering** from `learning-config.md`: `course_baseline_major: 12` shows the
