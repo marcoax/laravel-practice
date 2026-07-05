@@ -80,9 +80,9 @@ No lesson is left implicitly "done". At the **end of each lesson**, after recall
 ordinary optional deep-dive invitation, offer **learner-selected resource discovery**
 (ADR-0019) before the final lifecycle writes:
 
-- Use the learner's `language.chat` from `learning-config.md`. For the current learner,
-  the prompt is: **"Vuoi che cerchi risorse web/YouTube molto autorevoli su questo tema
-  e le aggiunga alla lezione + RESOURCES.md?"**
+- Use the learner's `language.chat` from `learning-config.md`. Render a short prompt
+  equivalent to: **"Do you want me to search for highly authoritative web/YouTube
+  resources on this topic and add them to the lesson + RESOURCES.md?"**
 - **Declined or ignored:** do not search and do not change the lesson HTML or
   `RESOURCES.md`; continue the lifecycle gate.
 - **Accepted:** search the web and YouTube, inspect candidates, and keep only very
@@ -93,9 +93,10 @@ ordinary optional deep-dive invitation, offer **learner-selected resource discov
 - Add at most **4 resources**: up to 2 official/primary sources and up to 2
   community/talk/video sources. Each accepted resource must include title, URL, type,
   author/channel/publisher, why it is authoritative, and why it helps this lesson.
-- Patch both destinations: a compact `curated-resources` section near the lesson's
-  existing `Approfondisci` / primary-source area, and `RESOURCES.md` as the durable
-  per-user index. Create `RESOURCES.md` lazily on the first accepted discovery.
+- Patch both destinations: a compact localized `curated-resources` section near the
+  lesson's existing deeper-study / primary-source area, and `RESOURCES.md` as the durable
+  per-user index. Keep `RESOURCES.md` entries in English. Create `RESOURCES.md` lazily
+  on the first accepted discovery.
 - **Fail-soft:** if the web is thin, no candidate clears the authority bar, or the search
   fails, say so in chat and leave files untouched. This never blocks lesson completion.
 

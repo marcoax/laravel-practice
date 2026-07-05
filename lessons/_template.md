@@ -46,7 +46,7 @@ _Example — (your project):_ your assessment here.
      authority bar in ADR-0019. Keep it separate from the single `.primary-source` callout:
 
      <section class="curated-resources">
-       <h2>Risorse autorevoli per approfondire</h2>
+       <h2>[Localized heading equivalent to "Authoritative resources for deeper study"]</h2>
        <ul>
          <li>
            <a href="...">Title</a>
@@ -56,7 +56,7 @@ _Example — (your project):_ your assessment here.
        </ul>
      </section>
 
-     Also add the same accepted resources to the git-ignored RESOURCES.md index. Maximum
-     4 resources per lesson: up to 2 official/primary sources and up to 2 recognized
-     community/talk/video sources. If nothing is authoritative enough, leave both files
-     unchanged and say so in chat. -->
+     Also add the same accepted resources to the git-ignored RESOURCES.md index, written
+     in English. Maximum 4 resources per lesson: up to 2 official/primary sources and up
+     to 2 recognized community/talk/video sources. If nothing is authoritative enough,
+     leave both files unchanged and say so in chat. -->

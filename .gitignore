@@ -4,7 +4,6 @@
 /MISSION.md
 /NOTES.md
 /learning-records/
-/RESOURCES.md
 
 # Rendered lessons: generated during /teach sessions with real project data
 # (paths, model names). The shared .md briefs and assets/lesson.css ARE tracked.
@@ -26,3 +25,4 @@
 # template content. Durable decisions land in docs/adr/ instead.
 /specs/
 .DS_Store
+
