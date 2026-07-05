@@ -33,10 +33,12 @@ codebase you choose at setup (`/lesson-init`), recorded in the git-ignored
   `en | it | fr | de | es` at `/lesson-init`.
 - Ground every lesson on **your reference project** (the `reference_project` in
   `learning-config.md`) as a concrete example, not as absolute truth.
-- **Learn by Doing mode.** This project sets the `Learning` output style as the default in
-  `.claude/settings.json`. When generating code that involves a design decision, set up the
-  scaffolding and leave the key 2–10 lines to the user via a single `TODO(human)` block,
-  rather than handing over finished code. It is separate from `/teach`: `/teach` decides
+- **Learn by Doing mode — during lessons only (ADR-0020).** `teach-lesson`/`/teach` read
+  `output_style` from `learning-config.md` (default `Learning`) and apply it for the
+  duration of the teaching session. With `Learning` active, when generating code that
+  involves a design decision, set up the scaffolding and leave the key 2–10 lines to the
+  user via a single `TODO(human)` block, rather than handing over finished code. Outside
+  lessons no output style is imposed. It is separate from `/teach`: `/teach` decides
   *what* to teach, the output style decides *how* to interact.
 
 When editing a lesson brief, keep the format (what changed, why it matters,     what to try,
@@ -50,10 +52,11 @@ This repo is a neutral, forkable template; the learner's choices are per-user an
 git-ignored. If **`learning-config.md`** exists at the repo root, treat its values as
 **authoritative** — the reference project, the language split (chat/lessons vs docs),
 `course_baseline_major`, and the pedagogy fields (`practice_default`, `quiz_format`,
-`deep_dive`, `branch_convention`). The shared output-style default lives in `.claude/settings.json`
-and can be overridden per user in `.claude/settings.local.json`; `model` is advisory
-only. If `learning-config.md` is **absent**, suggest running **`/lesson-init`** to
-create it. See `learning-config.example.md` for the schema and ADR-0001/0003.
+`deep_dive`, `branch_convention`). `output_style` is enforced by `teach-lesson`/`/teach`
+for lesson sessions only (ADR-0020) — the tracked `.claude/settings.json` stays neutral;
+`model` is advisory only. If `learning-config.md` is **absent**, suggest running
+**`/lesson-init`** to create it. See `learning-config.example.md` for the schema and
+ADR-0001/0003/0020.
 
 When `course_baseline_major` is `13`, learner-facing course flow must hide 12.x lessons
 and `recap-12x`, and `/teach` / `teach-lesson` must not propose or run 12.x lessons as

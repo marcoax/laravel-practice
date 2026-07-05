@@ -16,10 +16,12 @@ git-ignored `learning-config.md`.
   `en | it | fr | de | es` at `/lesson-init`.
 - Ground every lesson on **your reference project** (the `reference_project` in
   `learning-config.md`) as a concrete example, not as absolute truth.
-- **Learn by Doing mode.** This project sets the `Learning` output style as the default in
-  `.claude/settings.json`. When generating code that involves a design decision, set up the
-  scaffolding and leave the key 2–10 lines to the user via a single `TODO(human)` block,
-  rather than handing over finished code. It is separate from `/teach`: `/teach` decides
+- **Learn by Doing mode — during lessons only (ADR-0020).** `teach-lesson`/`/teach` read
+  `output_style` from `learning-config.md` (default `Learning`) and apply it for the
+  duration of the teaching session. With `Learning` active, when generating code that
+  involves a design decision, set up the scaffolding and leave the key 2–10 lines to the
+  user via a single `TODO(human)` block, rather than handing over finished code. Outside
+  lessons no output style is imposed. It is separate from `/teach`: `/teach` decides
   *what* to teach, the output style decides *how* to interact.
 
 See `NOTES.md` for teaching preferences and `MISSION.md` for context.

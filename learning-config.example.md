@@ -11,9 +11,9 @@ The values live in the YAML block below. Everything outside it is documentation.
 ```yaml
 # --- Essentials ---
 
-# Output style / interaction mode. "Learning" = Learn by Doing (scaffold + TODO(human)).
-# Shared default lives in .claude/settings.json; per-user overrides live in the
-# git-ignored .claude/settings.local.json. This file records the intended choice.
+# Output style / interaction mode for lessons. "Learning" = Learn by Doing (scaffold +
+# TODO(human)). Applied by teach-lesson//teach for the duration of a lesson session only
+# (ADR-0020); outside lessons nothing is imposed and no settings file is written.
 output_style: Learning
 
 # The real codebase you assess each lesson against ("does my project need this?").

@@ -1,17 +1,17 @@
 ---
 name: lesson-init
-description: One-shot setup for this Laravel 12→13 workspace — interviews you, then writes learning-config.md and the local output-style override. Run once per fork.
+description: One-shot setup for this Laravel 12→13 workspace — interviews you, then writes learning-config.md. Run once per fork.
 disable-model-invocation: true
 argument-hint: "(no arguments — it interviews you)"
 ---
 
 `/lesson-init` is a one-shot bootstrap, run once per fork, distinct from `/teach` (which runs
-the lessons). Interview the learner, then write two files:
+the lessons). Interview the learner, then write one file:
 
-1. **`learning-config.md`** at the repo root — the per-user, git-ignored config every later
-   session treats as authoritative (see `CLAUDE.md` → *Config binding*, ADR-0001/0003).
-2. **`.claude/settings.local.json`** — the git-ignored, higher-precedence file that *enforces*
-   the chosen output style.
+**`learning-config.md`** at the repo root — the per-user, git-ignored config every later
+session treats as authoritative (see `CLAUDE.md` → *Config binding*, ADR-0001/0003).
+The `output_style` recorded there is applied by `teach-lesson`/`/teach` during lesson
+sessions only (ADR-0020) — no settings file is written for it.
 
 First read `learning-config.example.md` (the tracked schema) and `CONTEXT.md`, so your output
 matches the canonical field names and the repo's vocabulary.
@@ -36,7 +36,7 @@ the template default.
 | # | Field | Recommended default | Notes / options |
 |---|-------|---------------------|-----------------|
 | 1 | `language` | `chat: en`, `docs: en` | Ask first. `chat` = conversation + HTML lessons (learner-facing); `docs` = project Markdown. Offer for `chat`: **English (recommended)**, Italian, French, German, Spanish. `docs` defaults to English. |
-| 2 | `output_style` | `Learning` | **Learning** = Learn by Doing (scaffold + `TODO(human)`, recommended). Other choices: `Explanatory` (teaches while writing — full code plus didactic notes) or `default` (concise, no pedagogy). Written to `settings.local.json`, **not** to `learning-config.md`, as the enforcement point. |
+| 2 | `output_style` | `Learning` | **Learning** = Learn by Doing (scaffold + `TODO(human)`, recommended). Other choices: `Explanatory` (teaches while writing — full code plus didactic notes) or `default` (concise, no pedagogy). Written to `learning-config.md`; `teach-lesson`/`/teach` apply it for the duration of a lesson session (ADR-0020). Never written to settings files. |
 | 3 | `reference_project` | *(no default — ask)* | Absolute path to the real codebase assessed each lesson. If they have none, store a placeholder and steer `practice_default` to `concepts-only`. |
 | 4 | `model` | `claude-opus-4-8` (+ Fast mode) | **Advisory only** — a file can't force the CLI model. Just record it. |
 | 5 | `course_baseline_major` | `12` | Static choices only: `12` \| `13`. `12` preserves the full authored Laravel 12 -> 13 path; `13` starts the active learner-facing path at Laravel 13 and hides 12.x material. This is not a generic `from_major -> to_major` engine. |
@@ -70,12 +70,13 @@ state**, not preferences — copy the defaults verbatim from `learning-config.ex
 Never prompt for these seeded fields. A fresh config starts from the values above; on a re-run
 they are preserved per the *Re-running* rule (only `auto_check_new_lessons` is re-asked).
 
-## Step 4 — Write the output style to `.claude/settings.local.json`
+## Step 4 — Do not touch settings files (ADR-0020)
 
-This file is git-ignored and already exists with a `permissions` block. You **must merge**,
-never overwrite: read the current JSON, set the top-level `"outputStyle"` key to the chosen
-value, and preserve every other key (especially `permissions`). The tracked
-`.claude/settings.json` stays neutral (`{}`) — do not write the style there.
+`output_style` lives in `learning-config.md` only; `teach-lesson`/`/teach` apply it during
+lesson sessions. Do **not** write `outputStyle` to `.claude/settings.json` (it stays neutral,
+`{}`) or to `.claude/settings.local.json` — the latter is the learner's personal,
+general-work preference and is none of this skill's business. If the learner has a stale
+`outputStyle` there from an older setup, mention it once; changing it is their call.
 
 ## Re-running (update mode)
 
@@ -97,6 +98,6 @@ ADR-0002):
 
 ## Step 5 — Confirm and hand off
 
-Summarise the written config back to the learner (in their chosen `chat` language), confirm the output style is
-active via `settings.local.json`, and point them to `/teach` to start lesson 01. Do **not**
-run a lesson here — `/lesson-init` only bootstraps.
+Summarise the written config back to the learner (in their chosen `chat` language), note that
+the chosen `output_style` will apply during lesson sessions (ADR-0020), and point them to
+`/teach` to start lesson 01. Do **not** run a lesson here — `/lesson-init` only bootstraps.

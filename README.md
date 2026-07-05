@@ -54,24 +54,18 @@ Bug fixes and dependency bumps stay out.
 
 ### Learn by Doing mode (recommended)
 
-These lessons work best with Claude Code's **Learning** output style active. With it,
-the agent doesn't hand you finished code: for every meaningful design decision it sets
-up the scaffolding and asks **you** to write the key 2–10 lines (a `TODO(human)` block),
-then gives feedback. That's the "understanding beats delegating" philosophy in practice.
+These lessons work best with the **Learning** output style active. With it, the agent
+doesn't hand you finished code: for every meaningful design decision it sets up the
+scaffolding and asks **you** to write the key 2–10 lines (a `TODO(human)` block), then
+gives feedback. That's the "understanding beats delegating" philosophy in practice.
 
-It is a separate setting from `/teach`: `/teach` decides *what* you learn; the Learning
-output style decides *how* you interact. The tracked `.claude/settings.json` ships the
-recommended shared default:
-
-```json
-{ "outputStyle": "Learning" }
-```
-
-Picking a different style in `/lesson-init` writes your choice to the git-ignored
-[`.claude/settings.local.json`](./.claude/settings.local.json), which overrides the
-shared default for your machine only. To change it later, run `/output-style` and pick
-`Learning` (or `default` to have the agent write the code for you). Other agents:
-replicate the behaviour by asking them to scaffold and leave the key decision to you.
+The style applies **during lessons only** (ADR-0020): `/lesson-init` records your choice
+as `output_style` in `learning-config.md` (default `Learning`), and the `teach-lesson`
+launcher applies it for the duration of each teaching session. Outside lessons the agent
+uses your own Claude Code settings — the tracked `.claude/settings.json` stays neutral.
+To change it later, edit `output_style` in `learning-config.md` or re-run `/lesson-init`.
+Other agents: replicate the behaviour by asking them to scaffold and leave the key
+decision to you.
 
 ## How it works
 
