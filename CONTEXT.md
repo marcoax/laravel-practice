@@ -1,4 +1,4 @@
-# Context — laravel-12-13-practice
+# Context — laravel-practice
 
 A **content/teaching repo** (no runnable app) that drives a stateful Laravel 12→13
 learning path. This file is the single-context glossary for the repo; see `docs/adr/`

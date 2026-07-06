@@ -1,4 +1,4 @@
-# laravel-12-13-practice
+# laravel-practice
 
 A **content repo**, not a runnable app — no `composer.json`/`artisan`. It is a
 **Laravel 12 → 13** learning path run with the `/teach` skill: each lesson teaches a
