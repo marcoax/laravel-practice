@@ -27,7 +27,7 @@ Use these terms in issues, ADRs, skill prompts, and code. Avoid the synonyms not
   "preferences file". See ADR-0001.
 
 - **/lesson-init** — the one-shot skill that interviews the learner and writes
-  `learning-config.md` (including `output_style`, which `teach-lesson`/`/teach` apply
+  `learning-config.md` (including `output_style`, which `lesson`/`/teach` apply
   during lesson sessions only — ADR-0020; no settings file is written). Run once
   per workspace. Distinct from `/teach`, which runs the lessons. See ADR-0002.
 

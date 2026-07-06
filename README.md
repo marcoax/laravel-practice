@@ -48,10 +48,10 @@ Bug fixes and dependency bumps stay out.
    # then set reference_project and any preferences
    ```
 
-4. **Run a lesson.** Open your agent in this repo and point `/teach-lesson` at a lesson,
+4. **Run a lesson.** Open your agent in this repo and point `/lesson` at a lesson,
    oldest first:
    ```
-   /teach-lesson lessons/01-eloquent-casts.md
+   /lesson lessons/01-eloquent-casts.md
    ```
    At the start of each lesson you choose how to practice: on a **throwaway app**
    (`laravel new practice-app`) or on **your own project**.
@@ -67,7 +67,7 @@ scaffolding and asks **you** to write the key 2–10 lines (a `TODO(human)` bloc
 gives feedback. That's the "understanding beats delegating" philosophy in practice.
 
 The style applies **during lessons only** (ADR-0020): `/lesson-init` records your choice
-as `output_style` in `learning-config.md` (default `Learning`), and the `teach-lesson`
+as `output_style` in `learning-config.md` (default `Learning`), and the `lesson`
 launcher applies it for the duration of each teaching session. Outside lessons the agent
 uses your own Claude Code settings — the tracked `.claude/settings.json` stays neutral.
 To change it later, edit `output_style` in `learning-config.md` or re-run `/lesson-init`.

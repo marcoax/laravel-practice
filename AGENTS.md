@@ -16,7 +16,7 @@ git-ignored `learning-config.md`.
   `en | it | fr | de | es` at `/lesson-init`.
 - Ground every lesson on **your reference project** (the `reference_project` in
   `learning-config.md`) as a concrete example, not as absolute truth.
-- **Learn by Doing mode — during lessons only (ADR-0020).** `teach-lesson`/`/teach` read
+- **Learn by Doing mode — during lessons only (ADR-0020).** `lesson`/`/teach` read
   `output_style` from `learning-config.md` (default `Learning`) and apply it for the
   duration of the teaching session. With `Learning` active, when generating code that
   involves a design decision, set up the scaffolding and leave the key 2–10 lines to the

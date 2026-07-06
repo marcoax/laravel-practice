@@ -108,7 +108,7 @@ Write each accepted lesson into `lessons/` from `lessons/_template.md`:
   password rules from your validation rules" → `html-password-rules`, "Bulk job dispatch with
   Bus::bulk()" → `bulk-job-dispatch` (the `Bus::bulk()` detail belongs in the lesson body, not
   the menu row). Write it **once, here, at generation time** — it is the single source of truth
-  for how the lesson's title is displayed everywhere downstream (the `teach-lesson` menu reads
+  for how the lesson's title is displayed everywhere downstream (the `lesson` menu reads
   this field rather than re-deriving it from the heading). Do **not** retrofit the 12 existing
   lessons (ADR-0006).
 - **Brief in the `language.docs` language (English).** HTML render stays a later `/teach` step.
