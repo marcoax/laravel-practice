@@ -100,4 +100,6 @@ ADR-0002):
 
 Summarise the written config back to the learner (in their chosen `chat` language), note that
 the chosen `output_style` will apply during lesson sessions (ADR-0020), and point them to
-`/teach` to start lesson 01. Do **not** run a lesson here — `/lesson-init` only bootstraps.
+`/teach-lesson` to start the course. Never surface bare `/teach` to the learner — it is the
+internal engine; `teach-lesson` is the learner-facing launcher. Do **not** run a lesson
+here — `/lesson-init` only bootstraps.
