@@ -38,7 +38,7 @@ the template default.
 | 1 | `language` | `chat: en`, `docs: en` | Ask first. `chat` = conversation + HTML lessons (learner-facing); `docs` = project Markdown. Offer for `chat`: **English (recommended)**, Italian, French, German, Spanish. `docs` defaults to English. |
 | 2 | `output_style` | `Learning` | **Learning** = Learn by Doing (scaffold + `TODO(human)`, recommended). Other choices: `Explanatory` (teaches while writing — full code plus didactic notes) or `default` (concise, no pedagogy). Written to `learning-config.md`; `teach-lesson`/`/teach` apply it for the duration of a lesson session (ADR-0020). Never written to settings files. |
 | 3 | `reference_project` | *(no default — ask)* | Absolute path to the real codebase assessed each lesson. If they have none, store a placeholder and steer `practice_default` to `concepts-only`. **Never suggest, guess, or illustrate this with a real absolute path** (yours, the learner's, or one seen earlier in the session/repo) — if an example is useful, use only the generic placeholder from `learning-config.example.md`: `/absolute/path/to/your/project`. |
-| 4 | `model` | `claude-opus-4-8` (+ Fast mode) | **Advisory only** — a file can't force the CLI model. Just record it. |
+| 4 | `model` | *(the model running this session)* | **Advisory only** — a file can't force the CLI model. Recommend **the model powering the current session** as the default, and other models of **its own family** as alternatives; do not sniff the environment or map agents to models — self-reference only (ADR-0021). If your environment has relevant execution modes (e.g. fast / extended), mention them in the suggestion. Just record the choice. |
 | 5 | `course_baseline_major` | `12` | Static choices only: `12` \| `13`. `12` preserves the full authored Laravel 12 -> 13 path; `13` starts the active learner-facing path at Laravel 13 and hides 12.x material. This is not a generic `from_major -> to_major` engine. |
 | 6 | `practice_default` | `concepts-only` | `concepts-only` \| `throwaway-app` \| `reference-project`. |
 | 7 | `quiz_format` | `recall` | `recall` (open question → accordion answer) \| `multiple-choice`. |
@@ -95,6 +95,9 @@ ADR-0002):
    replace a non-default value with the template default.
 4. **Surface conflicts, don't guess.** If `learning-config.md` is malformed or a value is
    unparseable, show the learner what you found and ask before overwriting that field.
+5. **`model` on re-run.** The stored `model` stays the recommended first option (rule 1); the
+   model running the current session is offered as a clearly *labelled* alternative (e.g.
+   "the model running now") — it never silently replaces a stored value (ADR-0021).
 
 ## Step 5 — Confirm and hand off
 

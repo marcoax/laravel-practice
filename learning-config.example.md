@@ -22,8 +22,9 @@ output_style: Learning
 reference_project: /absolute/path/to/your/project
 
 # Advisory only — a file cannot force the CLI's model; this records the recommendation.
-# Default: claude-opus-4-8 (+ Fast mode) for nuanced teaching and code-safety reasoning.
-model: claude-opus-4-8
+# Set by /lesson-init to a model suggested by the agent running the interview
+# (its own session model / family). Left null here; the real value comes from setup.
+model: null
 
 # Language split. chat = conversation + HTML lessons (learner-facing); docs = project MD.
 # chat choices: en (default) | it | fr | de | es. docs stays en.

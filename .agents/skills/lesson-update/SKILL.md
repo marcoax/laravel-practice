@@ -2,7 +2,6 @@
 name: lesson-update
 description: Discover new Laravel releases from the editorial sources in learning-config.md (Laravel News, Laravel Daily), propose one lesson per new version, and — on the learner's accept — generate it into lessons/ ready for a PR. Use when the learner wants to check for new Laravel versions / lessons, asks "are there new lessons?", "controlla nuove versioni", "update the lessons", "any Laravel releases I'm missing?", or runs /lesson-update. Also the discovery engine the lesson-completion auto-check (ADR-0007) runs in the background.
 argument-hint: "(no arguments — it scans, proposes, and on accept generates)"
-model: claude-sonnet-5
 ---
 
 Discover Laravel releases newer than the existing lessons cover, propose **one lesson per new
@@ -38,10 +37,10 @@ Read these fields from `learning-config.md` at the repo root (authoritative per 
   generation. Always available regardless of `auto_check_new_lessons`.
 - **Auto background discovery** (ADR-0007): the lesson lifecycle gate (ADR-0004), when
   `auto_check_new_lessons: on`, spawns a **read-only** sub-agent that runs **steps 1–3 only** and
-  reports "N candidates → view now or later?". **Spawn it with `model: sonnet`** — the scan is
-  procedural, so a session-model (Opus/Fable) run wastes tokens; but don't drop below Sonnet:
-  advancing `laravel_version_scanned` is irreversible, and a misread there silently skips a
-  release forever.
+  reports "N candidates → view now or later?". **Spawn it with a mid-tier model of the running
+  agent's family** — neither the top session model nor the minimum tier: the scan is procedural,
+  so a top-tier run wastes tokens; but don't drop to the cheapest tier either, because advancing
+  `laravel_version_scanned` is irreversible, and a misread there silently skips a release forever.
 
 **Hard boundary (ADR-0007): background discovers and proposes; it never generates.** The
 background path may advance `laravel_version_scanned` / `last_checked`, and **must not** write
