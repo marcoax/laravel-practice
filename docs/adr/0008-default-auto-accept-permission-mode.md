@@ -25,8 +25,7 @@ not the broader `bypassPermissions`.
   auto-accept mode with no manual per-session toggle.
 - **Scope: git-ignored `.claude/settings.local.json`** (per-user), *not* the tracked
   `.claude/settings.json`. This keeps the auto-accept permission choice out of the shared
-  template while still allowing `.claude/settings.json` to carry shared non-permission
-  defaults such as the `Learning` output style.
+  template. ADR-0020 later made the tracked settings file neutral for output style too.
 
 ## Consequences
 

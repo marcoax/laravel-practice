@@ -1,11 +1,16 @@
 # The lessons
 
-Twelve lessons, in chronological order (oldest first). Each is a short *brief*,
-not a full tutorial: it tells you **what changed**, **why it might matter** and
-**what to try**. The practice is yours — on your own project or a fresh Laravel
-app, with your AI assistant or by hand.
+The course has two families of lessons, side by side in this folder:
 
-| #  | Lesson | Version | Type |
+- the **core sequence** (`NN-*.md`, chronological, oldest first) listed below;
+- the **release lessons** (version-named, e.g. `13.17.0.md`) generated on request
+  by `/lesson-update` — how many there are depends on when you last ran it.
+
+Each is a short *brief*, not a full tutorial: it tells you **what changed**,
+**why it might matter** and **what to try**. The practice is yours — on your own
+project or a fresh Laravel app, with your AI assistant or by hand.
+
+| #  | Core lesson | Version | Type |
 |----|--------|---------|------|
 | 01 | Eloquent casts (AsHtmlString, AsCollection::of, #[UseEloquentBuilder]) | 12.x–12.19 | new |
 | 02 | Query Builder Pipelines and `shouldRun()` | 12.4 | new |

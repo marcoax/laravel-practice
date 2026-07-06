@@ -5,7 +5,8 @@ to 13.x**, one lesson at a time, oldest first. No endless changelog: only the
 changes that affect *how* you build — new features, security, breaking changes.
 Bug fixes and dependency bumps stay out.
 
-**Current lesson scope: 46 releases → 12 lessons.**
+**The course ships a core sequence of authored lessons, and grows on request:
+`/lesson-update` turns newer Laravel releases into new lessons whenever you ask.**
 
 👉 Serve the repo root and open the **[course page](./index.html)** to follow where you are.
 
@@ -53,28 +54,24 @@ Bug fixes and dependency bumps stay out.
 
 ### Learn by Doing mode (recommended)
 
-These lessons work best with Claude Code's **Learning** output style active. With it,
-the agent doesn't hand you finished code: for every meaningful design decision it sets
-up the scaffolding and asks **you** to write the key 2–10 lines (a `TODO(human)` block),
-then gives feedback. That's the "understanding beats delegating" philosophy in practice.
+These lessons work best with the **Learning** output style active. With it, the agent
+doesn't hand you finished code: for every meaningful design decision it sets up the
+scaffolding and asks **you** to write the key 2–10 lines (a `TODO(human)` block), then
+gives feedback. That's the "understanding beats delegating" philosophy in practice.
 
-It is a separate setting from `/teach`: `/teach` decides *what* you learn; the Learning
-output style decides *how* you interact. The tracked `.claude/settings.json` ships the
-recommended shared default:
-
-```json
-{ "outputStyle": "Learning" }
-```
-
-Picking a different style in `/lesson-init` writes your choice to the git-ignored
-[`.claude/settings.local.json`](./.claude/settings.local.json), which overrides the
-shared default for your machine only. To change it later, run `/output-style` and pick
-`Learning` (or `default` to have the agent write the code for you). Other agents:
-replicate the behaviour by asking them to scaffold and leave the key decision to you.
+The style applies **during lessons only** (ADR-0020): `/lesson-init` records your choice
+as `output_style` in `learning-config.md` (default `Learning`), and the `teach-lesson`
+launcher applies it for the duration of each teaching session. Outside lessons the agent
+uses your own Claude Code settings — the tracked `.claude/settings.json` stays neutral.
+To change it later, edit `output_style` in `learning-config.md` or re-run `/lesson-init`.
+Other agents: replicate the behaviour by asking them to scaffold and leave the key
+decision to you.
 
 ## How it works
 
-- The **12 lessons** live in [`/lessons`](./lessons), numbered chronologically.
+- The lessons live in [`/lessons`](./lessons): the **core sequence** (`NN-*.md`, numbered
+  chronologically) plus the **release lessons** generated via `/lesson-update`
+  (version-named, e.g. `13.17.0.md`).
 - Each lesson is a *brief*: what changed, why it might matter, what to try, and a
   few questions to judge whether it's relevant **to your project**.
 - You can **use the provided lessons** or **write your own** starting from
@@ -82,14 +79,14 @@ replicate the behaviour by asking them to scaffold and leave the key decision to
 
 ## Staying up to date — `/lesson-update`
 
-The current lessons cover Laravel **up to version 13.8**. Laravel keeps shipping, so
-**`/lesson-update`** looks for releases newer than that and turns the worthwhile ones into
-new lessons:
+Laravel keeps shipping, so the course never claims to be "complete":
+**`/lesson-update`** looks for releases newer than the ones already covered (tracked in
+`learning-config.md`) and turns the worthwhile ones into new lessons:
 
 1. **Discover** new releases from the editorial sources listed in `learning-config.md`
    ([Laravel News](https://laravel-news.com), [Laravel Daily](https://laraveldaily.com), …),
    querying them all. A release is lesson-worthy if *any* of the sources wrote about it.
-2. **Propose one lesson per release** (named by version, e.g. `13.17-…`), one at a time —
+2. **Propose one lesson per release** (named by version, e.g. `13.17.0.md`), one at a time —
    you accept or skip each.
 3. **Generate** the accepted ones into [`/lessons`](./lessons), ready to run with `/teach`.
 
@@ -124,7 +121,7 @@ php -S localhost:8000 scripts/progress-server.php
 
 then open <http://localhost:8000/>. What you get:
 
-- **One unified lesson list** in the sidebar — the 12 core lessons and the
+- **One unified lesson list** in the sidebar — the core lessons and the
   `/lesson-update`-generated release lessons, continuously numbered, with live
   done/todo status and a progress bar.
 - **Baseline filtering** from `learning-config.md`: `course_baseline_major: 12` shows the

@@ -11,9 +11,9 @@ The values live in the YAML block below. Everything outside it is documentation.
 ```yaml
 # --- Essentials ---
 
-# Output style / interaction mode. "Learning" = Learn by Doing (scaffold + TODO(human)).
-# Shared default lives in .claude/settings.json; per-user overrides live in the
-# git-ignored .claude/settings.local.json. This file records the intended choice.
+# Output style / interaction mode for lessons. "Learning" = Learn by Doing (scaffold +
+# TODO(human)). Applied by teach-lesson//teach for the duration of a lesson session only
+# (ADR-0020); outside lessons nothing is imposed and no settings file is written.
 output_style: Learning
 
 # The real codebase you assess each lesson against ("does my project need this?").
@@ -33,7 +33,9 @@ language:
 
 # Laravel major version the learner already knows. Static choices for this authored
 # Laravel 12 -> 13 path: 12 keeps the full path visible; 13 starts at Laravel 13 and
-# hides 12.x material from learner-facing course flow.
+# hides 12.x material from learner-facing course flow. Optional: when the field is
+# absent every reader (index.html, teach-lesson, verify scripts) falls back to 12,
+# so omitting it is equivalent to declaring 12. Chosen at /lesson-init.
 course_baseline_major: 12
 
 # --- Pedagogy ---
