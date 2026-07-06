@@ -40,7 +40,7 @@ codebase you choose at setup (`/lesson-init`), recorded in the git-ignored
   `en | it | fr | de | es` at `/lesson-init`.
 - Ground every lesson on **your reference project** (the `reference_project` in
   `learning-config.md`) as a concrete example, not as absolute truth.
-- **Learn by Doing mode — during lessons only (ADR-0020).** `teach-lesson`/`/teach` read
+- **Learn by Doing mode — during lessons only (ADR-0020).** `lesson`/`/teach` read
   `output_style` from `learning-config.md` (default `Learning`) and apply it for the
   duration of the teaching session. With `Learning` active, when generating code that
   involves a design decision, set up the scaffolding and leave the key 2–10 lines to the
@@ -59,14 +59,14 @@ This repo is a neutral, forkable template; the learner's choices are per-user an
 git-ignored. If **`learning-config.md`** exists at the repo root, treat its values as
 **authoritative** — the reference project, the language split (chat/lessons vs docs),
 `course_baseline_major`, and the pedagogy fields (`practice_default`, `quiz_format`,
-`deep_dive`, `branch_convention`). `output_style` is enforced by `teach-lesson`/`/teach`
+`deep_dive`, `branch_convention`). `output_style` is enforced by `lesson`/`/teach`
 for lesson sessions only (ADR-0020) — the tracked `.claude/settings.json` stays neutral;
 `model` is advisory only. If `learning-config.md` is **absent**, suggest running
 **`/lesson-init`** to create it. See `learning-config.example.md` for the schema and
 ADR-0001/0003/0020.
 
 When `course_baseline_major` is `13`, learner-facing course flow must hide 12.x lessons
-and `recap-12x`, and `/teach` / `teach-lesson` must not propose or run 12.x lessons as
+and `recap-12x`, and `/teach` / `lesson` must not propose or run 12.x lessons as
 part of the active path. The filter is based on each lesson brief's `> Version:`
 metadata, not numeric prefixes. Existing lesson files and `progress.json` entries stay
 intact so changing the baseline back to `12` restores the full path.
@@ -144,7 +144,7 @@ Then capture completion and reflection with two writes (see ADR-0004):
    `lessons_skipped` (those happen only on the learner's explicit accept/skip in the
    foreground). **Fail-soft:** a failed check (e.g. network down) is skipped silently and
    never blocks the gate or delays moving on. The trigger is **lesson completion**, not
-   `teach-lesson` startup. `/lesson-update` stays manually invocable regardless of the flag.
+   `lesson` startup. `/lesson-update` stays manually invocable regardless of the flag.
 
 `progress.json` is authoritative for **status** (one store, two writers — agent at the
 gate, learner via the progress endpoint; ADR-0018); `learning-records/` is the narrative

@@ -12,7 +12,7 @@ The values live in the YAML block below. Everything outside it is documentation.
 # --- Essentials ---
 
 # Output style / interaction mode for lessons. "Learning" = Learn by Doing (scaffold +
-# TODO(human)). Applied by teach-lesson//teach for the duration of a lesson session only
+# TODO(human)). Applied by /lesson (via /teach) for the duration of a lesson session only
 # (ADR-0020); outside lessons nothing is imposed and no settings file is written.
 output_style: Learning
 
@@ -35,7 +35,7 @@ language:
 # Laravel major version the learner already knows. Static choices for this authored
 # Laravel 12 -> 13 path: 12 keeps the full path visible; 13 starts at Laravel 13 and
 # hides 12.x material from learner-facing course flow. Optional: when the field is
-# absent every reader (index.html, teach-lesson, verify scripts) falls back to 12,
+# absent every reader (index.html, lesson, verify scripts) falls back to 12,
 # so omitting it is equivalent to declaring 12. Chosen at /lesson-init.
 course_baseline_major: 12
 
@@ -56,7 +56,7 @@ branch_convention: "one branch per generated brief, e.g. lesson-<x.y.z>-<slug>"
 
 # Whether /lesson-update opens a fresh branch cut from auto_branch_base (named via
 # branch_convention) for each generated brief. on | off. Consulted ONLY by
-# /lesson-update — teach-lesson sessions never cut branches: all their output is
+# /lesson-update — lesson sessions never cut branches: all their output is
 # git-ignored, so a per-lesson branch would be guaranteed empty (ADR-0017).
 auto_branch: on
 

@@ -75,11 +75,11 @@ assert(
   "lesson-init skill must ask for static course_baseline_major choices 12 and 13",
 );
 
-const teachSkill = read(".claude/skills/teach-lesson/SKILL.md");
+const teachSkill = read(".claude/skills/lesson/SKILL.md");
 assert(
   teachSkill.includes("course_baseline_major") &&
     teachSkill.includes("outside the active course path"),
-  "teach-lesson skill must filter direct requests against the active baseline",
+  "lesson skill must filter direct requests against the active baseline",
 );
 
 const index = read("index.html");

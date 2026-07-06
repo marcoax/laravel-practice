@@ -10,7 +10,7 @@ the lessons). Interview the learner, then write one file:
 
 **`learning-config.md`** at the repo root — the per-user, git-ignored config every later
 session treats as authoritative (see `CLAUDE.md` → *Config binding*, ADR-0001/0003).
-The `output_style` recorded there is applied by `teach-lesson`/`/teach` during lesson
+The `output_style` recorded there is applied by `lesson`/`/teach` during lesson
 sessions only (ADR-0020) — no settings file is written for it.
 
 First read `learning-config.example.md` (the tracked schema) and `CONTEXT.md`, so your output
@@ -36,7 +36,7 @@ the template default.
 | # | Field | Recommended default | Notes / options |
 |---|-------|---------------------|-----------------|
 | 1 | `language` | `chat: en`, `docs: en` | Ask first. `chat` = conversation + HTML lessons (learner-facing); `docs` = project Markdown. Offer for `chat`: **English (recommended)**, Italian, French, German, Spanish. `docs` defaults to English. |
-| 2 | `output_style` | `Learning` | **Learning** = Learn by Doing (scaffold + `TODO(human)`, recommended). Other choices: `Explanatory` (teaches while writing — full code plus didactic notes) or `default` (concise, no pedagogy). Written to `learning-config.md`; `teach-lesson`/`/teach` apply it for the duration of a lesson session (ADR-0020). Never written to settings files. |
+| 2 | `output_style` | `Learning` | **Learning** = Learn by Doing (scaffold + `TODO(human)`, recommended). Other choices: `Explanatory` (teaches while writing — full code plus didactic notes) or `default` (concise, no pedagogy). Written to `learning-config.md`; `lesson`/`/teach` apply it for the duration of a lesson session (ADR-0020). Never written to settings files. |
 | 3 | `reference_project` | *(no default — ask)* | Absolute path to the real codebase assessed each lesson. If they have none, store a placeholder and steer `practice_default` to `concepts-only`. **Never suggest, guess, or illustrate this with a real absolute path** (yours, the learner's, or one seen earlier in the session/repo) — if an example is useful, use only the generic placeholder from `learning-config.example.md`: `/absolute/path/to/your/project`. |
 | 4 | `model` | *(the model running this session)* | **Advisory only** — a file can't force the CLI model. Recommend **the model powering the current session** as the default, and other models of **its own family** as alternatives; do not sniff the environment or map agents to models — self-reference only (ADR-0021). If your environment has relevant execution modes (e.g. fast / extended), mention them in the suggestion. Just record the choice. |
 | 5 | `course_baseline_major` | `12` | Static choices only: `12` \| `13`. `12` preserves the full authored Laravel 12 -> 13 path; `13` starts the active learner-facing path at Laravel 13 and hides 12.x material. This is not a generic `from_major -> to_major` engine. |
@@ -72,7 +72,7 @@ they are preserved per the *Re-running* rule (only `auto_check_new_lessons` is r
 
 ## Step 4 — Do not touch settings files (ADR-0020)
 
-`output_style` lives in `learning-config.md` only; `teach-lesson`/`/teach` apply it during
+`output_style` lives in `learning-config.md` only; `lesson`/`/teach` apply it during
 lesson sessions. Do **not** write `outputStyle` to `.claude/settings.json` (it stays neutral,
 `{}`) or to `.claude/settings.local.json` — the latter is the learner's personal,
 general-work preference and is none of this skill's business. If the learner has a stale
@@ -103,6 +103,6 @@ ADR-0002):
 
 Summarise the written config back to the learner (in their chosen `chat` language), note that
 the chosen `output_style` will apply during lesson sessions (ADR-0020), and point them to
-`/teach-lesson` to start the course. Never surface bare `/teach` to the learner — it is the
-internal engine; `teach-lesson` is the learner-facing launcher. Do **not** run a lesson
+`/lesson` to start the course. Never surface bare `/teach` to the learner — it is the
+internal engine; `lesson` is the learner-facing launcher. Do **not** run a lesson
 here — `/lesson-init` only bootstraps.

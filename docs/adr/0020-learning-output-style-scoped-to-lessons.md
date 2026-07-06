@@ -21,7 +21,7 @@ workspace**.
   output-style default. (This makes `lesson-init`'s long-standing "stays neutral"
   claim true.)
 - **`output_style` in `learning-config.md` is the single recorded choice**, and
-  **`teach-lesson` / the `/teach` flow it launches is the enforcement point**: at
+  **`lesson` / the `/teach` flow it launches is the enforcement point**: at
   hand-off the skill reads `output_style` (default `Learning`) and applies it
   *behaviorally* for the duration of the teaching session — with `Learning`, scaffold
   and leave the key 2–10 lines as a single `TODO(human)` block. It never writes the
@@ -36,6 +36,6 @@ workspace**.
 - Outside lessons the agent interacts in whatever style the user's own settings say —
   no more contradiction between the two per-user files.
 - CLAUDE.md, AGENTS.md and README reword "this project sets Learning as the default"
-  to "Learning applies during lessons, enforced by teach-lesson".
+  to "Learning applies during lessons, enforced by lesson".
 - The lesson experience is unchanged: a `/teach` session still runs Learn by Doing by
   default.

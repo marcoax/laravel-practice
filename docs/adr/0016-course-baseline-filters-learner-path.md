@@ -8,7 +8,7 @@ baseline list (`12` or `13`). This is a per-user course-flow choice, not a gener
 
 If the baseline is `12`, the current course behavior is unchanged. If the baseline is
 `13`, learner-facing surfaces hide all 12.x material: the course page does not show 12.x
-lessons or `recap-12x`, and `/teach` / `teach-lesson` do not propose or run 12.x lessons,
+lessons or `recap-12x`, and `/teach` / `lesson` do not propose or run 12.x lessons,
 including direct lesson requests. The authored lesson files and historical `progress.json`
 entries remain intact; changing the baseline back to `12` makes that material visible again.
 

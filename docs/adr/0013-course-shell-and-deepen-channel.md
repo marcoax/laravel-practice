@@ -72,7 +72,7 @@ unless the no-build-step principle is consciously dropped (it is a core repo rul
 
 - The course gains a served, interactive reading mode with zero new tooling: one extra
   HTML file, one small JS asset, and whatever static server is already on the machine.
-- `/teach-lesson` warms the shell up at lesson start (best-effort, fail-soft): probe
+- `/lesson` warms the shell up at lesson start (best-effort, fail-soft): probe
   `localhost:8000`, else start `php -S` / `python3 -m http.server` in the background,
   then open `course.html#<slug>` with the platform's opener. Portability comes from the
   step being agent instructions, not a script: the agent picks whatever server and
