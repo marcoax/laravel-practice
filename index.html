@@ -310,8 +310,27 @@ function setStatus(key, status){
     });
 }
 
+function showPane(slug){
+  document.getElementById("empty").style.display = "none";
+  var pane = document.getElementById("pane");
+  pane.style.display = "";
+  pane.src = lessonUrl(slug);
+}
+
+// Not-yet-generated state (issue #58): lesson HTML is per-user and git-ignored,
+// generated during a /teach session (recaps on first accept), so a fresh fork
+// legitimately has no file yet. Keeps `active` set (selection stays highlighted,
+// pollLessonFile keeps polling) unlike showEmpty(), which clears it.
+function showNotGenerated(message){
+  document.getElementById("pane").style.display = "none";
+  var empty = document.getElementById("empty");
+  empty.style.display = "";
+  empty.innerHTML = message;
+}
+
 function openLesson(slug){
-  if(!findBySlug(slug)){
+  var l = findBySlug(slug);
+  if(!l){
     showEmpty("This lesson is outside your active course path.");
     return;
   }
@@ -319,15 +338,25 @@ function openLesson(slug){
   lastBody = null;
   wasMissing = false;
   noteOpen = false;
-  var pane = document.getElementById("pane");
-  pane.style.display = "";
-  document.getElementById("empty").style.display = "none";
-  pane.src = lessonUrl(slug);
-  var l = findBySlug(slug);
-  document.getElementById("paneTitle").textContent = l ? lessonUrl(slug) + " — " + l.title : lessonUrl(slug);
+  document.getElementById("paneTitle").textContent = lessonUrl(slug) + " — " + l.title;
   document.getElementById("paneLive").textContent = "";
   document.getElementById("statusErr").textContent = "";
   renderNav(); renderNote();
+  fetch(lessonUrl(slug), {cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw 0; return r.text(); })
+    .then(function(body){
+      if(slug !== active) return; // navigated away while the check was in flight
+      lastBody = body;
+      showPane(slug);
+    })
+    .catch(function(){
+      if(slug !== active) return;
+      wasMissing = true; // pollLessonFile reloads the pane the moment it appears
+      var isRecap = l.key === undefined;
+      showNotGenerated(isRecap
+        ? "This recap is created when you first accept adding a completed lesson to it."
+        : "\"" + l.title + "\" hasn't been generated yet — run /teach-lesson to generate it.");
+    });
 }
 
 function onHash(){
@@ -353,7 +382,10 @@ function pollProgress(){
 // freshness headers for static files. A missing file (the HTML is generated
 // mid-session by /teach) keeps polling and reloads on first appearance.
 function reloadPane(slug){
-  document.getElementById("pane").src = lessonUrl(slug) + "?t=" + Date.now();
+  document.getElementById("empty").style.display = "none";
+  var pane = document.getElementById("pane");
+  pane.style.display = "";
+  pane.src = lessonUrl(slug) + "?t=" + Date.now();
   document.getElementById("paneLive").textContent = "↻ updated " + new Date().toLocaleTimeString();
   document.getElementById("paneLive").className = "live";
 }
