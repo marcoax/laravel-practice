@@ -27,6 +27,13 @@ codebase you choose at setup (`/lesson-init`), recorded in the git-ignored
 - **All lessons are generated as HTML** in `./lessons/NN-<name>.html`, reusing the shared
   stylesheet `./assets/lesson.css`; they must be clean and printable. The `.md` briefs stay
   as source/summary, but the teaching output is always HTML.
+- **External links open outside the course pane.** The lesson HTML renders inside `index.html`'s
+  iframe, so every link to an off-site URL (`http(s)://…`, including protocol-relative `//…`) —
+  primary source, secondary citations, curated resources, GitHub, video, anything not on the
+  same origin — must carry `target="_blank" rel="noopener noreferrer"`. Internal course
+  navigation (links to other lessons, `README.md`, local `#anchors`) stays plain and must keep
+  loading in the current pane. `scripts/verify-external-links.mjs` checks this against a tracked
+  fixture and, when present, any generated `lessons/*.html` on disk.
 - **Language:** project Markdown and documentation files are always written in **English**.
   The chat conversation and the HTML lessons (learner-facing material) follow the learner's
   chosen `language.chat` in `learning-config.md` — **default English**, selectable among

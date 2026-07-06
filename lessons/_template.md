@@ -23,7 +23,14 @@ _Example — (your project):_ your assessment here.
 
 <!-- The lesson HTML renders the primary source as a prominent `.primary-source`
      callout (see assets/lesson.css), distinct from the secondary citation row in
-     the `.meta` header. Carry these links over when generating the HTML. -->
+     the `.meta` header. Carry these links over when generating the HTML.
+
+     Every external link (any off-site http(s)/// href — primary source, secondary
+     citations, curated resources) must render with target="_blank"
+     rel="noopener noreferrer": the lesson HTML loads inside index.html's iframe, and
+     these must open outside it. Internal course links (other lessons, README.md,
+     local #anchors) stay plain — see CLAUDE.md → Rules and
+     scripts/verify-external-links.mjs. -->
 
 **Primary source:** [Title](url) — _why this is the single best resource to read next._
 
@@ -49,7 +56,7 @@ _Example — (your project):_ your assessment here.
        <h2>[Localized heading equivalent to "Authoritative resources for deeper study"]</h2>
        <ul>
          <li>
-           <a href="...">Title</a>
+           <a href="..." target="_blank" rel="noopener noreferrer">Title</a>
            <span class="resource-meta">Official docs · Laravel</span>
            <p>Why authoritative; why it matters for this lesson.</p>
          </li>
