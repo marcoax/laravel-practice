@@ -38,7 +38,7 @@ it. Consequence: `progress.json` is authoritative for *status*;
 
 **D3 — "doing" has two writers.** The agent sets `status: "doing"` when a `/teach`
 session starts a lesson; the user can flip it manually from the page. Last write wins
-on the same store — no structural conflict. `/teach-lesson` (the menu launcher) stays
+on the same store — no structural conflict. `/lesson` (the menu launcher) stays
 read-only on progress.
 
 **D4 — Compact segmented control in the pane-bar.** The three states render as a mini
@@ -68,7 +68,7 @@ body before trusting the write; anything else reverts the optimistic update and 
 - The agent must not nag or reconcile a learner-flipped `done` that has no learning
   record — it is a legitimate administrative closure (D2).
 - The serve command changes to `php -S localhost:8000 scripts/progress-server.php`
-  (page footer, README, `teach-lesson` warm-up). ADR-0013 stays untouched as a
+  (page footer, README, `lesson` warm-up). ADR-0013 stays untouched as a
   historical record. Serving without the router keeps the page fully readable;
   only manual marking degrades, loudly.
 - The repo is no longer JS-only static serving: forkers publishing to GitHub Pages

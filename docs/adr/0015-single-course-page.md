@@ -51,7 +51,7 @@ channel. The agent at the gate stays the only writer; there is no state to recon
 - ADR-0013's deepen channel and the file-over-HTTP seam (ADR-0004) survive unchanged —
   the note panel, unified list, and recap section all sit behind the same seam; no new
   seams introduced.
-- `/teach-lesson` warms up and deep-links `http://localhost:8000/#<slug>`;
+- `/lesson` warms up and deep-links `http://localhost:8000/#<slug>`;
   `/lesson-update` appends new release lessons to the one `LESSONS` array in
   `index.html`.
 - Manual status flips and browser-local notes are no longer possible; progress is

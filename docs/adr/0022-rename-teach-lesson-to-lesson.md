@@ -1,8 +1,8 @@
 # ADR-0022 — Rename the `teach-lesson` skill to `lesson`
 
-**Status:** Accepted (2026-07-06). Earlier ADRs that say `teach-lesson`
-(0003, 0007, 0013, 0015–0018, 0020) refer to the same skill under its old
-name and are not rewritten.
+**Status:** Accepted (2026-07-06). Earlier ADRs that mentioned
+`teach-lesson` (0003, 0007, 0013, 0015–0018, 0020) were updated in place to
+the new name, so the ADR set reads consistently.
 
 ## Context
 
@@ -37,9 +37,13 @@ Alternatives considered:
   `index.html`'s empty-state message, `scripts/verify-course-baseline.mjs`
   (which reads the skill file by path), and the cross-references in
   `lesson-init`/`lesson-update` (both mirrors).
-- **Historical documents keep the old name**: prior ADRs,
-  `learning-records/`, `specs/`, and per-user `progress.json` notes are
-  records of what was true when written and are left untouched.
+- **Prior ADRs follow too.** The name occurrences in ADR-0003/0007/0013/
+  0015/0016/0017/0018/0020 are updated in place — they describe mechanisms
+  that are still live, so keeping a dead name there would only preserve the
+  confusion this rename removes.
+- **Narrative history keeps the old name**: `learning-records/`, `specs/`,
+  and per-user `progress.json` notes are session records of what was true
+  when written and are left untouched.
 
 ## Consequences
 
@@ -48,5 +52,6 @@ Alternatives considered:
   never surfaced to the learner (per `lesson-init`'s hand-off rule).
 - The rename is repo-local: the global `/teach` skill never references the
   launcher by name, so nothing outside the repo changes.
-- Anyone reading an older ADR or learning record must map `teach-lesson` →
-  `lesson`; this ADR is the pointer.
+- Anyone reading a learning record or old spec must map `teach-lesson` →
+  `lesson`; this ADR is the pointer. The ADR set itself already uses the
+  new name throughout.

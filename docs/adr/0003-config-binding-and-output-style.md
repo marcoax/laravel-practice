@@ -19,7 +19,7 @@
   values (language, reference project, course baseline, pedagogy) are authoritative; if absent, suggest
   `/lesson-init`."
 - **Output style enforcement is superseded by ADR-0020.** `/lesson-init` records
-  `output_style` in `learning-config.md`; `teach-lesson` applies it behaviorally during
+  `output_style` in `learning-config.md`; `lesson` applies it behaviorally during
   lesson sessions. The tracked `.claude/settings.json` stays neutral, and
   `.claude/settings.local.json` remains the learner's general-work preference.
 - **`model` is advisory only.** A file cannot force the CLI's model; `learning-config.md`

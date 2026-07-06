@@ -6,12 +6,12 @@
 
 `/lesson-update` should be available both as a manual command and "automatically in the
 background." A Claude Code skill has no always-running daemon, so "automatic" needs a concrete
-trigger and a concrete mechanism. The draft spec proposed a quick check **at `teach-lesson`
+trigger and a concrete mechanism. The draft spec proposed a quick check **at `lesson`
 startup**, gated by a config flag.
 
 Two problems with that:
 
-1. **Wrong hook.** `teach-lesson` is a menu launcher that must open instantly. Hanging a network
+1. **Wrong hook.** `lesson` is a menu launcher that must open instantly. Hanging a network
    scrape on every menu open makes it slow and flaky (no network → the menu stalls or errors) and
    hammers the sources many times a day.
 2. **Blocking.** Even gated, a synchronous check delays the thing the user actually asked for.
@@ -23,7 +23,7 @@ The learner reframed the trigger to **lesson completion**, run **in the backgrou
 - **Trigger = lesson completion, not menu startup.** The check hooks the existing **lesson
   lifecycle gate** (ADR-0004): after the gate marks the lesson done and writes `progress.json` +
   the learning record, it fires the update check. This reuses an existing seam instead of touching
-  `teach-lesson`, and the cadence is naturally low (you finish a lesson rarely and deliberately) —
+  `lesson`, and the cadence is naturally low (you finish a lesson rarely and deliberately) —
   so **no date-throttle is needed**.
 
 - **Mechanism = background discovery sub-agent.** The gate spawns a background sub-agent that runs
@@ -51,7 +51,7 @@ The learner reframed the trigger to **lesson completion**, run **in the backgrou
 
 ## Consequences
 
-- The auto-trigger lives in the ADR-0004 lifecycle gate (in `CLAUDE.md`), not in `teach-lesson`.
+- The auto-trigger lives in the ADR-0004 lifecycle gate (in `CLAUDE.md`), not in `lesson`.
 - `/lesson-init` gains a question for the flag; `learning-config(.example).md` gains the flag (and
   a `last_checked` field).
 - Discovery runs as a background sub-agent: a real cost per lesson-completion, but bounded and

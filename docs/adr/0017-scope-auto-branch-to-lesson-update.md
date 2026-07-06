@@ -3,7 +3,7 @@
 **Status:** Accepted (2026-07-03)
 
 With `auto_branch: on`, `/teach` used to cut a fresh per-lesson branch at lesson start.
-But a `teach-lesson` session's entire output is git-ignored by design (`lessons/*.html`,
+But a `lesson` session's entire output is git-ignored by design (`lessons/*.html`,
 `learning-records/`, `progress.json`, `NOTES.md`, `learning-config.md`), so the
 per-lesson branch was **guaranteed empty** — cut-then-delete ceremony with zero payload
 (issue #26, confirmed in lessons 07 and 08).
@@ -13,7 +13,7 @@ brief (`lessons/NN-*.md` / `lessons/<x.y.z>.md`) destined for a PR (ADR-0007).
 
 ## Options considered
 
-1. **Scope `auto_branch` to `/lesson-update` only** — teach-lesson stays on the current
+1. **Scope `auto_branch` to `/lesson-update` only** — lesson stays on the current
    branch; lesson-update keeps cutting branches + PRs.
 2. **Lazy branching** — cut the branch only on the first tracked write of a session.
 3. **Keep as-is, auto-clean** — document empty branches as expected, delete at session end.
@@ -22,7 +22,7 @@ brief (`lessons/NN-*.md` / `lessons/<x.y.z>.md`) destined for a PR (ADR-0007).
 ## Decision
 
 **Option 1.** `auto_branch` (with `auto_branch_base` and `branch_convention`) is
-consulted **only by `/lesson-update`**; `teach-lesson` / `/teach` sessions never cut a
+consulted **only by `/lesson-update`**; `lesson` / `/teach` sessions never cut a
 branch, regardless of the flag. The field keeps its name — renaming (e.g.
 `lesson_update_branch`) would break existing per-user configs for a field with only two
 readers; the YAML comment carries the scope.
@@ -39,11 +39,11 @@ want for generated briefs. This also resolves the prior inconsistency where
 
 ## Consequences
 
-- teach-lesson sessions produce no throwaway branches; enforcement lives in the tracked
+- lesson sessions produce no throwaway branches; enforcement lives in the tracked
   skills — the branching step in `/lesson-update` and the hand-off guard in
-  `teach-lesson` — plus the config comments, with no change to the global `/teach` skill.
+  `lesson` — plus the config comments, with no change to the global `/teach` skill.
 - Existing configs with `auto_branch: on` need no value migration, but their comments
   still carry the pre-0017 wording ("`/teach` cuts the branch at lesson start"). The
-  tracked skills override that text for `teach-lesson` sessions and `/lesson-update`;
+  tracked skills override that text for `lesson` sessions and `/lesson-update`;
   only a direct `/teach` invocation reading a stale config could still be misled —
   re-running `/lesson-init` refreshes the comments.
