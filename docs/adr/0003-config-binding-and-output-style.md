@@ -1,6 +1,6 @@
 # ADR-0003 — Config binding in CLAUDE.md; output style via Claude settings
 
-**Status:** Accepted (2026-06-28)
+**Status:** Accepted (2026-06-28). Output-style enforcement superseded by ADR-0020.
 
 ## Context
 
@@ -9,26 +9,26 @@
 1. **Where the read happens.** `CLAUDE.md` is auto-loaded every session; `/teach` only when
    invoked. The language, reference project, and pedagogy should apply in any session, not
    only inside `/teach`.
-2. **Output style enforcement.** The Learn-by-Doing style is *not* governed by markdown — it
-   is enforced by Claude settings. The tracked `.claude/settings.json` carries the shared
-   default (`{"outputStyle":"Learning"}`), while git-ignored `.claude/settings.local.json`
-   can override it per user and takes precedence.
+2. **Output style enforcement.** Superseded by ADR-0020: the repo no longer enforces
+   Learn-by-Doing through Claude settings. The tracked `.claude/settings.json` stays neutral,
+   and `output_style` is read from `learning-config.md` for lesson sessions only.
 
 ## Decision
 
 - **Binding lives in `CLAUDE.md`** (always loaded): "If `learning-config.md` exists, its
   values (language, reference project, course baseline, pedagogy) are authoritative; if absent, suggest
   `/lesson-init`."
-- **Output style** defaults to `Learning` in tracked **`.claude/settings.json`** so the
-  teaching workspace starts in Learn-by-Doing mode. `/lesson-init` may write a user-specific
-  override to **`.claude/settings.local.json`** (git-ignored, higher precedence) when the
-  learner chooses a different style.
+- **Output style enforcement is superseded by ADR-0020.** `/lesson-init` records
+  `output_style` in `learning-config.md`; `teach-lesson` applies it behaviorally during
+  lesson sessions. The tracked `.claude/settings.json` stays neutral, and
+  `.claude/settings.local.json` remains the learner's general-work preference.
 - **`model` is advisory only.** A file cannot force the CLI's model; `learning-config.md`
   records the recommendation (Opus 4.8 + Fast mode) but does not enforce it.
 
 ## Consequences
 
-- Choices apply in every session, including plain chat, not just `/teach`.
-- The public template ships the recommended `Learning` default, but each learner can override
-  it locally without committing personal settings.
+- Config choices other than output style apply in every session, including plain chat, not
+  just `/teach`.
+- The public template no longer ships a workspace-wide output-style default; lesson-scoped
+  Learn-by-Doing behavior is governed by ADR-0020.
 - `.gitignore` covers `settings.local.json`; confirm it stays ignored.

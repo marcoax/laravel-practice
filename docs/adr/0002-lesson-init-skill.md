@@ -15,8 +15,8 @@ Add a dedicated **`/lesson-init`** skill, run **once per workspace**. It intervi
 learner one question at a time and writes `learning-config.md`. It captures the **four
 original essentials, the course baseline, plus the pedagogy fields**:
 
-1. `output_style` (default: **Learning** / Learn by Doing) — written to
-   `.claude/settings.local.json`, see ADR-0003.
+1. `output_style` (default: **Learning** / Learn by Doing) — recorded in
+   `learning-config.md` and applied during lesson sessions only, see ADR-0020.
 2. `reference_project` — path to the real codebase used as the "does my project need this?"
    yardstick.
 3. `model` (advisory; default Opus 4.8 + Fast mode).
