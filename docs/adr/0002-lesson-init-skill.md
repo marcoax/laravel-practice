@@ -1,6 +1,6 @@
 # ADR-0002 — `/lesson-init` skill bootstraps the workspace
 
-**Status:** Accepted (2026-06-28)
+**Status:** Accepted (2026-06-28). `model` default amended by ADR-0021 (agent-agnostic suggestion).
 
 ## Context
 

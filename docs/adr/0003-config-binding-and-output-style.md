@@ -1,6 +1,6 @@
 # ADR-0003 — Config binding in CLAUDE.md; output style via Claude settings
 
-**Status:** Accepted (2026-06-28). Output-style enforcement superseded by ADR-0020.
+**Status:** Accepted (2026-06-28). Output-style enforcement superseded by ADR-0020; `model` recommendation amended by ADR-0021 (agent-agnostic suggestion).
 
 ## Context
 

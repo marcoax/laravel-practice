@@ -35,6 +35,13 @@ Use these terms in issues, ADRs, skill prompts, and code. Avoid the synonyms not
   ("does my project actually need this change?"). A **per-user choice**, not baked into
   the template. _Avoid:_ naming a specific project (e.g. eraCms) in tracked files. See ADR-0001.
 
+- **model (advisory)** — the `learning-config.md` field recording the recommended model for
+  teaching sessions. Suggested by **self-reference**: the agent running `/lesson-init`
+  proposes its own session model as the recommended default and its own family as
+  alternatives — never a hardcoded model name, an agent-detection table, or an extra
+  interview question. Advisory only; nothing enforces it. _Avoid:_ vendor model names in
+  tracked template files. See ADR-0003/0021.
+
 - **pedagogy fields** — the teaching-approach settings captured by `/lesson-init` beyond
   the four essentials: `practice_default`, `quiz_format`, `deep_dive`, `branch_convention`.
   See ADR-0002.
