@@ -38,3 +38,8 @@ callout; later lessons get it at generation time.
 
 Start from [`_template.md`](./_template.md), copy it with a new number and fill it
 in. To track other versions or packages (Cloud, Wayfinder…), use the same shape.
+
+Briefs are tracked, forkable template content: keep them neutral. Use the
+`{{reference_project}}` token wherever the learner's project is meant — see the
+**reference project placeholder** term in [`CONTEXT.md`](../CONTEXT.md) and ADR-0023;
+`scripts/verify-neutral-lessons.mjs` enforces it.
