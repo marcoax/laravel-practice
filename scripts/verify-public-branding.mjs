@@ -20,7 +20,7 @@ function assert(condition, message) {
 
 function textFromHtml(fragment) {
   return fragment
-    .replace(/<[^>]+>/g, "")
+    .replace(/[<>]/g, "")
     .replace(/\s+/g, " ")
     .trim();
 }
