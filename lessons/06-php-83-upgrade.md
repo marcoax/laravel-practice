@@ -21,8 +21,7 @@ you out.
 ## Relevant to your project?
 - Are you already on PHP 8.3 everywhere, including production?
 
-_Example — eraCms:_ yes. It's already on Laravel 13, so this is a conscious runtime
-check rather than a migration.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-13

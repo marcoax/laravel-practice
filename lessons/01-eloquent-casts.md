@@ -23,8 +23,7 @@ declared cleanly with one attribute instead of an override.
 - Do you have models with many JSON/array fields handled by hand?
 - Do you repeat the same scopes across the codebase?
 
-_Example — eraCms:_ yes. With 79 models, several with JSON casts, these casts and
-`#[UseEloquentBuilder]` cut boilerplate from the more complex models.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-12-19-0

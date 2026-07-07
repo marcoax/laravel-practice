@@ -19,8 +19,7 @@ are enough.
 ## Relevant to your project?
 - Do you expose APIs to a frontend or third parties that would benefit from a standard?
 
-_Example — eraCms:_ maybe. It exposes APIs for the Vue 3 frontend: understand what
-changes vs the current resources before adopting or deliberately ignoring it.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-13

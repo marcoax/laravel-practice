@@ -19,7 +19,7 @@ permissions and roles as enums, with the benefits of the type system.
 ## Relevant to your project?
 - Do you handle permissions/roles with strings you could type?
 
-_Example — eraCms:_ yes. To frame within the existing authorization system.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-12-46-0

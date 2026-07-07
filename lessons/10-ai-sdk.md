@@ -21,8 +21,7 @@ AI features, start here.
 ## Relevant to your project?
 - Do you have (or want) AI functionality in the project?
 
-_Example — eraCms:_ yes. It's also the author's AI testbed: understanding this API
-before building on top of it is the right starting point.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-13

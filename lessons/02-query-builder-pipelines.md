@@ -19,8 +19,7 @@ migrations help when the schema depends on the environment.
 ## Relevant to your project?
 - Do you have queries with many optional filters that are hard to read today?
 
-_Example — eraCms:_ maybe. Elegant but niche; worth it if you have complex search
-queries.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-12-4-0

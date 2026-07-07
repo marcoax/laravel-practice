@@ -23,7 +23,7 @@ reads like a sentence. `throwUnless()` lets you guard a response fluently.
 ## Relevant to your project?
 - Do you have durations written as raw numbers scattered through the code?
 
-_Example — eraCms:_ yes. Immediate readability anywhere durations appear.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-12-41-0

@@ -21,7 +21,7 @@ Understand it **before** writing or touching custom handlers for `TokenMismatchE
 ## Relevant to your project?
 - Do you have custom CSRF logic or manual 419 handling?
 
-_Example — eraCms:_ yes. In line with the hardening work already done on the project.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-13

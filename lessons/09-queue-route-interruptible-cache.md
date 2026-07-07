@@ -26,7 +26,7 @@ It changes how you design jobs in production.
 ## Relevant to your project?
 - Do you run queues in production with frequent deploys or long jobs?
 
-_Example — eraCms:_ maybe. Depends on how heavy queues are in the project.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-13

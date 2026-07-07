@@ -17,7 +17,7 @@ waste. This gives granular control over failures.
 ## Relevant to your project?
 - Do you use queues with jobs that depend on external services?
 
-_Example — eraCms:_ maybe. Depends on how central queues are to the project.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-12-19-0

@@ -29,9 +29,7 @@ Search by meaning rather than keywords, without bolting on an external service �
 - **What database engine are you on?** If you're on MySQL, native vector search isn't
   available — you'd need Postgres + pgvector, or an external vector store.
 
-_Example — eraCms:_ yes as a feature goal, but check the DB first. For a CMS semantic
-search is differentiating; the deciding factor is whether moving (or adding) Postgres
-+ pgvector is worth it.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-13

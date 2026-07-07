@@ -24,7 +24,7 @@ deliberately: sometimes it clarifies, sometimes it's just syntactic noise.
 ## Relevant to your project?
 - Do you want a uniform convention across the whole codebase?
 
-_Example — eraCms:_ maybe. Decide it as a standard before spreading it through the code.
+_Example — {{reference_project}}:_ your assessment here.
 
 ## Sources
 - https://laravel-news.com/laravel-13
