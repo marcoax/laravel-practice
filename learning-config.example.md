@@ -21,6 +21,11 @@ output_style: Learning
 # here and set practice_default: concepts-only.
 reference_project: /absolute/path/to/your/project
 
+# Display name for your reference project. /teach substitutes it for the
+# {{reference_project}} token in the tracked lesson briefs when rendering the
+# git-ignored lesson HTML. Never write the real name in tracked files (ADR-0023).
+reference_project_name: YourProject
+
 # Advisory only — a file cannot force the CLI's model; this records the recommendation.
 # Set by /lesson-init to a model suggested by the agent running the interview
 # (its own session model / family). Left null here; the real value comes from setup.

@@ -33,7 +33,14 @@ Use these terms in issues, ADRs, skill prompts, and code. Avoid the synonyms not
 
 - **reference project** — the real codebase a learner assesses each lesson against
   ("does my project actually need this change?"). A **per-user choice**, not baked into
-  the template. _Avoid:_ naming a specific project (e.g. eraCms) in tracked files. See ADR-0001.
+  the template. _Avoid:_ naming a specific project (e.g. a private client project) in tracked files. See ADR-0001.
+
+- **reference project placeholder** — the literal token `{{reference_project}}` used in
+  tracked lesson briefs wherever the learner's project is meant. Resolved by `/teach` at
+  HTML render time from `reference_project_name` in `learning-config.md`; the raw token is
+  the neutrality contract of the template, enforced by the generation rule in
+  `/lesson-update` and the verify script. _Avoid:_ real project names, stacks, or counts in
+  `lessons/*.md`; hardcoding any project name in the verify script. See ADR-0023.
 
 - **model (advisory)** — the `learning-config.md` field recording the recommended model for
   teaching sessions. Suggested by **self-reference**: the agent running `/lesson-init`

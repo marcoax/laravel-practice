@@ -115,6 +115,13 @@ Write each accepted lesson into `lessons/` from `lessons/_template.md`:
 - **Generate in default mode, never Learn by Doing (ADR-0009).** Lesson generation is *content
   authoring*, not co-writing code on a design decision — so the `Learning` output style does **not**
   apply here. Emit **complete** briefs: never a `TODO(human)` block or placeholder line.
+- **Neutrality rule (ADR-0023).** Briefs are tracked, forkable template content: **never**
+  write the reference project's name, stack, or real counts (model counts, framework
+  versions of the learner's app) into a brief — even though `learning-config.md` names
+  them. Wherever the learner's project is meant (practical TODOs, assessment questions),
+  use the literal `{{reference_project}}` token; `/teach` resolves it at HTML render
+  time. Leave the `_Example — {{reference_project}}:_` assessment slot empty
+  ("your assessment here") — per-project judgements belong in `learning-records/`.
 - **Register the lesson in the course page (ADR-0013/0015):** append one entry to the
   single `LESSONS` array in `index.html`, keeping version order (release lessons sit after
   the core lessons; the display number is positional, computed by the page) —

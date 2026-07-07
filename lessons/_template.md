@@ -17,7 +17,12 @@ Questions to ask before adopting it:
 - …
 - …
 
-_Example — (your project):_ your assessment here.
+_Example — {{reference_project}}:_ your assessment here.
+
+<!-- Neutrality contract (ADR-0023): tracked briefs never name the learner's real
+     project, its stack, or real counts. Use the {{reference_project}} token wherever
+     the learner's project is meant; /teach resolves it at HTML render time from
+     reference_project_name in learning-config.md. Leave the assessment slot empty. -->
 
 ## Sources
 
