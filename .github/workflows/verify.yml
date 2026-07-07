@@ -1,0 +1,46 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Template verification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Verify lesson neutrality
+        run: node scripts/verify-neutral-lessons.mjs
+
+      - name: Verify public branding
+        run: node scripts/verify-public-branding.mjs
+
+      - name: Verify course baseline
+        run: node scripts/verify-course-baseline.mjs
+
+      - name: Verify external link handling
+        run: node scripts/verify-external-links.mjs
+
+      - name: Verify PHP syntax
+        run: php -l scripts/progress-server.php
