@@ -1,0 +1,9 @@
+{
+  "name": "laravel-practice",
+  "private": true,
+  "scripts": {
+    "verify": "npm run verify:node && npm run verify:php",
+    "verify:node": "node scripts/verify-neutral-lessons.mjs && node scripts/verify-public-branding.mjs && node scripts/verify-course-baseline.mjs && node scripts/verify-external-links.mjs",
+    "verify:php": "php -l scripts/progress-server.php"
+  }
+}
