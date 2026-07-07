@@ -1,8 +1,7 @@
 # ADR-0019 — Learner-selected resource discovery
 
 **Status:** Accepted (2026-07-03). Spec:
-`specs/learner-selected-resource-discovery.html`. Source issue:
-<https://github.com/marcoax/laravel-practice/issues/29>.
+`specs/learner-selected-resource-discovery.html`. Source issue: internal tracker issue #29.
 
 At the end of each lesson, the learner is offered an opt-in resource discovery step:
 the agent can search the web and YouTube for very authoritative deeper resources and

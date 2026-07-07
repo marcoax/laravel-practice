@@ -5,9 +5,9 @@
 ## Context
 
 ADR-0001 made the reference project a per-user choice, but the tracked lesson
-briefs re-leaked it: all 17 briefs carried `_Example — eraCms:` lines with real
+briefs re-leaked it: all 17 briefs carried `_Example — <private reference project>:` lines with real
 per-project assessments, and the `/lesson-update`-generated version-pure briefs
-(13.9–13.17) went further — practical TODOs ("In eraCms, find…"), stack facts
+(13.9–13.17) went further — practical TODOs ("In <private reference project>, find…"), stack facts
 ("Vue 3 frontend"), and real counts ("~79 models"). Root cause: `/lesson-update`
 reads `learning-config.md` (which names the reference project) and its
 generation prompt contained **no neutrality rule**, so the agent dutifully
@@ -27,8 +27,7 @@ Alternatives considered for keeping briefs neutral:
    policy…?") lose force and would need per-sentence rewriting.
 2. **Placeholder token resolved at render time** — briefs keep their specific,
    actionable phrasing; the real name appears only in git-ignored output.
-3. **CI blocklist with the real name hardcoded** (spec's Phase 2 regex
-   `eraCms|newEra|marcoax`) — self-defeating: the guard file would itself leak
+3. **CI blocklist with the real name hardcoded** — self-defeating: the guard file would itself leak
    the name into the tracked template.
 
 ## Decision
@@ -55,7 +54,7 @@ Alternatives considered for keeping briefs neutral:
   CI (no config) only the generic checks run. No stack-name blocklist (`Vue 3`,
   `PHPStan`): too many false positives for lessons legitimately about them.
 - **Assessments are salvaged, not deleted:** the real per-project judgements in
-  the existing `_Example — eraCms:` lines move to `learning-records/`
+  the existing `_Example — <private reference project>:` lines move to `learning-records/`
   (git-ignored — exactly where per-user data belongs, ADR-0001) before the
   slots are emptied.
 - **No `lessons/STYLE.md`.** The norm lives where it acts: `_template.md`

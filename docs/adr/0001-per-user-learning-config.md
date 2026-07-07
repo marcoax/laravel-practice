@@ -5,11 +5,11 @@
 ## Context
 
 The repo is a public, forkable teaching template, but today the *approach* to the lessons
-is hardcoded in tracked files: `CLAUDE.md`/`README`/`NOTES.md` name **eraCms** as "the real
-project", and `MISSION.md` bakes in one learner's role and goal. eraCms is private client
-code, and the choices (which reference project, language, output style) are inherently
-per-learner. Baking them into the public template leaks private context and makes the
-template not truly forkable.
+is hardcoded in tracked files: `CLAUDE.md`/`README`/`NOTES.md` name one private reference
+project as "the real project", and `MISSION.md` bakes in one learner's role and goal. That
+reference project is private client code, and the choices (which reference project,
+language, output style) are inherently per-learner. Baking them into the public template
+leaks private context and makes the template not truly forkable.
 
 ## Decision
 
@@ -28,7 +28,7 @@ empty), `model` (advisory only — see ADR-0003), `language`, `course_baseline_m
 (added by ADR-0016), and the pedagogy fields (`practice_default`, `quiz_format`,
 `deep_dive`, `branch_convention`).
 
-As part of adopting this, the eraCms mentions in `CLAUDE.md`/`README`/`NOTES.md` are
+As part of adopting this, private reference project mentions in `CLAUDE.md`/`README`/`NOTES.md` are
 **neutralised now** to "your reference project (set by `/lesson-init`)".
 
 ## Consequences
@@ -37,5 +37,5 @@ As part of adopting this, the eraCms mentions in `CLAUDE.md`/`README`/`NOTES.md`
 - A new always-loaded binding is needed so the agent reads `learning-config.md` (ADR-0003).
 - `.gitignore` must cover `learning-config.md`, `progress.json` (ADR-0004), and
   `RESOURCES.md` (ADR-0019).
-- Existing learner state (eraCms as reference) moves from tracked prose into the
+- Existing learner state (the private reference project as reference) moves from tracked prose into the
   git-ignored `learning-config.md`.
