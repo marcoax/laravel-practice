@@ -83,11 +83,14 @@ assert(
 );
 
 const index = read("index.html");
+const coursePageJs = read("assets/course-page.js");
+const coursePage = index + "\n" + coursePageJs;
 assert(
-  index.includes("parseCourseBaseline") &&
-    index.includes("lessonMajorFromVersion") &&
-    index.includes('x.slug === "recap-12x"'),
-  "index.html must parse config, parse lesson Version metadata, and hide recap-12x",
+  index.includes('src="assets/course-page.js"') &&
+    coursePage.includes("parseCourseBaseline") &&
+    coursePage.includes("lessonMajorFromVersion") &&
+    coursePage.includes('x.slug === "recap-12x"'),
+  "course page must parse config, parse lesson Version metadata, and hide recap-12x",
 );
 
 const baseline12 = activeLessonsForBaseline(12);
