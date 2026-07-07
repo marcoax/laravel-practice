@@ -151,6 +151,17 @@ the page still works but status clicks show a warning instead of saving.
 > and the lessons with `fetch()`, which browsers block when the page is opened by
 > double-click (`file://`).
 
+## Verifying the template
+
+Run the same lightweight checks used by CI before opening a PR:
+
+```bash
+npm run verify
+```
+
+This validates lesson neutrality, public branding, course-baseline filtering,
+external-link handling, and PHP syntax for the local progress router.
+
 ## Publishing the course (GitHub Pages)
 
 If you fork this and want the course page live:
