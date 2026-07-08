@@ -1,4 +1,4 @@
-    <?php
+<?php
 
 // Router for `php -S localhost:8000 scripts/progress-server.php` (run from the
 // repo root). Static files are served exactly as with plain `php -S`; the one
