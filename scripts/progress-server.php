@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 // Router for `php -S localhost:8000 scripts/progress-server.php` (run from the
 // repo root). Static files are served exactly as with plain `php -S`; the one
@@ -12,6 +12,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 header('Content-Type: application/json');
+
+$remoteAddress = $_SERVER['REMOTE_ADDR'] ?? '';
+$localAddresses = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
+
+if (!in_array($remoteAddress, $localAddresses, true)) {
+    http_response_code(403);
+    echo json_encode(['error' => 'progress server is local-only; run it on localhost and do not expose it publicly']);
+    exit;
+}
 
 if (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) !== '/progress') {
     http_response_code(404);
