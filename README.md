@@ -126,6 +126,12 @@ and open it:
 php -S localhost:8000 scripts/progress-server.php
 ```
 
+Run it exactly as a local-only server: use `localhost`, not `0.0.0.0`, and do not
+expose this router on a public interface. The `/progress` endpoint can write to
+`progress.json`; it is intended for your own browser on the same machine. As a
+defensive fallback, `scripts/progress-server.php` rejects non-local requests with
+a clear JSON error response.
+
 then open <http://localhost:8000/>. What you get:
 
 - **One unified lesson list** in the sidebar — the core lessons and the
